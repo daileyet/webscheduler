@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebScheduler" version="3.0">
+	<display-name>webscheduler</display-name>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<servlet>
+		<servlet-name>easyweb</servlet-name>
+		<servlet-class>com.openthinks.easyweb.EasyWebDispatcher</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>easyweb</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>easyweb</servlet-name>
+		<url-pattern>*.htm</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>monitor</servlet-name>
+		<servlet-class>com.openthinks.easyweb.monitor.WebProcessMonitor</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>monitor</servlet-name>
+		<url-pattern>/monitor/*</url-pattern>
+	</servlet-mapping>
+	<listener>
+		<listener-class>com.openthinks.easyweb.context.WebContextLoadListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>configureClassName</param-name>
+		<param-value>com.openthinks.webscheduler.EasyWebConfigure</param-value>
+	</context-param>
+	<context-param>
+		<param-name>easyweb-class-dir</param-name>
+		<param-value>R:\MyGit\webscheduler\target\webscheduler\WEB-INF\classes</param-value>
+	</context-param>
+	<session-config>
+		<!-- minutes -->
+		<session-timeout>30</session-timeout>
+	</session-config>
+</web-app>
