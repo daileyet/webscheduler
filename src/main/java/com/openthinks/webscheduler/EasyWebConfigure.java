@@ -6,10 +6,13 @@ import com.openthinks.easyweb.annotation.configure.EasyConfigure;
 import com.openthinks.easyweb.annotation.configure.RequestSuffixs;
 import com.openthinks.easyweb.annotation.configure.ScanPackages;
 import com.openthinks.easyweb.context.Bootstrap;
+import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.sql.dhibernate.support.SessionFactory;
 import com.openthinks.libs.sql.lang.Configurator;
 import com.openthinks.libs.sql.lang.ConfiguratorFactory;
+import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.service.SchedulerService;
 
 @EasyConfigure
 @ScanPackages({ "com.openthinks.webscheduler" })
@@ -28,11 +31,12 @@ public class EasyWebConfigure implements Bootstrap {
 				"/dbconfig.properties"));
 		SessionFactory.setDefaultConfigurator(configuration);
 
+		SchedulerService schedulerService = WebContexts.get().lookup(SchedulerService.class);
 		ProcessLogger.info("Start WebScheduler...");
 		try {
-			SchedulerManagement.get().start();
+			schedulerService.start();
 		} catch (SchedulerException e) {
-			ProcessLogger.fatal(e.getMessage());
+			ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
 		}
 
 	}
