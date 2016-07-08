@@ -25,7 +25,7 @@ public class EasyWebConfigure implements Bootstrap {
 
 	@Override
 	public void initial() {
-		ProcessLogger.currentLevel = ProcessLogger.PLLevel.DEBUG;
+		ProcessLogger.currentLevel = ProcessLogger.PLLevel.INFO;
 
 		Configurator configuration = ConfiguratorFactory.getInstance(getClass().getResourceAsStream(
 				"/dbconfig.properties"));
