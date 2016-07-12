@@ -37,7 +37,8 @@
 	</context-param>
 	<context-param>
 		<param-name>easyweb-class-dir</param-name>
-		<param-value>R:\MyGit\webscheduler\target\webscheduler\WEB-INF\classes</param-value>
+		<!-- <param-value>R:\MyGit\webscheduler\target\webscheduler\WEB-INF\classes</param-value> -->
+		<param-value>R:\MyGit\webscheduler\target\classes</param-value>
 	</context-param>
 	<session-config>
 		<!-- minutes -->

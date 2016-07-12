@@ -3,7 +3,7 @@ package com.openthinks.webscheduler.model;
 import java.util.UUID;
 
 public class TaskMetaData {
-
+	private String taskId;
 	private String taskName;
 	private String taskType;
 	private String groupName;
@@ -13,9 +13,18 @@ public class TaskMetaData {
 	private TaskState taskState;
 
 	public TaskMetaData() {
-		taskName = UUID.randomUUID().toString();
+		taskId = UUID.randomUUID().toString();
+		taskName = "default_task";
 		groupName = "default_group";
 		taskState = TaskState.NOT_RUNNING;
+	}
+
+	public String getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
 
 	public String getTaskName() {
@@ -56,6 +65,46 @@ public class TaskMetaData {
 
 	public void setTaskState(TaskState taskState) {
 		this.taskState = taskState;
+	}
+
+	public boolean isValid() {
+		return taskState != null && taskState != TaskState.INVALID;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((taskId == null) ? 0 : taskId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TaskMetaData other = (TaskMetaData) obj;
+		if (taskId == null) {
+			if (other.taskId != null)
+				return false;
+		} else if (!taskId.equals(other.taskId))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "TaskMetaData [taskId=" + taskId + ", taskName=" + taskName + ", taskType=" + taskType + ", groupName="
+				+ groupName + ", taskRef=" + taskRef + ", taskState=" + taskState + "]";
+	}
+
+	public void update(TaskMetaData taskMetaDataNew) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

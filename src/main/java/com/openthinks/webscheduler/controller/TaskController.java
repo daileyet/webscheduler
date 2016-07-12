@@ -54,6 +54,6 @@ public class TaskController {
 	public String index(WebAttributers was) {
 		List<TaskMetaData> tasks = taskService.getValidTasks();
 		was.addAttribute(StaticDict.PAGE_TASK_LIST, tasks, WebScope.REQUEST);
-		return "WEB-INF/jsp/task.jsp";
+		return "WEB-INF/jsp/main.jsp";
 	}
 }
