@@ -12,10 +12,10 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 
+import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
 import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.annotation.ResponseReturn;
-import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
 import com.openthinks.libs.utilities.CommonUtilities;
@@ -30,8 +30,10 @@ import com.openthinks.webscheduler.task.support.SafaribooksonlineGetterTask;
 @Controller("/task")
 public class TaskController {
 
-	SchedulerService schedulerService = WebContexts.get().lookup(SchedulerService.class);
-	TaskService taskService = WebContexts.get().lookup(TaskService.class);
+	@AutoComponent
+	SchedulerService schedulerService;
+	@AutoComponent
+	TaskService taskService;
 
 	@Mapping("/add")
 	@ResponseReturn(contentType = "text/html")
