@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: TaskDao.java 
+* @Title: ITaskDao.java 
 * @Package com.openthinks.webscheduler.dao 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
@@ -34,7 +34,7 @@ import com.openthinks.webscheduler.model.TaskMetaData;
  * @author dailey.yet@outlook.com
  *
  */
-public interface TaskDao {
+public interface ITaskDao {
 	/**
 	 * fetch task list by predicate
 	 * @param predicate Predicate<TaskMetaData>

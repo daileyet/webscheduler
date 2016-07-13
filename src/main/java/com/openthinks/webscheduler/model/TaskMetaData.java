@@ -2,6 +2,8 @@ package com.openthinks.webscheduler.model;
 
 import java.util.UUID;
 
+import com.openthinks.webscheduler.model.task.TaskState;
+
 public class TaskMetaData {
 	private String taskId;
 	private String taskName;

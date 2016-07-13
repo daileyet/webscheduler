@@ -32,19 +32,19 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-import com.openthinks.webscheduler.dao.TaskDao;
+import com.openthinks.webscheduler.dao.ITaskDao;
 import com.openthinks.webscheduler.model.TaskMetaData;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public class TaskStore implements TaskDao {
+public class TaskStore implements ITaskDao {
 	private static final List<TaskMetaData> taskDB = Collections.synchronizedList(new ArrayList<TaskMetaData>());
 	private Lock lock = new ReentrantLock();
 
 	/* (non-Javadoc)
-	 * @see com.openthinks.webscheduler.dao.TaskDao#getTasks(java.util.function.Predicate)
+	 * @see com.openthinks.webscheduler.dao.ITaskDao#getTasks(java.util.function.Predicate)
 	 */
 	@Override
 	public List<TaskMetaData> getTasks(Predicate<TaskMetaData> predicate) {
@@ -58,7 +58,7 @@ public class TaskStore implements TaskDao {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.openthinks.webscheduler.dao.TaskDao#save(com.openthinks.webscheduler.model.TaskMetaData)
+	 * @see com.openthinks.webscheduler.dao.ITaskDao#save(com.openthinks.webscheduler.model.TaskMetaData)
 	 */
 	@Override
 	public void save(TaskMetaData taskMetaDataNew) {

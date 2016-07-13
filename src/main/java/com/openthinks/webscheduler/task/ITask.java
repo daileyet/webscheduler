@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: Task.java 
+* @Title: ITask.java 
 * @Package com.openthinks.webscheduler.task 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
@@ -33,7 +33,7 @@ import org.quartz.JobExecutionException;
  * @author dailey.yet@outlook.com
  *
  */
-public interface Task extends Job {
+public interface ITask extends Job {
 	String TASK_REF = "task-ref";
 
 	@Override
