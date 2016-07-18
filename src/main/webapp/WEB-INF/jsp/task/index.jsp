@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="ew" uri="http://www.openthinks.com/easyweb" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,9 +10,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="dailey.yet@outlook.com">
-<link rel="icon"
-	href="${pageContext.request.contextPath}/static/favicon.ico">
-<title>Task</title>
+<link rel="icon" href="${ew:pathS('/static/favicon.ico')}">
+<title>Task - Home</title>
 <%@ include file="../template/head.style.jsp"%>
 </head>
 <body>
@@ -21,20 +22,20 @@
 				<jsp:param name="active" value="tasks" />
 			</jsp:include>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h1 class="page-header">Task</h1>
+				<h1 class="page-header">Task Home</h1>
 
 				<div class="row placeholders">
+					<a href="${ew:path('/task/to/add') }">
+						<div class="col-xs-6 col-sm-6 placeholder">
+							<img src="${ew:pathS('/static/img/createtask_512.png')}"
+								width="200" height="200" class="img-responsive"
+								alt="Generic placeholder thumbnail">
+							<h4>New</h4>
+							<span class="text-muted">Create a task</span>
+						</div>
+					</a>
 					<div class="col-xs-6 col-sm-6 placeholder">
-						<img
-							src="${pageContext.request.contextPath}/static/img/createtask_512.png"
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>New</h4>
-						<span class="text-muted">Create a task</span>
-					</div>
-					<div class="col-xs-6 col-sm-6 placeholder">
-						<img
-							src="${pageContext.request.contextPath}/static/img/definetask_512.png"
+						<img src="${ew:pathS('/static/img/definetask_512.png')}"
 							width="200" height="200" class="img-responsive"
 							alt="Generic placeholder thumbnail">
 						<h4>Define</h4>
@@ -60,19 +61,14 @@
 								<td>Lorem</td>
 								<td>ipsum</td>
 								<td>dolor</td>
-								<td>
-									<a href="#"><span title="Schedule" class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
-									<a href="#"><span title="Stop" class="glyphicon glyphicon-pause" aria-hidden="true"></span></a>
-									<a href="#"><span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-									<a href="#"><span title="Remove" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-								</td>
-							</tr>
-							<tr>
-								<td>1,002</td>
-								<td>amet</td>
-								<td>consectetur</td>
-								<td>adipiscing</td>
-								<td>elit</td>
+								<td><a href="#"><span title="Schedule"
+										class="glyphicon glyphicon-play" aria-hidden="true"></span></a> <a
+									href="#"><span title="Stop"
+										class="glyphicon glyphicon-pause" aria-hidden="true"></span></a> <a
+									href="#"><span title="Edit"
+										class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+									<a href="#"><span title="Remove"
+										class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
 							</tr>
 						</tbody>
 					</table>

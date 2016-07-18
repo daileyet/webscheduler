@@ -44,4 +44,15 @@
 		<!-- minutes -->
 		<session-timeout>30</session-timeout>
 	</session-config>
+	
+	<!-- <jsp-config>
+       <taglib>
+         <taglib-uri>
+           http://www.openthinks.com/easyweb
+         </taglib-uri>
+         <taglib-location>
+           /WEB-INF/tags/easyweb.tld
+         </taglib-location>
+       </taglib> 
+    </jsp-config> -->
 </web-app>

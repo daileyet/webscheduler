@@ -32,7 +32,6 @@ import com.openthinks.easyweb.context.RequestSuffix;
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
-import com.openthinks.libs.utilities.logger.ProcessLogger;
 
 /**
  * @author dailey.yet@outlook.com
@@ -52,12 +51,6 @@ public class MonitorController {
 
 	@Mapping("/reload")
 	public String reload(WebAttributers was) {
-		try {
-			WebContexts.get().getWebProcesser().reload();
-		} catch (ClassNotFoundException e) {
-			ProcessLogger.error(">>>>>>>>>>>>>>>>>>> Reload error:" + e.getMessage());
-		}
-		WebContexts.get().getWebProcesser().process();
 		return index(was);
 	}
 

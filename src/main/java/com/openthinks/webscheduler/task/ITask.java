@@ -37,10 +37,14 @@ public interface ITask extends Job {
 	String TASK_REF = "task-ref";
 
 	@Override
+	@Deprecated
 	public default void execute(JobExecutionContext context) throws JobExecutionException {
 		execute(new TaskContext(context));
 	}
 
 	public void execute(TaskContext context);
 
+	public default String getDescription() {
+		return this.getClass().getName();
+	}
 }

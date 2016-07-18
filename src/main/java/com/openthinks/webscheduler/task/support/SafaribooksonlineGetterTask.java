@@ -5,10 +5,10 @@ import openthinks.others.webpages.exception.LaunchFailedException;
 
 import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
-import com.openthinks.webscheduler.task.ITask;
+import com.openthinks.webscheduler.task.SupportTask;
 import com.openthinks.webscheduler.task.TaskContext;
 
-public class SafaribooksonlineGetterTask implements ITask {
+public class SafaribooksonlineGetterTask implements SupportTask {
 
 	@Override
 	public void execute(TaskContext context) {
@@ -22,6 +22,11 @@ public class SafaribooksonlineGetterTask implements ITask {
 			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
 		}
 
+	}
+
+	@Override
+	public String getDescription() {
+		return "Safari book download task";
 	}
 
 }

@@ -2,6 +2,7 @@ package com.openthinks.webscheduler.model;
 
 import java.util.UUID;
 
+import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.model.task.TaskState;
 
 public class TaskMetaData {
@@ -10,7 +11,7 @@ public class TaskMetaData {
 	private String taskType;
 	private String groupName;
 
-	private Object taskRef;
+	private ITaskRef taskRef;
 
 	private TaskState taskState;
 
@@ -53,11 +54,11 @@ public class TaskMetaData {
 		this.groupName = groupName;
 	}
 
-	public Object getTaskRef() {
+	public ITaskRef getTaskRef() {
 		return taskRef;
 	}
 
-	public void setTaskRef(Object taskRef) {
+	public void setTaskRef(ITaskRef taskRef) {
 		this.taskRef = taskRef;
 	}
 
@@ -105,8 +106,17 @@ public class TaskMetaData {
 	}
 
 	public void update(TaskMetaData taskMetaDataNew) {
-		// TODO Auto-generated method stub
-
+		if (taskMetaDataNew.getTaskId() != null)
+			this.setTaskId(taskMetaDataNew.getTaskId());
+		if (taskMetaDataNew.getTaskName() != null)
+			this.setTaskName(taskMetaDataNew.getTaskName());
+		if (taskMetaDataNew.getTaskType() != null)
+			this.setTaskType(taskMetaDataNew.getTaskType());
+		if (taskMetaDataNew.getGroupName() != null)
+			this.setGroupName(taskMetaDataNew.getGroupName());
+		if (taskMetaDataNew.getTaskRef() != null)
+			this.setTaskRef(taskMetaDataNew.getTaskRef());
+		if (taskMetaDataNew.getTaskState() != null)
+			this.setTaskState(taskMetaDataNew.getTaskState());
 	}
-
 }

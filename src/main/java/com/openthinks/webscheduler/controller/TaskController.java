@@ -20,6 +20,7 @@ import com.openthinks.webscheduler.model.TaskMetaData;
 import com.openthinks.webscheduler.service.SchedulerService;
 import com.openthinks.webscheduler.service.TaskService;
 import com.openthinks.webscheduler.task.ITask;
+import com.openthinks.webscheduler.task.TaskTypes;
 import com.openthinks.webscheduler.task.support.SafaribooksonlineGetterRef;
 import com.openthinks.webscheduler.task.support.SafaribooksonlineGetterTask;
 
@@ -50,7 +51,7 @@ public class TaskController {
 
 	@Mapping("/to/add")
 	public String goToAdd(WebAttributers was) {
-		//TODO
+		was.addAttribute("types", TaskTypes.getSupportTasks(), WebScope.REQUEST);
 		return "WEB-INF/jsp/task/add.jsp";
 	}
 
