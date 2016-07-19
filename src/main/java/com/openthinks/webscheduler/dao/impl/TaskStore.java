@@ -28,6 +28,8 @@ package com.openthinks.webscheduler.dao.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
@@ -41,6 +43,7 @@ import com.openthinks.webscheduler.model.TaskMetaData;
  */
 public class TaskStore implements ITaskDao {
 	private static final List<TaskMetaData> taskDB = Collections.synchronizedList(new ArrayList<TaskMetaData>());
+	private static final Map<String, TaskMetaData> taskMap = new ConcurrentHashMap<String, TaskMetaData>();
 	private Lock lock = new ReentrantLock();
 
 	/* (non-Javadoc)
@@ -62,13 +65,13 @@ public class TaskStore implements ITaskDao {
 	 */
 	@Override
 	public void save(TaskMetaData taskMetaDataNew) {
-		boolean isExist = taskDB.contains(taskMetaDataNew);
+		boolean isExist = taskMap.containsKey(taskMetaDataNew.getTaskId());
 		if (isExist) {
 			lock.lock();
 			try {
-				int index = taskDB.indexOf(taskMetaDataNew);
-				TaskMetaData taskMetaDataOld = taskDB.get(index);
-				taskMetaDataOld.update(taskMetaDataNew);
+				TaskMetaData taskMetaDataOld = taskMap.get(taskMetaDataNew.getTaskId());
+				if (taskMetaDataOld != null)
+					taskMetaDataOld.update(taskMetaDataNew);
 			} finally {
 				lock.unlock();
 			}
@@ -76,10 +79,19 @@ public class TaskStore implements ITaskDao {
 			lock.lock();
 			try {
 				taskDB.add(taskMetaDataNew);
+				taskMap.put(taskMetaDataNew.getTaskId(), taskMetaDataNew);
+				taskMetaDataNew.setTaskSeq(taskDB.size());
 			} finally {
 				lock.unlock();
 			}
 		}
 
+	}
+
+	@Override
+	public TaskMetaData get(String id) {
+		if (id != null)
+			return taskMap.get(id);
+		return null;
 	}
 }

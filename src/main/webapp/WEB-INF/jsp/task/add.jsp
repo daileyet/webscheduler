@@ -40,13 +40,27 @@
 							type</label>
 						<div class="col-sm-10">
 							<select id="tasktype" name="tasktype" class="form-control">
-								
+
 								<c:forEach var="typeClass" items="${types }">
 									<option value="${typeClass.name }">${typeClass.simpleName }</option>
 								</c:forEach>
 							</select>
 						</div>
 					</div>
+					<div class="form-group">
+						<label for="taskname" class="col-sm-2 control-label">Task
+							Properties</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" id="tasktref" name="taskref" rows="3"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10 ">
+							<button type="submit" class="btn btn-primary">Create</button>
+							<a class="btn btn-default " href="${ew:path('/task/index')}" role="button">Cancel</a>
+						</div>
+					</div>
+
 				</form>
 			</div>
 		</div>

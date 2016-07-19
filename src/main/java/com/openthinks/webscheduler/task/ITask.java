@@ -25,9 +25,15 @@
 */
 package com.openthinks.webscheduler.task;
 
+import java.util.Optional;
+
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+
+import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.task.DefaultTaskRef;
+import com.openthinks.webscheduler.model.task.ITaskRef;
 
 /**
  * @author dailey.yet@outlook.com
@@ -35,6 +41,7 @@ import org.quartz.JobExecutionException;
  */
 public interface ITask extends Job {
 	String TASK_REF = "task-ref";
+	String TASK_META = "task-meta";
 
 	@Override
 	@Deprecated
@@ -46,5 +53,14 @@ public interface ITask extends Job {
 
 	public default String getDescription() {
 		return this.getClass().getName();
+	}
+
+	public default Class<? extends ITaskRef> getTaskRef() {
+		return DefaultTaskRef.class;
+	}
+
+	public default Optional<TaskMetaData> getTaskMetaData(TaskContext context) {
+		TaskMetaData taskMetaData = context.get(TASK_META);
+		return Optional.ofNullable(taskMetaData);
 	}
 }

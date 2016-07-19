@@ -4,14 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.openthinks.easyweb.annotation.process.WebProcesser;
-import com.openthinks.easyweb.annotation.process.WebProcesser.FileFilterVistor;
-import com.openthinks.easyweb.context.WebContexts;
+import com.openthinks.easyweb.WebUtils;
+import com.openthinks.easyweb.annotation.process.filter.FileFilterVisitor;
 
 public final class TaskTypes {
 
 	private static final List<String> scanedPackages = new ArrayList<String>();
-	private static final List<Class<? extends SupportTask>> supportTasks = new ArrayList<Class<? extends SupportTask>>();
+	private static final List<Class<? extends ITask>> supportTasks = new ArrayList<Class<? extends ITask>>();
 	private static final List<Class<? extends CustomTask>> customTasks = new ArrayList<Class<? extends CustomTask>>();
 	private static final List<Class<?>> allTasks = new ArrayList<Class<?>>();
 	static {
@@ -39,7 +38,7 @@ public final class TaskTypes {
 		return customTasks;
 	}
 
-	public static List<Class<? extends SupportTask>> getSupportTasks() {
+	public static List<Class<? extends ITask>> getSupportTasks() {
 		return supportTasks;
 	}
 
@@ -50,16 +49,15 @@ public final class TaskTypes {
 	}
 
 	private static void visitPackage(String packName) {
-		final WebProcesser webProcesser = WebContexts.get().getWebProcesser();
-		String packPath = webProcesser.getPackPath(packName);
+		String packPath = WebUtils.getPackPath(packName);
 		File dir = new File(packPath);
-		dir.listFiles(new TaskFilterVistor(webProcesser, allTasks));
+		dir.listFiles(new TaskFilterVistor(allTasks));
 	}
 
-	static class TaskFilterVistor extends FileFilterVistor {
+	static class TaskFilterVistor extends FileFilterVisitor {
 
-		public TaskFilterVistor(WebProcesser webProcesser, List<Class<?>> filterClasss) {
-			webProcesser.super(filterClasss);
+		public TaskFilterVistor(List<Class<?>> filterClasss) {
+			super(filterClasss);
 		}
 
 		@Override
@@ -81,9 +79,20 @@ public final class TaskTypes {
 			if (CustomTask.class.isAssignableFrom(clazz)) {
 				customTasks.add((Class<? extends CustomTask>) clazz);
 			} else {
-				supportTasks.add((Class<? extends SupportTask>) clazz);
+				if (isSupportTask(clazz)) {
+					supportTasks.add((Class<? extends ITask>) clazz);
+				}
 			}
 		}
 
+		boolean isSupportTask(Class<?> clazz) {
+			Class<?>[] clazzs = clazz.getInterfaces();
+			for (Class<?> cl : clazzs) {
+				if ("com.openthinks.webscheduler.task.support.SupportTask".equals(cl.getName())) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }

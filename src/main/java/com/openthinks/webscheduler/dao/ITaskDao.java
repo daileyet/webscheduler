@@ -43,4 +43,6 @@ public interface ITaskDao {
 	public List<TaskMetaData> getTasks(Predicate<TaskMetaData> predicate);
 
 	public void save(TaskMetaData taskMetaData);
+
+	public TaskMetaData get(String id);
 }

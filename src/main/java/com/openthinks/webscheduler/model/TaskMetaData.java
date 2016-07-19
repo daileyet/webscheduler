@@ -2,16 +2,21 @@ package com.openthinks.webscheduler.model;
 
 import java.util.UUID;
 
+import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.model.task.TaskState;
+import com.openthinks.webscheduler.task.ITask;
 
 public class TaskMetaData {
+	private int taskSeq;
+
 	private String taskId;
 	private String taskName;
 	private String taskType;
 	private String groupName;
 
 	private ITaskRef taskRef;
+	private String taskRefContent;
 
 	private TaskState taskState;
 
@@ -20,6 +25,15 @@ public class TaskMetaData {
 		taskName = "default_task";
 		groupName = "default_group";
 		taskState = TaskState.NOT_RUNNING;
+		taskRef = new DefaultTaskRef();
+	}
+
+	public int getTaskSeq() {
+		return taskSeq;
+	}
+
+	public void setTaskSeq(int taskSeq) {
+		this.taskSeq = taskSeq;
 	}
 
 	public String getTaskId() {
@@ -40,6 +54,15 @@ public class TaskMetaData {
 
 	public String getTaskType() {
 		return taskType;
+	}
+
+	public String getTaskTypeShort() {
+		try {
+			return getTaskClass().getSimpleName();
+		} catch (ClassNotFoundException e) {
+			String[] names = getTaskType().split(".");
+			return names[names.length - 1];
+		}
 	}
 
 	public void setTaskType(String taskType) {
@@ -70,6 +93,14 @@ public class TaskMetaData {
 		this.taskState = taskState;
 	}
 
+	public String getTaskRefContent() {
+		return taskRefContent;
+	}
+
+	public void setTaskRefContent(String taskRefContent) {
+		this.taskRefContent = taskRefContent;
+	}
+
 	public boolean isValid() {
 		return taskState != null && taskState != TaskState.INVALID;
 	}
@@ -97,6 +128,12 @@ public class TaskMetaData {
 		} else if (!taskId.equals(other.taskId))
 			return false;
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends ITask> Class<T> getTaskClass() throws ClassNotFoundException {
+
+		return (Class<T>) Class.forName(getTaskType());
 	}
 
 	@Override

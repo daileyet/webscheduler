@@ -56,20 +56,22 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>1,001</td>
-								<td>Lorem</td>
-								<td>ipsum</td>
-								<td>dolor</td>
-								<td><a href="#"><span title="Schedule"
+							<c:forEach var="tm" items="${PAGE_TASK_LIST }">
+								<tr data-id="${tm.taskId }">
+								<td>${tm.taskSeq }</td>
+								<td>${tm.taskName }</td>
+								<td><span title="${tm.taskType}">${tm.taskTypeShort }</span></td>
+								<td>${tm.taskState }</td>
+								<td><a href="${ew:path('/task/schedule') }?taskid=${tm.taskId }"><span title="Schedule"
 										class="glyphicon glyphicon-play" aria-hidden="true"></span></a> <a
-									href="#"><span title="Stop"
+									href="${ew:path('/task/stop') }?taskid=${tm.taskId }"><span title="Stop"
 										class="glyphicon glyphicon-pause" aria-hidden="true"></span></a> <a
-									href="#"><span title="Edit"
+									href="${ew:path('/task/to/edit') }?taskid=${tm.taskId }"><span title="Edit"
 										class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-									<a href="#"><span title="Remove"
+									<a href="${ew:path('/task/remove') }?taskid=${tm.taskId }"><span title="Remove"
 										class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
-							</tr>
+								</tr>
+							</c:forEach>
 						</tbody>
 					</table>
 				</div>

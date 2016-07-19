@@ -14,7 +14,8 @@ public class TaskContext {
 		return context;
 	}
 
-	public Object get(Object key) {
-		return context.getMergedJobDataMap().get(key);
+	@SuppressWarnings("unchecked")
+	public <T extends Object> T get(Object key) {
+		return (T) context.getMergedJobDataMap().get(key);
 	}
 }

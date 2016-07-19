@@ -32,5 +32,11 @@ package com.openthinks.webscheduler.help;
 public interface StaticDict {
 
 	String PAGE_TASK_LIST = "PAGE_TASK_LIST";
+	public static final String PAGE_PARAM_TASK_ID = "taskid";
+	public static final String PAGE_ATTRIBUTE_ERRORS = "errors";
+	public static final String PAGE_PARAM_TASK_NAME = "taskname";
+	public static final String PAGE_PARAM_TASK_TYPE = "tasktype";
+	public static final String PAGE_PARAM_TASK_REF = "taskref";
+	public static final String PAGE_ATTRIBUTE_TASK_TYPES = "types";
 
 }

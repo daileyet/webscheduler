@@ -10,7 +10,6 @@ import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.service.SchedulerService;
-import com.openthinks.webscheduler.task.TaskTypes;
 
 @EasyConfigure
 @ScanPackages({ "com.openthinks.webscheduler" })
@@ -36,6 +35,6 @@ public class EasyWebConfigure implements Bootstrap {
 		} catch (SchedulerException e) {
 			ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
 		}
-		TaskTypes.init();
+		//		TaskTypes.init();
 	}
 }

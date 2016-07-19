@@ -19,4 +19,8 @@ public class TaskService {
 	public void saveTask(TaskMetaData taskMetaData) {
 		taskStore.save(taskMetaData);
 	}
+
+	public TaskMetaData getTask(String id) {
+		return taskStore.get(id);
+	}
 }

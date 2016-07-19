@@ -1,19 +1,19 @@
 package com.openthinks.webscheduler.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 
 import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
 import com.openthinks.easyweb.annotation.Mapping;
-import com.openthinks.easyweb.annotation.ResponseReturn;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
-import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.model.TaskMetaData;
@@ -21,8 +21,6 @@ import com.openthinks.webscheduler.service.SchedulerService;
 import com.openthinks.webscheduler.service.TaskService;
 import com.openthinks.webscheduler.task.ITask;
 import com.openthinks.webscheduler.task.TaskTypes;
-import com.openthinks.webscheduler.task.support.SafaribooksonlineGetterRef;
-import com.openthinks.webscheduler.task.support.SafaribooksonlineGetterTask;
 
 @Controller("/task")
 public class TaskController {
@@ -32,26 +30,48 @@ public class TaskController {
 	@AutoComponent
 	TaskService taskService;
 
-	@Mapping("/add")
-	@ResponseReturn(contentType = "text/html")
-	public String add() {
+	@Mapping("/schedule")
+	public String schedule(WebAttributers was) {
+		String taskId = (String) was.get(StaticDict.PAGE_PARAM_TASK_ID);
+		TaskMetaData taskMetaData = taskService.getTask(taskId);
+		List<Exception> errors = new ArrayList<Exception>();
+		Class<? extends ITask> clazz = null;
 		try {
-			SafaribooksonlineGetterRef bookConfigure = new SafaribooksonlineGetterRef();
-
-			JobDetail job = JobBuilder.newJob(SafaribooksonlineGetterTask.class).withIdentity("job1", "group1").build();
-			job.getJobDataMap().put(ITask.TASK_REF, bookConfigure);
-
-			Trigger trigger = TriggerBuilder.newTrigger().withIdentity("job1-trigger", "group1").startNow().build();
-			schedulerService.scheduleJob(job, trigger);
-		} catch (Exception e) {
-			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
+			clazz = taskMetaData.getTaskClass();
+		} catch (ClassNotFoundException e) {
+			ProcessLogger.error(e.getMessage());
+			errors.add(e);
 		}
-		return "<span>Done.</span>";
+		JobDetail job = JobBuilder.newJob(clazz).withIdentity(taskMetaData.getTaskId(), taskMetaData.getGroupName())
+				.build();
+		job.getJobDataMap().put(ITask.TASK_META, taskMetaData);
+		Trigger trigger = TriggerBuilder.newTrigger()
+				.withIdentity(taskMetaData.getTaskId() + "-trigger", taskMetaData.getGroupName()).startNow().build();
+
+		try {
+			schedulerService.scheduleJob(job, trigger);
+		} catch (SchedulerException e) {
+			ProcessLogger.fatal(e.getMessage());
+			errors.add(e);
+		}
+		was.addError(StaticDict.PAGE_ATTRIBUTE_ERRORS, errors, WebScope.REQUEST);
+		return index(was);
+	}
+
+	@Mapping("/add")
+	public String add(WebAttributers was) {
+
+		TaskMetaData taskMetaData = new TaskMetaData();
+		taskMetaData.setTaskName((String) was.get(StaticDict.PAGE_PARAM_TASK_NAME));
+		taskMetaData.setTaskType((String) was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
+		taskMetaData.setTaskRefContent((String) was.get(StaticDict.PAGE_PARAM_TASK_REF));
+		taskService.saveTask(taskMetaData);
+		return index(was);
 	}
 
 	@Mapping("/to/add")
 	public String goToAdd(WebAttributers was) {
-		was.addAttribute("types", TaskTypes.getSupportTasks(), WebScope.REQUEST);
+		was.addAttribute(StaticDict.PAGE_ATTRIBUTE_TASK_TYPES, TaskTypes.getSupportTasks(), WebScope.REQUEST);
 		return "WEB-INF/jsp/task/add.jsp";
 	}
 
