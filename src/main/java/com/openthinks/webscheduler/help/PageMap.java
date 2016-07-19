@@ -33,6 +33,9 @@ import java.util.HashMap;
  */
 public class PageMap extends HashMap<String, Object> {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 
 	public static PageMap build() {
@@ -40,7 +43,7 @@ public class PageMap extends HashMap<String, Object> {
 	}
 
 	public PageMap push(String key, Object value) {
-		this.push(key, value);
+		this.put(key, value);
 		return this;
 	}
 
