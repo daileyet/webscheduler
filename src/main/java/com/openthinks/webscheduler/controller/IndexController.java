@@ -11,4 +11,9 @@ public class IndexController {
 	public String index(WebAttributers was) {
 		return "WEB-INF/jsp/main.jsp";
 	}
+
+	@Mapping("/test")
+	public String test(WebAttributers was) {
+		return "WEB-INF/jsp/template/intermediate.jsp";
+	}
 }

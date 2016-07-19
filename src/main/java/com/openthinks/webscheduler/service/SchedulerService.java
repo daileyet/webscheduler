@@ -20,7 +20,7 @@ public class SchedulerService {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
 			scheduler.getListenerManager().addJobListener(new DefaultJobListener());
 		} catch (SchedulerException e) {
-			ProcessLogger.fatal(e.getMessage());
+			ProcessLogger.fatal(e);
 		}
 	}
 

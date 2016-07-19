@@ -16,28 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: StaticDict.java 
+* @Title: PageMap.java 
 * @Package com.openthinks.webscheduler.help 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Jul 8, 2016
+* @date Jul 19, 2016
 * @version V1.0   
 */
 package com.openthinks.webscheduler.help;
+
+import java.util.HashMap;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public interface StaticDict {
+public class PageMap extends HashMap<String, Object> {
 
-	String PAGE_TASK_LIST = "PAGE_TASK_LIST";
-	String PAGE_ATTRIBUTE_MAP = "pm";
-	public static final String PAGE_PARAM_TASK_ID = "taskid";
-	public static final String PAGE_ATTRIBUTE_ERRORS = "errors";
-	public static final String PAGE_PARAM_TASK_NAME = "taskname";
-	public static final String PAGE_PARAM_TASK_TYPE = "tasktype";
-	public static final String PAGE_PARAM_TASK_REF = "taskref";
-	public static final String PAGE_ATTRIBUTE_TASK_TYPES = "types";
+	private static final long serialVersionUID = 1L;
+
+	public static PageMap build() {
+		return new PageMap();
+	}
+
+	public PageMap push(String key, Object value) {
+		this.push(key, value);
+		return this;
+	}
 
 }
