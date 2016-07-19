@@ -10,7 +10,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="dailey.yet@outlook.com">
-
 <link rel="icon" href="${ew:pathS('/static/favicon.ico')}">
 <title>Task - New</title>
 <%@ include file="../template/head.style.jsp"%>

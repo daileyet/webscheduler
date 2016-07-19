@@ -45,7 +45,7 @@
 		<session-timeout>30</session-timeout>
 	</session-config>
 	
-	<!-- <jsp-config>
+	<jsp-config>
        <taglib>
          <taglib-uri>
            http://www.openthinks.com/easyweb
@@ -54,5 +54,5 @@
            /WEB-INF/tags/easyweb.tld
          </taglib-location>
        </taglib> 
-    </jsp-config> -->
+    </jsp-config>
 </web-app>

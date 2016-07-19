@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ew" uri="http://www.openthinks.com/easyweb" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +11,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="dailey.yet@outlook.com">
-<link rel="icon" href="${ew:pathS('/static/favicon.ico')}">
 <title>Task - Home</title>
 <%@ include file="../template/head.style.jsp"%>
 </head>

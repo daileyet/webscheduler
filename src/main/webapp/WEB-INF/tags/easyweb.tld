@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+    version="2.1">
+
+	<display-name>Easyweb utilities Functions</display-name>
+    <tlib-version>1.0</tlib-version>
+    <short-name>ew</short-name>
+	<uri>http://www.openthinks.com/easyweb</uri>
+
+	<function>
+		<name>path</name>
+		<function-class>com.openthinks.easyweb.WebUtils</function-class>
+		<function-signature>java.lang.String path(java.lang.String)</function-signature>
+	</function>
+	
+	<function>
+		<name>pathS</name>
+		<function-class>com.openthinks.easyweb.WebUtils</function-class>
+		<function-signature>java.lang.String pathS(java.lang.String)</function-signature>
+	</function>
+</taglib> 
