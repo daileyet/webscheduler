@@ -43,7 +43,7 @@
 					</div>
 				</div>
 
-				<h2 class="sub-header">Task List</h2>
+				<!-- <h2 class="sub-header">Task List</h2> -->
 				<div class="table-responsive">
 					<table class="table table-striped">
 						<thead>

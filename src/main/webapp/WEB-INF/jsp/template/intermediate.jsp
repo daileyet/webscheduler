@@ -41,12 +41,14 @@
 	<%@ include file="body.script.jsp"%>
 	<script type="text/javascript">
 		$(window).load(function() {
-			$(".bg_load").fadeOut("slow");
-			$(".wrapper").fadeOut("slow");
-			var redirectUrl = "${pm['redirectUrl']} ";
-			if(redirectUrl && redirectUrl!=""){
-				window.location = redirectUrl ;
-			}
+			setTimeout(function(){
+				$(".bg_load").fadeOut("slow");
+				$(".wrapper").fadeOut("slow");
+				var redirectUrl = "${pm['redirectUrl']} ";
+				if(redirectUrl && redirectUrl!=""){
+					window.location = redirectUrl ;
+				}
+			},800);
 		})
 	</script>
 </body>

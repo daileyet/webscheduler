@@ -30,7 +30,7 @@
 							name</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="taskname"
-								name="taskname" placeholder="task name">
+								name="taskname" placeholder="task name" required>
 						</div>
 					</div>
 
@@ -38,7 +38,7 @@
 						<label for="taskname" class="col-sm-2 control-label">Task
 							type</label>
 						<div class="col-sm-10">
-							<select id="tasktype" name="tasktype" class="form-control">
+							<select id="tasktype" name="tasktype" class="form-control" required>
 
 								<c:forEach var="typeClass" items="${types }">
 									<option value="${typeClass.name }">${typeClass.simpleName }</option>
