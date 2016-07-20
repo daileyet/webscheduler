@@ -16,39 +16,48 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: PageMap.java 
-* @Package com.openthinks.webscheduler.help 
+* @Title: TaskExecuteResult.java 
+* @Package com.openthinks.webscheduler.model.task 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Jul 19, 2016
+* @date Jul 20, 2016
 * @version V1.0   
 */
-package com.openthinks.webscheduler.help;
+package com.openthinks.webscheduler.model.task;
 
-import java.util.HashMap;
+import java.util.Date;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public class PageMap extends HashMap<String, Object> {
+public class TaskExecuteResult {
+	private boolean isSuccess;
+	private Date executeTime;
+	private String logContent;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3171294487394800798L;
-
-	/**
-	 * 
-	 */
-
-	public static PageMap build() {
-		return new PageMap();
+	public boolean isSuccess() {
+		return isSuccess;
 	}
 
-	public PageMap push(String key, Object value) {
-		this.put(key, value);
-		return this;
+	public void setSuccess(boolean isSuccess) {
+		this.isSuccess = isSuccess;
+	}
+
+	public Date getExecuteTime() {
+		return executeTime;
+	}
+
+	public void setExecuteTime(Date executeTime) {
+		this.executeTime = executeTime;
+	}
+
+	public String getLogContent() {
+		return logContent;
+	}
+
+	public void setLogContent(String logContent) {
+		this.logContent = logContent;
 	}
 
 }

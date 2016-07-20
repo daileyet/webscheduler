@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Enumeration;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Optional;
 import java.util.Properties;
@@ -74,6 +75,8 @@ public interface ITaskRef {
 	public void load(Reader reader) throws IOException;
 
 	public void loadFromXML(InputStream in) throws IOException, InvalidPropertiesFormatException;
+
+	public Enumeration<?> propertyNames();
 
 	public default Optional<String> getProp(String propertyName) {
 		try {

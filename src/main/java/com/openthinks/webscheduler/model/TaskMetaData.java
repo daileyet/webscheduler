@@ -1,9 +1,11 @@
 package com.openthinks.webscheduler.model;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
+import com.openthinks.webscheduler.model.task.TaskExecuteResult;
 import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.task.ITask;
 
@@ -15,17 +17,21 @@ public class TaskMetaData {
 	private String taskType;
 	private String groupName;
 
+	@Deprecated
 	private ITaskRef taskRef;
 	private String taskRefContent;
 
 	private TaskState taskState;
 
+	private TaskExecuteResult lastTaskResult;
+
 	public TaskMetaData() {
 		taskId = UUID.randomUUID().toString();
 		taskName = "default_task";
 		groupName = "default_group";
-		taskState = TaskState.NOT_RUNNING;
+		taskState = TaskState.UN_SCHEDULE;
 		taskRef = new DefaultTaskRef();
+		taskRefContent = "";
 	}
 
 	public int getTaskSeq() {
@@ -101,6 +107,14 @@ public class TaskMetaData {
 		this.taskRefContent = taskRefContent;
 	}
 
+	public TaskExecuteResult getLastTaskResult() {
+		return lastTaskResult;
+	}
+
+	public void setLastTaskResult(TaskExecuteResult lastTaskResult) {
+		this.lastTaskResult = lastTaskResult;
+	}
+
 	public boolean isValid() {
 		return taskState != null && taskState != TaskState.INVALID;
 	}
@@ -136,6 +150,16 @@ public class TaskMetaData {
 		return (Class<T>) Class.forName(getTaskType());
 	}
 
+	public void preparedTaskRef() {
+		if (this.taskRef != null) {
+			try {
+				this.taskRef.readString(getTaskRefContent());
+			} catch (IOException e) {
+				//ignore
+			}
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "TaskMetaData [taskId=" + taskId + ", taskName=" + taskName + ", taskType=" + taskType + ", groupName="
@@ -155,5 +179,7 @@ public class TaskMetaData {
 			this.setTaskRef(taskMetaDataNew.getTaskRef());
 		if (taskMetaDataNew.getTaskState() != null)
 			this.setTaskState(taskMetaDataNew.getTaskState());
+		if (taskMetaDataNew.getTaskRefContent() != null)
+			this.setTaskRefContent(taskMetaDataNew.getTaskRefContent());
 	}
 }

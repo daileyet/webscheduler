@@ -56,12 +56,12 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="tm" items="${PAGE_TASK_LIST }">
+							<c:forEach var="tm" items="${tms }">
 								<tr data-id="${tm.taskId }">
 								<td>${tm.taskSeq }</td>
 								<td>${tm.taskName }</td>
 								<td><span title="${tm.taskType}">${tm.taskTypeShort }</span></td>
-								<td>${tm.taskState }</td>
+								<td>${tm.taskState.display }</td>
 								<td><a href="${ew:path('/task/schedule') }?taskid=${tm.taskId }"><span title="Schedule"
 										class="glyphicon glyphicon-play" aria-hidden="true"></span></a> <a
 									href="${ew:path('/task/stop') }?taskid=${tm.taskId }"><span title="Stop"

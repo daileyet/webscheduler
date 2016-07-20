@@ -1,6 +1,5 @@
 package com.openthinks.webscheduler.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.quartz.JobBuilder;
@@ -34,15 +33,15 @@ public class TaskController {
 
 	@Mapping("/schedule")
 	public String schedule(WebAttributers was) {
-		String taskId = (String) was.get(StaticDict.PAGE_PARAM_TASK_ID);
+		boolean isSuccess = true;
+		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
 		TaskMetaData taskMetaData = taskService.getTask(taskId);
-		List<Exception> errors = new ArrayList<Exception>();
 		Class<? extends ITask> clazz = null;
 		try {
 			clazz = taskMetaData.getTaskClass();
 		} catch (ClassNotFoundException e) {
 			ProcessLogger.error(e);
-			errors.add(e);
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not found this task type.", WebScope.REQUEST);
 		}
 		JobDetail job = JobBuilder.newJob(clazz).withIdentity(taskMetaData.getTaskId(), taskMetaData.getGroupName())
 				.build();
@@ -53,41 +52,97 @@ public class TaskController {
 		try {
 			schedulerService.scheduleJob(job, trigger);
 		} catch (SchedulerException e) {
+			isSuccess = false;
 			ProcessLogger.fatal(e);
-			errors.add(e);
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2, "Can not schedule this task, " + e.getMessage(),
+					WebScope.REQUEST);
 		}
-		was.addError(StaticDict.PAGE_ATTRIBUTE_ERRORS, errors, WebScope.REQUEST);
+		if (!isSuccess) {
+			errorPage(was, this.newPageMap());
+		}
 		return index(was);
 	}
 
 	@Mapping("/add")
 	public String add(WebAttributers was) {
-
+		boolean isSuccess = true;
 		TaskMetaData taskMetaData = new TaskMetaData();
-		taskMetaData.setTaskName((String) was.get(StaticDict.PAGE_PARAM_TASK_NAME));
-		taskMetaData.setTaskType((String) was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
-		taskMetaData.setTaskRefContent((String) was.get(StaticDict.PAGE_PARAM_TASK_REF));
-		taskService.saveTask(taskMetaData);
-		PageMap pm = PageMap.build().push("title", "Task - Adding").push("activeSidebar", "tasks")
-				.push("redirectUrl", WebUtils.path("/task/index"));
-		return intermediate(was, pm);
+		taskMetaData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
+		taskMetaData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
+		taskMetaData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
+		PageMap pm = newPageMap();
+		try {
+			taskService.saveTask(taskMetaData);
+		} catch (Exception e) {
+			isSuccess = false;
+			ProcessLogger.error(e);
+			was.addError(e.getClass().getName(), "Save new task failed." + e.getMessage(), WebScope.REQUEST);
+		}
+		if (!isSuccess) {
+			return errorPage(was, pm);
+		}
+		pm.push("title", "Task - Adding").push("redirectUrl", WebUtils.path("/task/index"));
+		return intermediatePage(was, pm);
 	}
 
-	private String intermediate(WebAttributers was, PageMap pm) {
-		was.addAttribute(StaticDict.PAGE_ATTRIBUTE_MAP, pm, WebScope.REQUEST);
+	private String intermediatePage(WebAttributers was, PageMap pm) {
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
 		return "WEB-INF/jsp/template/intermediate.jsp";
+	}
+
+	private String errorPage(WebAttributers was, PageMap pm) {
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
+		return "WEB-INF/jsp/template/business.error.jsp";
 	}
 
 	@Mapping("/to/add")
 	public String goToAdd(WebAttributers was) {
-		was.addAttribute(StaticDict.PAGE_ATTRIBUTE_TASK_TYPES, TaskTypes.getSupportTasks(), WebScope.REQUEST);
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_TYPES, TaskTypes.getSupportTasks());
 		return "WEB-INF/jsp/task/add.jsp";
+	}
+
+	@Mapping("/to/edit")
+	public String goToEdit(WebAttributers was) {
+		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
+		TaskMetaData taskMetaData = taskService.getTask(taskId);
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_TYPES, TaskTypes.getSupportTasks());
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP,
+				PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskMetaData));
+		return "WEB-INF/jsp/task/edit.jsp";
+	}
+
+	@Mapping("/edit")
+	public String edit(WebAttributers was) {
+		boolean isSuccess = true;
+		TaskMetaData taskMetaData = new TaskMetaData();
+		taskMetaData.setTaskId(was.get(StaticDict.PAGE_PARAM_TASK_ID));
+		taskMetaData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
+		taskMetaData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
+		taskMetaData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
+		PageMap pm = newPageMap();
+
+		try {
+			taskService.saveTask(taskMetaData);
+		} catch (Exception e) {
+			isSuccess = false;
+			ProcessLogger.error(e);
+			was.addError(e.getClass().getName(), "Change task failed." + e.getMessage(), WebScope.REQUEST);
+		}
+		if (!isSuccess) {
+			return errorPage(was, pm);
+		}
+		pm.push("title", "Task - Editing").push("redirectUrl", WebUtils.path("/task/index"));
+		return intermediatePage(was, pm);
 	}
 
 	@Mapping("/index")
 	public String index(WebAttributers was) {
 		List<TaskMetaData> tasks = taskService.getValidTasks();
-		was.addAttribute(StaticDict.PAGE_TASK_LIST, tasks, WebScope.REQUEST);
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_LIST, tasks);
 		return "WEB-INF/jsp/task/index.jsp";
+	}
+
+	private PageMap newPageMap() {
+		return PageMap.build().push("activeSidebar", "tasks");
 	}
 }

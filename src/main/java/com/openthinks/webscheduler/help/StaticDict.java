@@ -18,7 +18,6 @@
  *
 * @Title: StaticDict.java 
 * @Package com.openthinks.webscheduler.help 
-* @Description: TODO
 * @author dailey.yet@outlook.com  
 * @date Jul 8, 2016
 * @version V1.0   
@@ -31,13 +30,22 @@ package com.openthinks.webscheduler.help;
  */
 public interface StaticDict {
 
-	String PAGE_TASK_LIST = "PAGE_TASK_LIST";
-	String PAGE_ATTRIBUTE_MAP = "pm";
+	public static final String PAGE_ATTRIBUTE_TASK_LIST = "tms";
+	public static final String PAGE_ATTRIBUTE_TASK_TYPES = "types";
+	public static final String PAGE_ATTRIBUTE_MAP = "pm";
+	public static final String PAGE_ATTRIBUTE_TASK_META = "tm";
+	public static final String PAGE_ATTRIBUTE_ERROR_PRE = "error_";
+
+	public static final String PAGE_ATTRIBUTE_ERROR_1 = "error_1";
+	public static final String PAGE_ATTRIBUTE_ERROR_2 = "error_2";
+	public static final String PAGE_ATTRIBUTE_ERROR_3 = "error_3";
+	public static final String PAGE_ATTRIBUTE_ERROR_4 = "error_4";
+	public static final String PAGE_ATTRIBUTE_ERROR_5 = "error_5";
+	public static final String PAGE_ATTRIBUTE_ERROR_6 = "error_6";
+
 	public static final String PAGE_PARAM_TASK_ID = "taskid";
-	public static final String PAGE_ATTRIBUTE_ERRORS = "errors";
 	public static final String PAGE_PARAM_TASK_NAME = "taskname";
 	public static final String PAGE_PARAM_TASK_TYPE = "tasktype";
 	public static final String PAGE_PARAM_TASK_REF = "taskref";
-	public static final String PAGE_ATTRIBUTE_TASK_TYPES = "types";
 
 }

@@ -47,19 +47,22 @@ class DefaultJobListener implements JobListener {
 
 	@Override
 	public void jobExecutionVetoed(JobExecutionContext arg0) {
-		ProcessLogger.info("jobExecutionVetoed");
+		ProcessLogger.debug("jobExecutionVetoed");
 
 	}
 
 	@Override
 	public void jobToBeExecuted(JobExecutionContext arg0) {
-		ProcessLogger.info("jobToBeExecuted");
+		ProcessLogger.debug("jobToBeExecuted");
 
 	}
 
 	@Override
 	public void jobWasExecuted(JobExecutionContext arg0, JobExecutionException arg1) {
-		ProcessLogger.info("jobWasExecuted");
+		ProcessLogger.debug("jobWasExecuted");
+		if (arg1 != null) {
+
+		}
 
 	}
 
