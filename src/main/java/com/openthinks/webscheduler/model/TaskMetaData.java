@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
-import com.openthinks.webscheduler.model.task.TaskExecuteResult;
+import com.openthinks.webscheduler.model.task.TaskResult;
 import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.task.ITask;
 
@@ -23,15 +23,19 @@ public class TaskMetaData {
 
 	private TaskState taskState;
 
-	private TaskExecuteResult lastTaskResult;
+	private TaskResult lastTaskResult;
 
 	public TaskMetaData() {
+	}
+
+	public void makeDefault() {
 		taskId = UUID.randomUUID().toString();
 		taskName = "default_task";
 		groupName = "default_group";
 		taskState = TaskState.UN_SCHEDULE;
 		taskRef = new DefaultTaskRef();
 		taskRefContent = "";
+		lastTaskResult=new TaskResult();
 	}
 
 	public int getTaskSeq() {
@@ -107,11 +111,11 @@ public class TaskMetaData {
 		this.taskRefContent = taskRefContent;
 	}
 
-	public TaskExecuteResult getLastTaskResult() {
+	public TaskResult getLastTaskResult() {
 		return lastTaskResult;
 	}
 
-	public void setLastTaskResult(TaskExecuteResult lastTaskResult) {
+	public void setLastTaskResult(TaskResult lastTaskResult) {
 		this.lastTaskResult = lastTaskResult;
 	}
 

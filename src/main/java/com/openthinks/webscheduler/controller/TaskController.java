@@ -67,6 +67,7 @@ public class TaskController {
 	public String add(WebAttributers was) {
 		boolean isSuccess = true;
 		TaskMetaData taskMetaData = new TaskMetaData();
+		taskMetaData.makeDefault();
 		taskMetaData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
 		taskMetaData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
 		taskMetaData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));

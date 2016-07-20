@@ -44,22 +44,25 @@ public class EchoTask implements SupportTask {
 		Optional<TaskMetaData> optional = getTaskMetaData(context);
 		if (optional.isPresent()) {
 			TaskMetaData taskMetaData = optional.get();
-			taskMetaData.preparedTaskRef();
-			Enumeration<?> enumeration = taskMetaData.getTaskRef().propertyNames();
-			while (enumeration.hasMoreElements()) {
-				String propertyName = (String) enumeration.nextElement();
-				if ("exception".equalsIgnoreCase(propertyName)) {
-					Optional<String> optional2 = taskMetaData.getTaskRef().getProp(propertyName);
-					if (optional2.isPresent() && "true".equalsIgnoreCase(optional2.get())) {
-						throw new IllegalArgumentException("This is illegal parameter configure items.");
-					}
+			if (taskMetaData.getTaskRefContent() == null || taskMetaData.getTaskRefContent().trim().length() == 0) {
+				for(int i=0;i<=100;i++){
+					echo("Hello World("+i+")");
+					sleep();
 				}
-				echo(propertyName + "=" + taskMetaData.getTaskRef().getProp(propertyName));
-				sleep();
-			}
-		} else {
-			for (int i = 0; i < 100; i++) {
-				echo("Hello World(" + i + ")");
+			} else {
+				taskMetaData.preparedTaskRef();
+				Enumeration<?> enumeration = taskMetaData.getTaskRef().propertyNames();
+				while (enumeration.hasMoreElements()) {
+					String propertyName = (String) enumeration.nextElement();
+					if ("exception".equalsIgnoreCase(propertyName)) {
+						Optional<String> optional2 = taskMetaData.getTaskRef().getProp(propertyName);
+						if (optional2.isPresent() && "true".equalsIgnoreCase(optional2.get())) {
+							throw new IllegalArgumentException("This is illegal parameter configure items.");
+						}
+					}
+					echo(propertyName + "=" + taskMetaData.getTaskRef().getProp(propertyName));
+					sleep();
+				}
 			}
 		}
 		ProcessLogger.debug(getClass() + " finished");

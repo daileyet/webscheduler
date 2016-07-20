@@ -22,9 +22,7 @@ public class SafaribooksonlineGetterTask implements SupportTask {
 		try {
 			bookConfigure.readString(taskMetaData.getTaskRefContent());
 			SafariBookLaunch bookLaunch = new SafariBookLaunch(bookConfigure);
-			taskMetaData.setTaskState(TaskState.RUNNING);
 			bookLaunch.start();
-			taskMetaData.setTaskState(TaskState.COMPLETE);
 		} catch (IOException e) {
 			taskMetaData.setTaskState(TaskState.INTERRUPT);
 			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());

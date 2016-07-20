@@ -31,11 +31,17 @@ import java.util.Date;
  * @author dailey.yet@outlook.com
  *
  */
-public class TaskExecuteResult {
+public class TaskResult {
 	private boolean isSuccess;
 	private Date executeTime;
 	private String logContent;
 
+	public TaskResult() {
+		this.isSuccess=true;
+		this.executeTime= new Date();
+		this.logContent="";
+	}
+	
 	public boolean isSuccess() {
 		return isSuccess;
 	}
