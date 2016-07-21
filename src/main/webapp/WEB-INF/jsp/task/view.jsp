@@ -101,7 +101,7 @@
 							    	<textarea class="form-control " id="tasktref" name="taskref" rows="10" readonly>${pm.tm.taskRefContent}</textarea>
 							    </div>
 							    <div role="tabpanel" class="tab-pane" id="taskresult">
-							    	<textarea class="form-control " id="tasktresult" name="tasktresult" rows="3" readonly>${pm.tm.lastTaskResult}</textarea>
+							    	<textarea class="form-control " id="tasktresult" name="tasktresult" rows="10" readonly>${pm.tm.lastTaskResult}</textarea>
 							    </div>
 							</div>
 						</div>

@@ -34,17 +34,16 @@ import com.openthinks.webscheduler.help.StaticUtils;
  *
  */
 public class TaskResult {
-	private boolean isSuccess;
-	private Date executeTime;
+	private Boolean isSuccess;
+	private Date startTime;
+	private Date endTime;
 	private String logContent;
 
 	public TaskResult() {
-		this.isSuccess = true;
-		this.executeTime = new Date();
-		this.logContent = "";
+
 	}
 
-	public boolean isSuccess() {
+	public Boolean isSuccess() {
 		return isSuccess;
 	}
 
@@ -52,12 +51,20 @@ public class TaskResult {
 		this.isSuccess = isSuccess;
 	}
 
-	public Date getExecuteTime() {
-		return executeTime;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setExecuteTime(Date executeTime) {
-		this.executeTime = executeTime;
+	public void setStartTime(Date executeTime) {
+		this.startTime = executeTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getLogContent() {
@@ -71,20 +78,27 @@ public class TaskResult {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Execution: ");
-		sb.append(this.isSuccess ? "Success" : "Failed");
-		sb.append("\\r\\n");
-		sb.append("Start Time: ");
-		sb.append(this.getFormattedExecuteTime());
-		sb.append("\\r\\n");
-		sb.append("Log Track: ");
-		sb.append(this.getLogContent());
-		sb.append("\\r\\n");
+		if (this.isSuccess() != null) {
+			sb.append("Execution: ");
+			sb.append(this.isSuccess ? "Success" : "Failed");
+			sb.append("\r\n");
+		}
+		if (this.getStartTime() != null) {
+			sb.append("Start Time: ");
+			sb.append(StaticUtils.formatDate(getStartTime()));
+			sb.append("\r\n");
+		}
+		if (this.getEndTime() != null) {
+			sb.append("End Time: ");
+			sb.append(StaticUtils.formatDate(getEndTime()));
+			sb.append("\r\n");
+		}
+		if (this.getLogContent() != null) {
+			sb.append("Log Track: ");
+			sb.append(this.getLogContent());
+			sb.append("\r\n");
+		}
 		return sb.toString();
-	}
-
-	private String getFormattedExecuteTime() {
-		return StaticUtils.formatDate(this.executeTime);
 	}
 
 }
