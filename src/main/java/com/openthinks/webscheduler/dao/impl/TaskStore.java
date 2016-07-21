@@ -43,7 +43,7 @@ import com.openthinks.webscheduler.model.TaskMetaData;
  */
 public class TaskStore implements ITaskDao {
 	private static final List<TaskMetaData> taskDB = Collections.synchronizedList(new ArrayList<TaskMetaData>());
-	private static final Map<String, TaskMetaData> taskMap = new ConcurrentHashMap<String, TaskMetaData>();
+	private static final Map<String, TaskMetaData> taskMap = new ConcurrentHashMap<>();
 	private Lock lock = new ReentrantLock();
 
 	/* (non-Javadoc)
@@ -51,7 +51,7 @@ public class TaskStore implements ITaskDao {
 	 */
 	@Override
 	public List<TaskMetaData> getTasks(Predicate<TaskMetaData> predicate) {
-		final List<TaskMetaData> taskMetaDatas = new ArrayList<TaskMetaData>();
+		final List<TaskMetaData> taskMetaDatas = new ArrayList<>();
 		taskDB.forEach((task) -> {
 			if (predicate.test(task)) {
 				taskMetaDatas.add(task);
@@ -93,5 +93,17 @@ public class TaskStore implements ITaskDao {
 		if (id != null)
 			return taskMap.get(id);
 		return null;
+	}
+
+	@Override
+	public boolean delete(String taskId) {
+		try {
+			TaskMetaData taskMetaData = taskMap.get(taskId);
+			taskDB.remove(taskMetaData);
+			taskMap.remove(taskId);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }

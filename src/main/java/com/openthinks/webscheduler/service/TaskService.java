@@ -23,4 +23,8 @@ public class TaskService {
 	public TaskMetaData getTask(String id) {
 		return taskStore.get(id);
 	}
+
+	public boolean remove(TaskMetaData taskMetaData) {
+		return taskStore.delete(taskMetaData.getTaskId());
+	}
 }

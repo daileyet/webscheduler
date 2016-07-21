@@ -54,5 +54,13 @@
            /WEB-INF/tags/easyweb.tld
          </taglib-location>
        </taglib> 
+       <taglib>
+         <taglib-uri>
+           http://www.openthinks.com/webscheduler/fns
+         </taglib-uri>
+         <taglib-location>
+           /WEB-INF/tags/webscheduler-fn.tld
+         </taglib-location>
+       </taglib> 
     </jsp-config>
 </web-app>

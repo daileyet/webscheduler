@@ -27,6 +27,8 @@ package com.openthinks.webscheduler.model.task;
 
 import java.util.Date;
 
+import com.openthinks.webscheduler.help.StaticUtils;
+
 /**
  * @author dailey.yet@outlook.com
  *
@@ -37,11 +39,11 @@ public class TaskResult {
 	private String logContent;
 
 	public TaskResult() {
-		this.isSuccess=true;
-		this.executeTime= new Date();
-		this.logContent="";
+		this.isSuccess = true;
+		this.executeTime = new Date();
+		this.logContent = "";
 	}
-	
+
 	public boolean isSuccess() {
 		return isSuccess;
 	}
@@ -64,6 +66,25 @@ public class TaskResult {
 
 	public void setLogContent(String logContent) {
 		this.logContent = logContent;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Execution: ");
+		sb.append(this.isSuccess ? "Success" : "Failed");
+		sb.append("\\r\\n");
+		sb.append("Start Time: ");
+		sb.append(this.getFormattedExecuteTime());
+		sb.append("\\r\\n");
+		sb.append("Log Track: ");
+		sb.append(this.getLogContent());
+		sb.append("\\r\\n");
+		return sb.toString();
+	}
+
+	private String getFormattedExecuteTime() {
+		return StaticUtils.formatDate(this.executeTime);
 	}
 
 }

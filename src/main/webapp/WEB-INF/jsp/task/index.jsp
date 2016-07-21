@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
-<%@ taglib prefix="ew" uri="http://www.openthinks.com/easyweb" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="ew" uri="http://www.openthinks.com/easyweb"%>
+<%@ taglib prefix="wsfn" uri="http://www.openthinks.com/webscheduler/fns"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +45,8 @@
 				</div>
 
 				<!-- <h2 class="sub-header">Task List</h2> -->
-				<div class="table-responsive <c:if test="${fn:length(tms)==0 }">hidden</c:if>">
+				<div
+					class="table-responsive <c:if test="${fn:length(tms)==0 }">hidden</c:if>">
 					<table class="table table-striped">
 						<thead>
 							<tr>
@@ -59,18 +60,31 @@
 						<tbody>
 							<c:forEach var="tm" items="${tms }">
 								<tr data-id="${tm.taskId }">
-								<td>${tm.taskSeq }</td>
-								<td>${tm.taskName }</td>
-								<td><span title="${tm.taskType}">${tm.taskTypeShort }</span></td>
-								<td>${tm.taskState.display }</td>
-								<td><a href="${ew:path('/task/schedule') }?taskid=${tm.taskId }"><span title="Schedule"
-										class="glyphicon glyphicon-play" aria-hidden="true"></span></a> <a
-									href="${ew:path('/task/stop') }?taskid=${tm.taskId }"><span title="Stop"
-										class="glyphicon glyphicon-pause" aria-hidden="true"></span></a> <a
-									href="${ew:path('/task/to/edit') }?taskid=${tm.taskId }"><span title="Edit"
-										class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-									<a href="${ew:path('/task/remove') }?taskid=${tm.taskId }"><span title="Remove"
-										class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+									<td data-title="taskseq">${tm.taskSeq }</td>
+									<td data-title="taskname"><a href="${ew:path('/task/to/view') }?taskid=${tm.taskId }">${tm.taskName }</a></td>
+									<td data-title="tasktype"><span title="${tm.taskType}">${tm.taskTypeShort }</span></td>
+									<td data-title="taskstate">${tm.taskState.display }
+										<c:if
+											test="${wsfn:isCompleteWith(tm,true) }">
+											<i class="fa fa-check-circle text-success" aria-hidden="true"></i>
+										</c:if> <c:if test="${wsfn:isCompleteWith(tm,false) }">
+											<i class="fa fa-times-circle-o text-danger"
+												aria-hidden="true"></i>
+										</c:if>
+									</td>
+									<td data-title="taskaction">
+										<!-- <div class="btn-group btn-group-xs" role="group"> -->
+											<a href="${ew:path('/task/schedule') }?taskid=${tm.taskId }" >
+											<span title="Schedule" class="glyphicon glyphicon-play" aria-hidden="true"></span></a> 
+											<a href="${ew:path('/task/stop') }?taskid=${tm.taskId }" >
+												<span title="Stop" class="glyphicon glyphicon-pause" aria-hidden="true"></span></a> 
+											<a href="${ew:path('/task/to/edit') }?taskid=${tm.taskId }" >
+												<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> 
+											<a href="${ew:path('/task/remove') }?taskid=${tm.taskId }"  data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
+												<span title="Remove" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+											</a>
+										<!-- </div> -->
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -80,7 +94,28 @@
 		</div>
 	</div>
 
+	 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Remove</h4>
+                </div>
+            
+                <div class="modal-body">
+                    <p>You are going to remove this task <span class="label label-default" data-title="taskname"></span>, this procedure is irreversible.</p>
+                    <p>Do you want to proceed?</p>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
 	<%@ include file="../template/body.script.jsp"%>
-
+	<script type="text/javascript"
+		src="${ew:pathS('/static/js/task.index.js')}"></script>
 </body>
 </html>

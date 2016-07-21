@@ -45,4 +45,6 @@ public interface ITaskDao {
 	public void save(TaskMetaData taskMetaData);
 
 	public TaskMetaData get(String id);
+
+	public boolean delete(String taskId);
 }

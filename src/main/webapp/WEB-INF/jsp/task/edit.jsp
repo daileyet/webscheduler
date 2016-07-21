@@ -63,7 +63,7 @@
 						<label for="taskname" class="col-sm-2 control-label">Task
 							Properties</label>
 						<div class="col-sm-10">
-							<textarea class="form-control" id="tasktref" name="taskref" rows="3">${pm.tm.taskRefContent}</textarea>
+							<textarea class="form-control" id="tasktref" name="taskref" rows="10">${pm.tm.taskRefContent}</textarea>
 						</div>
 					</div>
 					<div class="form-group">

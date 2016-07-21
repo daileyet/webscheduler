@@ -136,6 +136,41 @@ public class TaskController {
 		return intermediatePage(was, pm);
 	}
 
+	@Mapping("/remove")
+	public String remove(WebAttributers was) {
+		boolean isSuccess = true;
+		PageMap pm = newPageMap();
+		TaskMetaData taskMetaData = taskService.getTask(was.get(StaticDict.PAGE_PARAM_TASK_ID));
+		if (taskMetaData != null) {
+			isSuccess = taskService.remove(taskMetaData);
+			if (!isSuccess)
+				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Internal error happend when removing, try it later.",
+						WebScope.REQUEST);
+		} else {
+			isSuccess = false;
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2, "Can not found this entry, maybe it has been removed.",
+					WebScope.REQUEST);
+		}
+		if (!isSuccess) {
+			return errorPage(was, pm);
+		}
+		pm.push("title", "Task - Removing").push("redirectUrl", WebUtils.path("/task/index"));
+		return intermediatePage(was, pm);
+	}
+
+	@Mapping("/to/view")
+	public String view(WebAttributers was) {
+		PageMap pm = newPageMap();
+		TaskMetaData taskMetaData = taskService.getTask(was.get(StaticDict.PAGE_PARAM_TASK_ID));
+		if (taskMetaData == null) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not found this entry, maybe it has been removed.",
+					WebScope.REQUEST);
+			return errorPage(was, pm);
+		}
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm.push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskMetaData));
+		return "WEB-INF/jsp/task/view.jsp";
+	}
+
 	@Mapping("/index")
 	public String index(WebAttributers was) {
 		List<TaskMetaData> tasks = taskService.getValidTasks();

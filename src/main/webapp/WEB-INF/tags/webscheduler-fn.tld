@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+    version="2.1">
+
+	<display-name>WebScheduler utilities Functions</display-name>
+    <tlib-version>1.0</tlib-version>
+    <short-name>functions</short-name>
+	<uri>http://www.openthinks.com/webscheduler/fns</uri>
+
+	<function>
+		<name>isCompleteWith</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>boolean isCompleteWith(com.openthinks.webscheduler.model.TaskMetaData, boolean)</function-signature>
+	</function>
+	
+</taglib> 

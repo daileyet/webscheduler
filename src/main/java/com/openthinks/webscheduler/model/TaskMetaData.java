@@ -35,7 +35,7 @@ public class TaskMetaData {
 		taskState = TaskState.UN_SCHEDULE;
 		taskRef = new DefaultTaskRef();
 		taskRefContent = "";
-		lastTaskResult=new TaskResult();
+		lastTaskResult = new TaskResult();
 	}
 
 	public int getTaskSeq() {

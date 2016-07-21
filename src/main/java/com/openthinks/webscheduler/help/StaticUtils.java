@@ -16,44 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: StaticChecker.java 
+* @Title: StaticUtils.java 
 * @Package com.openthinks.webscheduler.help 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Jul 13, 2016
+* @date Jul 21, 2016
 * @version V1.0   
 */
 package com.openthinks.webscheduler.help;
 
-import com.openthinks.webscheduler.model.TaskMetaData;
-import com.openthinks.webscheduler.model.task.TaskState;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public final class StaticChecker {
+public final class StaticUtils {
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	public static boolean isRefXML(String content) {
-		boolean is = content.indexOf("<?xml") != -1;
-		if (!is)
-			return false;
-		is = content.indexOf("<!DOCTYPE properties SYSTEM \"http://java.sun.com/dtd/properties.dtd\">") != -1;
-		if (!is)
-			return false;
-		is = content.indexOf("<properties>") != -1;
-		if (!is)
-			return false;
-		return true;
+	public static String formatDate(Date date) {
+		return DATE_FORMAT.format(date);
 	}
-
-	public static boolean isCompleteWith(TaskMetaData taskMetaData, boolean isSuccess) {
-		if (taskMetaData != null && taskMetaData.getTaskState() == TaskState.COMPLETE) {
-			if (taskMetaData.getLastTaskResult() != null && taskMetaData.getLastTaskResult().isSuccess() == isSuccess) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 }
