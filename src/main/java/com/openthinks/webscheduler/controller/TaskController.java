@@ -16,8 +16,10 @@ import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.PageMap;
+import com.openthinks.webscheduler.help.StaticChecker;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.task.TaskAction;
 import com.openthinks.webscheduler.service.SchedulerService;
 import com.openthinks.webscheduler.service.TaskService;
 import com.openthinks.webscheduler.task.ITask;
@@ -33,9 +35,12 @@ public class TaskController {
 
 	@Mapping("/schedule")
 	public String schedule(WebAttributers was) {
-		boolean isSuccess = true;
 		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
 		TaskMetaData taskMetaData = taskService.getTask(taskId);
+		if (!checkState(was, taskMetaData, TaskAction.Schedule)) {
+			return errorPage(was, this.newPageMap());
+		}
+		boolean isSuccess = true;
 		Class<? extends ITask> clazz = null;
 		try {
 			clazz = taskMetaData.getTaskClass();
@@ -58,20 +63,21 @@ public class TaskController {
 					WebScope.REQUEST);
 		}
 		if (!isSuccess) {
-			errorPage(was, this.newPageMap());
+			return errorPage(was, this.newPageMap());
 		}
 		return index(was);
 	}
 
 	@Mapping("/add")
 	public String add(WebAttributers was) {
-		boolean isSuccess = true;
+
 		TaskMetaData taskMetaData = new TaskMetaData();
 		taskMetaData.makeDefault();
 		taskMetaData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
 		taskMetaData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
 		taskMetaData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
 		PageMap pm = newPageMap();
+		boolean isSuccess = true;
 		try {
 			taskService.saveTask(taskMetaData);
 		} catch (Exception e) {
@@ -114,14 +120,16 @@ public class TaskController {
 
 	@Mapping("/edit")
 	public String edit(WebAttributers was) {
-		boolean isSuccess = true;
 		TaskMetaData taskMetaData = new TaskMetaData();
 		taskMetaData.setTaskId(was.get(StaticDict.PAGE_PARAM_TASK_ID));
 		taskMetaData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
 		taskMetaData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
 		taskMetaData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
 		PageMap pm = newPageMap();
-
+		if (!checkState(was, taskMetaData, TaskAction.Edit)) {
+			return errorPage(was, pm);
+		}
+		boolean isSuccess = true;
 		try {
 			taskService.saveTask(taskMetaData);
 		} catch (Exception e) {
@@ -136,11 +144,31 @@ public class TaskController {
 		return intermediatePage(was, pm);
 	}
 
+	/**
+	 * check the given task action is allowed under current task state
+	 * @param was
+	 * @param taskMetaData
+	 * @param pm
+	 */
+	protected boolean checkState(WebAttributers was, TaskMetaData taskMetaData, TaskAction taskAction) {
+		if (!StaticChecker.isAvaiableWith(taskMetaData, taskAction)) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_PRE + "State",
+					"This action:[" + taskAction + "] is not allowed since current task is on state:["
+							+ taskMetaData.getTaskState().getDisplay() + "].",
+					WebScope.REQUEST);
+			return false;
+		}
+		return true;
+	}
+
 	@Mapping("/remove")
 	public String remove(WebAttributers was) {
-		boolean isSuccess = true;
 		PageMap pm = newPageMap();
 		TaskMetaData taskMetaData = taskService.getTask(was.get(StaticDict.PAGE_PARAM_TASK_ID));
+		if (taskMetaData != null && !checkState(was, taskMetaData, TaskAction.Remove)) {
+			return errorPage(was, pm);
+		}
+		boolean isSuccess = true;
 		if (taskMetaData != null) {
 			isSuccess = taskService.remove(taskMetaData);
 			if (!isSuccess)

@@ -16,4 +16,10 @@
 		<function-signature>boolean isCompleteWith(com.openthinks.webscheduler.model.TaskMetaData, boolean)</function-signature>
 	</function>
 	
+	<function>
+		<name>isAvaiableWith</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>boolean isAvaiableWith(com.openthinks.webscheduler.model.TaskMetaData, java.lang.String)</function-signature>
+	</function>
+	
 </taglib> 

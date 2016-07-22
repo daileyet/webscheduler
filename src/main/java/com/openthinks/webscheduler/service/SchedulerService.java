@@ -85,13 +85,14 @@ class DefaultJobListener implements JobListener {
 		Optional<TaskMetaData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.COMPLETE);
+			metaData.get().getLastTaskResult().setSuccess(true);
+			metaData.get().getLastTaskResult().setEndTime(new Date());
 		}
 		if (executionException != null) {
 			ProcessLogger.error(executionException);
 			if (metaData.isPresent()) {
 				metaData.get().getLastTaskResult().setSuccess(false);
-				metaData.get().getLastTaskResult().setEndTime(new Date());
-				metaData.get().getLastTaskResult().setLogContent(executionException.getMessage());
+				metaData.get().getLastTaskResult().track(executionException.getMessage());
 			}
 		}
 

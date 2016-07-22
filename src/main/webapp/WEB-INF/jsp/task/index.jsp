@@ -74,15 +74,23 @@
 									</td>
 									<td data-title="taskaction">
 										<!-- <div class="btn-group btn-group-xs" role="group"> -->
-											<a href="${ew:path('/task/schedule') }?taskid=${tm.taskId }" >
-											<span title="Schedule" class="glyphicon glyphicon-play" aria-hidden="true"></span></a> 
-											<a href="${ew:path('/task/stop') }?taskid=${tm.taskId }" >
-												<span title="Stop" class="glyphicon glyphicon-pause" aria-hidden="true"></span></a> 
-											<a href="${ew:path('/task/to/edit') }?taskid=${tm.taskId }" >
-												<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> 
-											<a href="${ew:path('/task/remove') }?taskid=${tm.taskId }"  data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
-												<span title="Remove" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-											</a>
+											<c:if test="${wsfn:isAvaiableWith(tm,'Schedule') }">
+												<a href="${ew:path('/task/schedule') }?taskid=${tm.taskId }" >
+												<span title="Schedule" class="glyphicon glyphicon-play" aria-hidden="true"></span></a> 
+											</c:if>
+											<c:if test="${wsfn:isAvaiableWith(tm,'Stop') }">
+												<a href="${ew:path('/task/stop') }?taskid=${tm.taskId }" >
+													<span title="Stop" class="glyphicon glyphicon-pause" aria-hidden="true"></span></a> 
+											</c:if>
+											<c:if test="${wsfn:isAvaiableWith(tm,'Edit') }">
+												<a href="${ew:path('/task/to/edit') }?taskid=${tm.taskId }" >
+													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> 
+											</c:if>
+											<c:if test="${wsfn:isAvaiableWith(tm,'Remove') }">
+												<a href="${ew:path('/task/remove') }?taskid=${tm.taskId }"  data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
+													<span title="Remove" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+												</a>
+											</c:if>
 										<!-- </div> -->
 									</td>
 								</tr>

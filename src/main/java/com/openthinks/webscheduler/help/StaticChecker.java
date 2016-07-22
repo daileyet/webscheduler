@@ -26,6 +26,8 @@
 package com.openthinks.webscheduler.help;
 
 import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.task.TaskAction;
+import com.openthinks.webscheduler.model.task.TaskResult;
 import com.openthinks.webscheduler.model.task.TaskState;
 
 /**
@@ -49,11 +51,42 @@ public final class StaticChecker {
 
 	public static boolean isCompleteWith(TaskMetaData taskMetaData, boolean isSuccess) {
 		if (taskMetaData != null && taskMetaData.getTaskState() == TaskState.COMPLETE) {
-			if (taskMetaData.getLastTaskResult() != null && taskMetaData.getLastTaskResult().isSuccess() == isSuccess) {
+			TaskResult taskResult = taskMetaData.getLastTaskResult();
+			if (taskResult != null && taskResult.isSuccess() != null && taskResult.isSuccess() == isSuccess) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public static boolean isAvaiableWith(TaskMetaData taskMetaData, TaskAction taskAction) {
+		boolean isAvaiable = false;
+		if (taskMetaData == null || taskAction == null) {
+			return isAvaiable;
+		}
+		switch (taskAction) {
+		case Schedule:
+			isAvaiable = (taskMetaData.getTaskState() != TaskState.RUNNING);
+			break;
+		case Stop:
+			isAvaiable = (taskMetaData.getTaskState() == TaskState.RUNNING);
+			break;
+		case Edit:
+			isAvaiable = (taskMetaData.getTaskState() != TaskState.RUNNING);
+			break;
+		case Remove:
+			isAvaiable = (taskMetaData.getTaskState() != TaskState.RUNNING
+					&& taskMetaData.getTaskState() != TaskState.INVALID);
+			break;
+		}
+		return isAvaiable;
+	}
+
+	public static boolean isAvaiableWith(TaskMetaData taskMetaData, String taskActionStr) {
+		boolean isAvaiable = false;
+		TaskAction taskAction = TaskAction.valueOf(taskActionStr);
+		isAvaiable = isAvaiableWith(taskMetaData, taskAction);
+		return isAvaiable;
 	}
 
 }

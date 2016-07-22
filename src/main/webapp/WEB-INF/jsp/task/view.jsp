@@ -28,18 +28,26 @@
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10 ">
 							<div class="btn-group pull-right" role="group" aria-label="Action">
-								<a class="btn btn-default " role="button" href="${ew:path('/task/schedule') }?taskid=${pm.tm.taskId }">
-									<span title="Schedule" class="glyphicon glyphicon-play" aria-hidden="true"></span>Schedule
-								</a> 
-								<a class="btn btn-default " href="${ew:path('/task/stop') }?taskid=${pm.tm.taskId }">
-									<span title="Stop" class="glyphicon glyphicon-pause" aria-hidden="true"></span>Stop
-								</a> 
-								<a class="btn btn-default " href="${ew:path('/task/to/edit') }?taskid=${pm.tm.taskId }">
-									<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Edit
-								</a> 
-								<a class="btn btn-default " href="${ew:path('/task/remove') }?taskid=${pm.tm.taskId }" data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
-									<span title="Remove" class="glyphicon glyphicon-trash" aria-hidden="true"></span>Remove
-								</a>	
+								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Schedule') }">
+									<a class="btn btn-default " role="button" href="${ew:path('/task/schedule') }?taskid=${pm.tm.taskId }">
+										<span title="Schedule" class="glyphicon glyphicon-play" aria-hidden="true"></span>Schedule
+									</a> 
+								</c:if>
+								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Stop') }">
+									<a class="btn btn-default " href="${ew:path('/task/stop') }?taskid=${pm.tm.taskId }">
+										<span title="Stop" class="glyphicon glyphicon-pause" aria-hidden="true"></span>Stop
+								</a>
+								</c:if> 
+								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Edit') }">
+									<a class="btn btn-default " href="${ew:path('/task/to/edit') }?taskid=${pm.tm.taskId }">
+										<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Edit
+								</a>
+								</c:if> 
+								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Remove') }">
+									<a class="btn btn-default " href="${ew:path('/task/remove') }?taskid=${pm.tm.taskId }" data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
+										<span title="Remove" class="glyphicon glyphicon-trash" aria-hidden="true"></span>Remove
+									</a>
+								</c:if>	
 							</div>						
 						</div>
 					</div>

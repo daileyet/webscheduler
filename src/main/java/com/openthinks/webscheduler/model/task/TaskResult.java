@@ -37,10 +37,10 @@ public class TaskResult {
 	private Boolean isSuccess;
 	private Date startTime;
 	private Date endTime;
-	private String logContent;
+	private StringBuilder logContent;
 
 	public TaskResult() {
-
+		logContent = new StringBuilder();
 	}
 
 	public Boolean isSuccess() {
@@ -68,11 +68,16 @@ public class TaskResult {
 	}
 
 	public String getLogContent() {
-		return logContent;
+		return logContent.toString();
 	}
 
-	public void setLogContent(String logContent) {
-		this.logContent = logContent;
+	protected void setLogContent(String logContent) {
+		this.logContent = new StringBuilder(logContent);
+	}
+
+	public void track(String log) {
+		this.logContent.append(log);
+		this.logContent.append("\r\n");
 	}
 
 	@Override
@@ -93,7 +98,7 @@ public class TaskResult {
 			sb.append(StaticUtils.formatDate(getEndTime()));
 			sb.append("\r\n");
 		}
-		if (this.getLogContent() != null) {
+		if (this.getLogContent() != null && this.getLogContent().length() > 0) {
 			sb.append("Log Track: ");
 			sb.append(this.getLogContent());
 			sb.append("\r\n");
