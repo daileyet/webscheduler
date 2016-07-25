@@ -23,20 +23,21 @@
 * @date Jul 20, 2016
 * @version V1.0   
 */
-package com.openthinks.webscheduler.task.support;
+package com.openthinks.webscheduler.task.custom;
 
 import java.util.Enumeration;
 import java.util.Optional;
 
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.task.CustomTaskDefinition;
 import com.openthinks.webscheduler.task.TaskContext;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public class EchoTask implements SupportTaskDefinition {
+public class EchoCustomTask implements CustomTaskDefinition {
 
 	@Override
 	public void execute(TaskContext context) {

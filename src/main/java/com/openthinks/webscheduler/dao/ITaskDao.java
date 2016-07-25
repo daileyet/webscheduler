@@ -28,7 +28,7 @@ package com.openthinks.webscheduler.dao;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.TaskRunTimeData;
 
 /**
  * @author dailey.yet@outlook.com
@@ -37,14 +37,14 @@ import com.openthinks.webscheduler.model.TaskMetaData;
 public interface ITaskDao {
 	/**
 	 * fetch task list by predicate
-	 * @param predicate Predicate<TaskMetaData>
-	 * @return List<TaskMetaData>
+	 * @param predicate Predicate<TaskRunTimeData>
+	 * @return List<TaskRunTimeData>
 	 */
-	public List<TaskMetaData> getTasks(Predicate<TaskMetaData> predicate);
+	public List<TaskRunTimeData> getTasks(Predicate<TaskRunTimeData> predicate);
 
-	public void save(TaskMetaData taskMetaData);
+	public void save(TaskRunTimeData taskRunTimeData);
 
-	public TaskMetaData get(String id);
+	public TaskRunTimeData get(String id);
 
 	public boolean delete(String taskId);
 }

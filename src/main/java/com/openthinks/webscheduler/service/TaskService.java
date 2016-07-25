@@ -5,26 +5,26 @@ import java.util.List;
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.webscheduler.dao.ITaskDao;
 import com.openthinks.webscheduler.dao.impl.TaskStore;
-import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.TaskRunTimeData;
 
 public class TaskService {
 	private ITaskDao taskStore = WebContexts.get().lookup(TaskStore.class);
 
-	public List<TaskMetaData> getValidTasks() {
+	public List<TaskRunTimeData> getValidTasks() {
 		return taskStore.getTasks((task) -> {
 			return task.isValid();
 		});
 	}
 
-	public void saveTask(TaskMetaData taskMetaData) {
-		taskStore.save(taskMetaData);
+	public void saveTask(TaskRunTimeData taskRunTimeData) {
+		taskStore.save(taskRunTimeData);
 	}
 
-	public TaskMetaData getTask(String id) {
+	public TaskRunTimeData getTask(String id) {
 		return taskStore.get(id);
 	}
 
-	public boolean remove(TaskMetaData taskMetaData) {
-		return taskStore.delete(taskMetaData.getTaskId());
+	public boolean remove(TaskRunTimeData taskRunTimeData) {
+		return taskStore.delete(taskRunTimeData.getTaskId());
 	}
 }

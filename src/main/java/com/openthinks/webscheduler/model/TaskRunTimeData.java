@@ -7,9 +7,9 @@ import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.model.task.TaskResult;
 import com.openthinks.webscheduler.model.task.TaskState;
-import com.openthinks.webscheduler.task.ITask;
+import com.openthinks.webscheduler.task.ITaskDefinition;
 
-public class TaskMetaData {
+public class TaskRunTimeData {
 	private int taskSeq;
 
 	private String taskId;
@@ -25,7 +25,7 @@ public class TaskMetaData {
 
 	private TaskResult lastTaskResult;
 
-	public TaskMetaData() {
+	public TaskRunTimeData() {
 	}
 
 	public void makeDefault() {
@@ -139,7 +139,7 @@ public class TaskMetaData {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TaskMetaData other = (TaskMetaData) obj;
+		TaskRunTimeData other = (TaskRunTimeData) obj;
 		if (taskId == null) {
 			if (other.taskId != null)
 				return false;
@@ -149,7 +149,7 @@ public class TaskMetaData {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends ITask> Class<T> getTaskClass() throws ClassNotFoundException {
+	public <T extends ITaskDefinition> Class<T> getTaskClass() throws ClassNotFoundException {
 
 		return (Class<T>) Class.forName(getTaskType());
 	}
@@ -166,11 +166,11 @@ public class TaskMetaData {
 
 	@Override
 	public String toString() {
-		return "TaskMetaData [taskId=" + taskId + ", taskName=" + taskName + ", taskType=" + taskType + ", groupName="
+		return "TaskRunTimeData [taskId=" + taskId + ", taskName=" + taskName + ", taskType=" + taskType + ", groupName="
 				+ groupName + ", taskRef=" + taskRef + ", taskState=" + taskState + "]";
 	}
 
-	public void update(TaskMetaData taskMetaDataNew) {
+	public void update(TaskRunTimeData taskMetaDataNew) {
 		if (taskMetaDataNew.getTaskId() != null)
 			this.setTaskId(taskMetaDataNew.getTaskId());
 		if (taskMetaDataNew.getTaskName() != null)

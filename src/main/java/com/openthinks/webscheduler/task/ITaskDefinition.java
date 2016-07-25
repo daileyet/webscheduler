@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: ITask.java 
+* @Title: ITaskDefinition.java 
 * @Package com.openthinks.webscheduler.task 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
@@ -31,15 +31,14 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
-import com.openthinks.webscheduler.model.task.ITaskRef;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public interface ITask extends Job {
+public interface ITaskDefinition extends Job {
 	String TASK_REF = "task-ref";
 	String TASK_META = "task-meta";
 
@@ -51,16 +50,18 @@ public interface ITask extends Job {
 
 	public void execute(TaskContext context);
 
-	public default String getDescription() {
-		return this.getClass().getName();
+	public default TaskDefinitionDescriber getTaskDescriber() {
+		TaskDefinitionDescriber taskDefinitionDescriber = TaskDefinitionDescriber.build(this.getClass());
+		return taskDefinitionDescriber;
 	}
 
-	public default Class<? extends ITaskRef> getTaskRef() {
-		return DefaultTaskRef.class;
+	public default TaskRefDefinitionDescriber getTaskRefDescriber() {
+		return DefaultTaskRef.getTaskRefDescriber();
 	}
 
-	public default Optional<TaskMetaData> getTaskMetaData(TaskContext context) {
-		TaskMetaData taskMetaData = context.get(TASK_META);
-		return Optional.ofNullable(taskMetaData);
+	public default Optional<TaskRunTimeData> getTaskRunTimeData(TaskContext context) {
+		TaskRunTimeData taskRunTimeData = context.get(TASK_META);
+		return Optional.ofNullable(taskRunTimeData);
 	}
+
 }

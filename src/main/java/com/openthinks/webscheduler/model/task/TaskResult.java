@@ -33,7 +33,7 @@ import com.openthinks.webscheduler.help.StaticUtils;
  * @author dailey.yet@outlook.com
  *
  */
-public class TaskResult {
+public final class TaskResult {
 	private Boolean isSuccess;
 	private Date startTime;
 	private Date endTime;

@@ -18,11 +18,11 @@ import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.PageMap;
 import com.openthinks.webscheduler.help.StaticChecker;
 import com.openthinks.webscheduler.help.StaticDict;
-import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.TaskAction;
 import com.openthinks.webscheduler.service.SchedulerService;
 import com.openthinks.webscheduler.service.TaskService;
-import com.openthinks.webscheduler.task.ITask;
+import com.openthinks.webscheduler.task.ITaskDefinition;
 import com.openthinks.webscheduler.task.TaskTypes;
 
 @Controller("/task")
@@ -36,23 +36,24 @@ public class TaskController {
 	@Mapping("/schedule")
 	public String schedule(WebAttributers was) {
 		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
-		TaskMetaData taskMetaData = taskService.getTask(taskId);
-		if (!checkState(was, taskMetaData, TaskAction.Schedule)) {
+		TaskRunTimeData taskRunTimeData = taskService.getTask(taskId);
+		if (!checkState(was, taskRunTimeData, TaskAction.Schedule)) {
 			return errorPage(was, this.newPageMap());
 		}
 		boolean isSuccess = true;
-		Class<? extends ITask> clazz = null;
+		Class<? extends ITaskDefinition> clazz = null;
 		try {
-			clazz = taskMetaData.getTaskClass();
+			clazz = taskRunTimeData.getTaskClass();
 		} catch (ClassNotFoundException e) {
 			ProcessLogger.error(e);
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not found this task type.", WebScope.REQUEST);
 		}
-		JobDetail job = JobBuilder.newJob(clazz).withIdentity(taskMetaData.getTaskId(), taskMetaData.getGroupName())
-				.build();
-		job.getJobDataMap().put(ITask.TASK_META, taskMetaData);
+		JobDetail job = JobBuilder.newJob(clazz)
+				.withIdentity(taskRunTimeData.getTaskId(), taskRunTimeData.getGroupName()).build();
+		job.getJobDataMap().put(ITaskDefinition.TASK_META, taskRunTimeData);
 		Trigger trigger = TriggerBuilder.newTrigger()
-				.withIdentity(taskMetaData.getTaskId() + "-trigger", taskMetaData.getGroupName()).startNow().build();
+				.withIdentity(taskRunTimeData.getTaskId() + "-trigger", taskRunTimeData.getGroupName()).startNow()
+				.build();
 
 		try {
 			schedulerService.scheduleJob(job, trigger);
@@ -71,15 +72,15 @@ public class TaskController {
 	@Mapping("/add")
 	public String add(WebAttributers was) {
 
-		TaskMetaData taskMetaData = new TaskMetaData();
-		taskMetaData.makeDefault();
-		taskMetaData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
-		taskMetaData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
-		taskMetaData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
+		TaskRunTimeData taskRunTimeData = new TaskRunTimeData();
+		taskRunTimeData.makeDefault();
+		taskRunTimeData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
+		taskRunTimeData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
+		taskRunTimeData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
 		PageMap pm = newPageMap();
 		boolean isSuccess = true;
 		try {
-			taskService.saveTask(taskMetaData);
+			taskService.saveTask(taskRunTimeData);
 		} catch (Exception e) {
 			isSuccess = false;
 			ProcessLogger.error(e);
@@ -104,34 +105,37 @@ public class TaskController {
 
 	@Mapping("/to/add")
 	public String goToAdd(WebAttributers was) {
-		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_TYPES, TaskTypes.getSupportTasks());
+		PageMap pm = newPageMap();
+		pm.push(StaticDict.PAGE_ATTRIBUTE_SUPPORT_TASKS, TaskTypes.getSupportTaskMetaData());
+		pm.push(StaticDict.PAGE_ATTRIBUTE_CUSTOM_TASKS, TaskTypes.getCustomTaskMetaData());
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
 		return "WEB-INF/jsp/task/add.jsp";
 	}
 
 	@Mapping("/to/edit")
 	public String goToEdit(WebAttributers was) {
 		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
-		TaskMetaData taskMetaData = taskService.getTask(taskId);
+		TaskRunTimeData taskRunTimeData = taskService.getTask(taskId);
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_TYPES, TaskTypes.getSupportTasks());
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP,
-				PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskMetaData));
+				PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskRunTimeData));
 		return "WEB-INF/jsp/task/edit.jsp";
 	}
 
 	@Mapping("/edit")
 	public String edit(WebAttributers was) {
-		TaskMetaData taskMetaData = new TaskMetaData();
-		taskMetaData.setTaskId(was.get(StaticDict.PAGE_PARAM_TASK_ID));
-		taskMetaData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
-		taskMetaData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
-		taskMetaData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
+		TaskRunTimeData taskRunTimeData = new TaskRunTimeData();
+		taskRunTimeData.setTaskId(was.get(StaticDict.PAGE_PARAM_TASK_ID));
+		taskRunTimeData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
+		taskRunTimeData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
+		taskRunTimeData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
 		PageMap pm = newPageMap();
-		if (!checkState(was, taskMetaData, TaskAction.Edit)) {
+		if (!checkState(was, taskRunTimeData, TaskAction.Edit)) {
 			return errorPage(was, pm);
 		}
 		boolean isSuccess = true;
 		try {
-			taskService.saveTask(taskMetaData);
+			taskService.saveTask(taskRunTimeData);
 		} catch (Exception e) {
 			isSuccess = false;
 			ProcessLogger.error(e);
@@ -147,14 +151,14 @@ public class TaskController {
 	/**
 	 * check the given task action is allowed under current task state
 	 * @param was
-	 * @param taskMetaData
+	 * @param taskRunTimeData
 	 * @param pm
 	 */
-	protected boolean checkState(WebAttributers was, TaskMetaData taskMetaData, TaskAction taskAction) {
-		if (!StaticChecker.isAvaiableWith(taskMetaData, taskAction)) {
+	protected boolean checkState(WebAttributers was, TaskRunTimeData taskRunTimeData, TaskAction taskAction) {
+		if (!StaticChecker.isAvaiableWith(taskRunTimeData, taskAction)) {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_PRE + "State",
 					"This action:[" + taskAction + "] is not allowed since current task is on state:["
-							+ taskMetaData.getTaskState().getDisplay() + "].",
+							+ taskRunTimeData.getTaskState().getDisplay() + "].",
 					WebScope.REQUEST);
 			return false;
 		}
@@ -164,13 +168,13 @@ public class TaskController {
 	@Mapping("/remove")
 	public String remove(WebAttributers was) {
 		PageMap pm = newPageMap();
-		TaskMetaData taskMetaData = taskService.getTask(was.get(StaticDict.PAGE_PARAM_TASK_ID));
-		if (taskMetaData != null && !checkState(was, taskMetaData, TaskAction.Remove)) {
+		TaskRunTimeData taskRunTimeData = taskService.getTask(was.get(StaticDict.PAGE_PARAM_TASK_ID));
+		if (taskRunTimeData != null && !checkState(was, taskRunTimeData, TaskAction.Remove)) {
 			return errorPage(was, pm);
 		}
 		boolean isSuccess = true;
-		if (taskMetaData != null) {
-			isSuccess = taskService.remove(taskMetaData);
+		if (taskRunTimeData != null) {
+			isSuccess = taskService.remove(taskRunTimeData);
 			if (!isSuccess)
 				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Internal error happend when removing, try it later.",
 						WebScope.REQUEST);
@@ -189,19 +193,19 @@ public class TaskController {
 	@Mapping("/to/view")
 	public String view(WebAttributers was) {
 		PageMap pm = newPageMap();
-		TaskMetaData taskMetaData = taskService.getTask(was.get(StaticDict.PAGE_PARAM_TASK_ID));
-		if (taskMetaData == null) {
+		TaskRunTimeData taskRunTimeData = taskService.getTask(was.get(StaticDict.PAGE_PARAM_TASK_ID));
+		if (taskRunTimeData == null) {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not found this entry, maybe it has been removed.",
 					WebScope.REQUEST);
 			return errorPage(was, pm);
 		}
-		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm.push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskMetaData));
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm.push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskRunTimeData));
 		return "WEB-INF/jsp/task/view.jsp";
 	}
 
 	@Mapping("/index")
 	public String index(WebAttributers was) {
-		List<TaskMetaData> tasks = taskService.getValidTasks();
+		List<TaskRunTimeData> tasks = taskService.getValidTasks();
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_LIST, tasks);
 		return "WEB-INF/jsp/task/index.jsp";
 	}

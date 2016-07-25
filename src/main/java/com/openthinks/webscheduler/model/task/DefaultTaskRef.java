@@ -30,6 +30,8 @@ import java.io.InputStream;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
+import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
+
 /**
  * @author dailey.yet@outlook.com
  *
@@ -48,6 +50,14 @@ public class DefaultTaskRef extends Properties implements ITaskRef {
 		DefaultTaskRef instance = new DefaultTaskRef();
 		instance.load(is);
 		return instance;
+	}
+
+	public static final TaskRefDefinitionDescriber getTaskRefDescriber() {
+		return new TaskRefDefinitionDescriber(DefaultTaskRef.class);
+	}
+
+	public static final TaskRefDefinitionDescriber getTaskRefDescriber(String description) {
+		return new TaskRefDefinitionDescriber(DefaultTaskRef.class, description);
 	}
 
 }

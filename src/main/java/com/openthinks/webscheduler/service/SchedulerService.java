@@ -13,9 +13,9 @@ import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
 import com.openthinks.libs.utilities.logger.ProcessLogger;
-import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.TaskState;
-import com.openthinks.webscheduler.task.ITask;
+import com.openthinks.webscheduler.task.ITaskDefinition;
 import com.openthinks.webscheduler.task.TaskContext;
 
 public class SchedulerService {
@@ -41,11 +41,11 @@ public class SchedulerService {
 
 	public void scheduleJob(JobDetail job, Trigger trigger) throws SchedulerException {
 		scheduler.scheduleJob(job, trigger);
-		Object dataObj = job.getJobDataMap().get(ITask.TASK_META);
-		if (dataObj != null && dataObj instanceof TaskMetaData) {
-			TaskMetaData taskMetaData = (TaskMetaData) dataObj;
-			taskMetaData.setTaskState(TaskState.SCHEDULED);
-			taskMetaData.getLastTaskResult().setStartTime(new Date());
+		Object dataObj = job.getJobDataMap().get(ITaskDefinition.TASK_META);
+		if (dataObj != null && dataObj instanceof TaskRunTimeData) {
+			TaskRunTimeData taskRunTimeData = (TaskRunTimeData) dataObj;
+			taskRunTimeData.setTaskState(TaskState.SCHEDULED);
+			taskRunTimeData.getLastTaskResult().setStartTime(new Date());
 		}
 	}
 
@@ -61,7 +61,7 @@ class DefaultJobListener implements JobListener {
 	@Override
 	public void jobExecutionVetoed(JobExecutionContext ctx) {
 		ProcessLogger.debug("jobExecutionVetoed");
-		Optional<TaskMetaData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
+		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.INTERRUPT);
 			metaData.get().getLastTaskResult().setSuccess(false);
@@ -72,7 +72,7 @@ class DefaultJobListener implements JobListener {
 	@Override
 	public void jobToBeExecuted(JobExecutionContext ctx) {
 		ProcessLogger.debug("jobToBeExecuted");
-		Optional<TaskMetaData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
+		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.RUNNING);
 		}
@@ -82,7 +82,7 @@ class DefaultJobListener implements JobListener {
 	@Override
 	public void jobWasExecuted(JobExecutionContext ctx, JobExecutionException executionException) {
 		ProcessLogger.debug("jobWasExecuted");
-		Optional<TaskMetaData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
+		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.COMPLETE);
 			metaData.get().getLastTaskResult().setSuccess(true);

@@ -35,41 +35,41 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 import com.openthinks.webscheduler.dao.ITaskDao;
-import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.TaskRunTimeData;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
 public class TaskStore implements ITaskDao {
-	private static final List<TaskMetaData> taskDB = Collections.synchronizedList(new ArrayList<TaskMetaData>());
-	private static final Map<String, TaskMetaData> taskMap = new ConcurrentHashMap<>();
+	private static final List<TaskRunTimeData> taskDB = Collections.synchronizedList(new ArrayList<TaskRunTimeData>());
+	private static final Map<String, TaskRunTimeData> taskMap = new ConcurrentHashMap<>();
 	private Lock lock = new ReentrantLock();
 
 	/* (non-Javadoc)
 	 * @see com.openthinks.webscheduler.dao.ITaskDao#getTasks(java.util.function.Predicate)
 	 */
 	@Override
-	public List<TaskMetaData> getTasks(Predicate<TaskMetaData> predicate) {
-		final List<TaskMetaData> taskMetaDatas = new ArrayList<>();
+	public List<TaskRunTimeData> getTasks(Predicate<TaskRunTimeData> predicate) {
+		final List<TaskRunTimeData> taskRunTimeDatas = new ArrayList<>();
 		taskDB.forEach((task) -> {
 			if (predicate.test(task)) {
-				taskMetaDatas.add(task);
+				taskRunTimeDatas.add(task);
 			}
 		});
-		return taskMetaDatas;
+		return taskRunTimeDatas;
 	}
 
 	/* (non-Javadoc)
-	 * @see com.openthinks.webscheduler.dao.ITaskDao#save(com.openthinks.webscheduler.model.TaskMetaData)
+	 * @see com.openthinks.webscheduler.dao.ITaskDao#save(com.openthinks.webscheduler.model.TaskRunTimeData)
 	 */
 	@Override
-	public void save(TaskMetaData taskMetaDataNew) {
+	public void save(TaskRunTimeData taskMetaDataNew) {
 		boolean isExist = taskMap.containsKey(taskMetaDataNew.getTaskId());
 		if (isExist) {
 			lock.lock();
 			try {
-				TaskMetaData taskMetaDataOld = taskMap.get(taskMetaDataNew.getTaskId());
+				TaskRunTimeData taskMetaDataOld = taskMap.get(taskMetaDataNew.getTaskId());
 				if (taskMetaDataOld != null)
 					taskMetaDataOld.update(taskMetaDataNew);
 			} finally {
@@ -89,7 +89,7 @@ public class TaskStore implements ITaskDao {
 	}
 
 	@Override
-	public TaskMetaData get(String id) {
+	public TaskRunTimeData get(String id) {
 		if (id != null)
 			return taskMap.get(id);
 		return null;
@@ -98,8 +98,8 @@ public class TaskStore implements ITaskDao {
 	@Override
 	public boolean delete(String taskId) {
 		try {
-			TaskMetaData taskMetaData = taskMap.get(taskId);
-			taskDB.remove(taskMetaData);
+			TaskRunTimeData taskRunTimeData = taskMap.get(taskId);
+			taskDB.remove(taskRunTimeData);
 			taskMap.remove(taskId);
 			return true;
 		} catch (Exception e) {

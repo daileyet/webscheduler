@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.quartz.JobExecutionContext;
 
-import com.openthinks.webscheduler.model.TaskMetaData;
+import com.openthinks.webscheduler.model.TaskRunTimeData;
 
 public class TaskContext {
 	private JobExecutionContext context;
@@ -23,9 +23,9 @@ public class TaskContext {
 		return (T) context.getMergedJobDataMap().get(key);
 	}
 	
-	public  Optional<TaskMetaData> getTaskMetaData() {
-		TaskMetaData taskMetaData = get(ITask.TASK_META);
-		return Optional.ofNullable(taskMetaData);
+	public  Optional<TaskRunTimeData> getTaskMetaData() {
+		TaskRunTimeData taskRunTimeData = get(ITaskDefinition.TASK_META);
+		return Optional.ofNullable(taskRunTimeData);
 	}
 	
 	public static final TaskContext wrapper(JobExecutionContext jobExecutionContext){
