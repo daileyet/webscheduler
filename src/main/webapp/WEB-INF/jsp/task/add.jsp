@@ -12,6 +12,17 @@
 <meta name="author" content="dailey.yet@outlook.com">
 <title>Task - New</title>
 <%@ include file="../template/head.style.jsp"%>
+<link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
+<style>
+.CodeMirror{
+display: block;
+width: 100%;
+font-size: 14px;
+line-height: 1.42857143;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+</style>
 </head>
 <body>
 	<jsp:include page="../template/navbar.jsp" />
@@ -39,21 +50,29 @@
 						<div class="col-sm-10">
 							<select id="tasktype" name="tasktype" class="form-control" required>
 
-								<c:forEach var="task" items="${pm.supportTasks }">
-									<option value="${task.type.name }">${task.type.simpleName }</option>
+								<c:forEach var="task" items="${pm.supportTasks }" varStatus="status">
+									<option data-required="${task.refDescriber.required }" data-ref="st_${status.index }" value="${task.type.name }" title="${task.describer.description }">${task.type.simpleName }</option>
 								</c:forEach>
-								
-								<c:forEach var="task" items="${pm.customTasks }">
-									<option value="${task.class.name }">${task.class.simpleName }</option>
+								<option value="" disabled="disabled">--------------------------</option>
+								<c:forEach var="task" items="${pm.customTasks }" varStatus="status">
+									<option data-required="${task.refDescriber.required }" data-ref="ct_${status.index }" value="${task.type.name }" title="${task.describer.description }">${task.type.simpleName }</option>
 								</c:forEach>
 							</select>
+							<div class="hidden" id="tasktype-ref">
+								<c:forEach var="task" items="${pm.supportTasks }" varStatus="status">
+									<code id="st_${status.index }" >${task.refDescriber.description }</code>
+								</c:forEach>
+								<c:forEach var="task" items="${pm.customTasks }" varStatus="status">
+									<code id="ct_${status.index }">${task.refDescriber.description }</code>
+								</c:forEach>
+							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="tasktref" class="col-sm-2 control-label">Task
+						<label for="taskref" class="col-sm-2 control-label">Task
 							Properties</label>
 						<div class="col-sm-10">
-							<textarea class="form-control" id="tasktref" name="taskref" rows="10"></textarea>
+							<textarea class="form-control" id="taskref" name="taskref" rows="10"></textarea>
 						</div>
 					</div>
 					<div class="form-group">
@@ -69,6 +88,9 @@
 	</div>
 
 	<%@ include file="../template/body.script.jsp"%>
-
+	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/lib/codemirror.js')}"></script>
+	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/properties/properties.js')}"></script>
+	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/xml/xml.js')}"></script>
+	<script type="text/javascript" src="${ew:pathS('/static/js/task.add.js')}"></script>
 </body>
 </html>

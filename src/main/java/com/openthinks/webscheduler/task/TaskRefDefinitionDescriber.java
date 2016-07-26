@@ -34,17 +34,20 @@ import com.openthinks.webscheduler.model.task.ITaskRef;
 public final class TaskRefDefinitionDescriber {
 	private Class<? extends ITaskRef> taskRefClass;
 	private StringBuilder description;
+	private boolean required;
 
 	public <T extends ITaskRef> TaskRefDefinitionDescriber(Class<T> taskRefClass) {
 		super();
 		this.taskRefClass = taskRefClass;
 		this.description = new StringBuilder();
+		this.required = false;
 	}
 
 	public <T extends ITaskRef> TaskRefDefinitionDescriber(Class<T> taskRefClass, String description) {
 		super();
 		this.taskRefClass = taskRefClass;
 		this.description = new StringBuilder(description);
+		this.required = false;
 	}
 
 	/**
@@ -70,6 +73,19 @@ public final class TaskRefDefinitionDescriber {
 
 	public <T extends ITaskRef> void setTaskRefClass(Class<T> taskRefClass) {
 		this.taskRefClass = taskRefClass;
+	}
+
+	/**
+	 * this task definition configuration is required or not
+	 * @return boolean
+	 */
+	public boolean isRequired() {
+		return required;
+	}
+
+	public TaskRefDefinitionDescriber setRequired(boolean required) {
+		this.required = required;
+		return this;
 	}
 
 	public TaskRefDefinitionDescriber push(String itemDesc) {

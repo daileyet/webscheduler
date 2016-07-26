@@ -40,11 +40,12 @@ public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 	@Override
 	public TaskRefDefinitionDescriber getTaskRefDescriber() {
 		TaskRefDefinitionDescriber describer = new TaskRefDefinitionDescriber(SafaribooksonlineGetterRef.class);
-		preparedDescription(describer);
+		describer.setRequired(true);
+		preparedRefDescription(describer);
 		return describer;
 	}
 
-	protected void preparedDescription(TaskRefDefinitionDescriber describer) {
+	protected void preparedRefDescription(TaskRefDefinitionDescriber describer) {
 		describer.push("#[option]Browser client: FF31; FF38; IE8; IE11; CHROME");
 		describer.push("browser-version=FF38");
 		describer.push("#[option]proxy host if present");
