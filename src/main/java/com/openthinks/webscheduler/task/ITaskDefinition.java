@@ -27,9 +27,10 @@ package com.openthinks.webscheduler.task;
 
 import java.util.Optional;
 
-import org.quartz.Job;
+import org.quartz.InterruptableJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.UnableToInterruptJobException;
 
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
@@ -38,7 +39,7 @@ import com.openthinks.webscheduler.model.task.DefaultTaskRef;
  * @author dailey.yet@outlook.com
  *
  */
-public interface ITaskDefinition extends Job {
+public interface ITaskDefinition extends InterruptableJob {
 	String TASK_REF = "task-ref";
 	String TASK_META = "task-meta";
 
@@ -62,6 +63,15 @@ public interface ITaskDefinition extends Job {
 	public default Optional<TaskRunTimeData> getTaskRunTimeData(TaskContext context) {
 		TaskRunTimeData taskRunTimeData = context.get(TASK_META);
 		return Optional.ofNullable(taskRunTimeData);
+	}
+
+	@Override
+	default void interrupt() throws UnableToInterruptJobException {
+		try {
+			this.wait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

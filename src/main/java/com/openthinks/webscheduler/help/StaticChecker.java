@@ -70,6 +70,8 @@ public final class StaticChecker {
 			break;
 		case Stop:
 			isAvaiable = (taskRunTimeData.getTaskState() == TaskState.RUNNING);
+			//disable this action always
+			//isAvaiable = false;
 			break;
 		case Edit:
 			isAvaiable = (taskRunTimeData.getTaskState() != TaskState.RUNNING);

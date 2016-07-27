@@ -6,10 +6,12 @@ import java.util.Optional;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.JobKey;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 
 import com.openthinks.libs.utilities.logger.ProcessLogger;
@@ -17,6 +19,7 @@ import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.task.ITaskDefinition;
 import com.openthinks.webscheduler.task.TaskContext;
+import com.openthinks.webscheduler.task.TaskInterruptException;
 
 public class SchedulerService {
 
@@ -33,6 +36,23 @@ public class SchedulerService {
 
 	public void start() throws SchedulerException {
 		scheduler.start();
+	}
+
+	public boolean interrupt(JobKey jobKey) {
+		boolean isSuccess = false;
+		try {
+			isSuccess = scheduler.interrupt(jobKey);
+			isSuccess = scheduler.deleteJob(jobKey);
+		} catch (UnableToInterruptJobException e) {
+			isSuccess = false;
+		} catch (TaskInterruptException e) {
+			isSuccess = true;
+		} catch (SchedulerException e) {
+			isSuccess = false;
+			ProcessLogger.fatal(e);
+		}
+
+		return isSuccess;
 	}
 
 	public void stop() throws SchedulerException {

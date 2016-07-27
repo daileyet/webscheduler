@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
@@ -32,6 +33,27 @@ public class TaskController {
 	SchedulerService schedulerService;
 	@AutoComponent
 	TaskService taskService;
+
+	@Mapping("/stop")
+	public String stop(WebAttributers was) {
+		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
+		TaskRunTimeData taskRunTimeData = taskService.getTask(taskId);
+		if (!checkState(was, taskRunTimeData, TaskAction.Stop)) {
+			return errorPage(was, this.newPageMap());
+		}
+		boolean isSuccess = true;
+		try {
+			schedulerService.interrupt(JobKey.jobKey(taskRunTimeData.getTaskId(), taskRunTimeData.getGroupName()));
+		} catch (Exception e) {
+			isSuccess = false;
+			ProcessLogger.error(e);
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not stop this task.", WebScope.REQUEST);
+		}
+		if (!isSuccess) {
+			return errorPage(was, this.newPageMap());
+		}
+		return index(was);
+	}
 
 	@Mapping("/schedule")
 	public String schedule(WebAttributers was) {
