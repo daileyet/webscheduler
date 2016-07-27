@@ -13,6 +13,7 @@
 <title>Task - New</title>
 <%@ include file="../template/head.style.jsp"%>
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
+<link rel="stylesheet" href="${ew:pathS('/static/css/task.css')}">
 <style>
 .CodeMirror{
 display: block;

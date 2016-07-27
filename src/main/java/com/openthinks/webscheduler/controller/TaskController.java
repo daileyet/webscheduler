@@ -116,9 +116,11 @@ public class TaskController {
 	public String goToEdit(WebAttributers was) {
 		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
 		TaskRunTimeData taskRunTimeData = taskService.getTask(taskId);
-		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_TYPES, TaskTypes.getSupportTasks());
-		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP,
-				PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskRunTimeData));
+		PageMap pm = newPageMap();
+		pm.push(StaticDict.PAGE_ATTRIBUTE_SUPPORT_TASKS, TaskTypes.getSupportTaskMetaData());
+		pm.push(StaticDict.PAGE_ATTRIBUTE_CUSTOM_TASKS, TaskTypes.getCustomTaskMetaData());
+		pm.push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskRunTimeData);
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
 		return "WEB-INF/jsp/task/edit.jsp";
 	}
 

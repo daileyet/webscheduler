@@ -13,6 +13,17 @@
 <meta name="author" content="dailey.yet@outlook.com">
 <title>Task - View</title>
 <%@ include file="../template/head.style.jsp"%>
+<link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
+<style>
+.CodeMirror{
+display: block;
+width: 100%;
+font-size: 14px;
+line-height: 1.42857143;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+</style>
 </head>
 <body>
 	<jsp:include page="../template/navbar.jsp" />
@@ -106,10 +117,10 @@
 							
 							<div class="tab-content">
 							    <div role="tabpanel" class="tab-pane active" id="taskproperties">
-							    	<textarea class="form-control " id="tasktref" name="taskref" rows="10" readonly>${pm.tm.taskRefContent}</textarea>
+							    	<textarea class="form-control " id="taskref" name="taskref" rows="10" readonly>${pm.tm.taskRefContent}</textarea>
 							    </div>
 							    <div role="tabpanel" class="tab-pane" id="taskresult">
-							    	<textarea class="form-control " id="tasktresult" name="tasktresult" rows="10" readonly>${pm.tm.lastTaskResult}</textarea>
+							    	<textarea class="form-control " id="taskresult" name="taskresult" rows="10" readonly>${pm.tm.lastTaskResult}</textarea>
 							    </div>
 							</div>
 						</div>
@@ -140,6 +151,9 @@
     </div>
 
 	<%@ include file="../template/body.script.jsp"%>
+	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/lib/codemirror.js')}"></script>
+	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/properties/properties.js')}"></script>
+	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/xml/xml.js')}"></script>
 	<script type="text/javascript"
 		src="${ew:pathS('/static/js/task.view.js')}"></script>
 </body>

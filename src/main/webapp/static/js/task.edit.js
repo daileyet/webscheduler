@@ -5,6 +5,9 @@
 			'Optionselected_Tasktype':'#tasktype option:selected',
 			'Div_Tasktype_Ref':'#tasktype-ref',
 			'Txtarea_Taskref':'#taskref',
+			'Btn_Ref_example':'#taskref-toolbar button[data-role="example"]',
+			'Btn_Ref_copy':'#taskref-toolbar button[data-role="copy"]',
+			'Btn_Ref_clear':'#taskref-toolbar button[data-role="clear"]',
 		init:function(){
 			this.components.init();
 		}
@@ -27,7 +30,16 @@
 				    	_this.$txtarea.val(sNew);
 				    });
 					this.cm  = editor;
-					//this.$txtarea.css({"visibility":"hidden","display":"inline","width":"0","margin-left":"30px","height":"0","padding":"0px","border-width":"0"});
+					/*this.$txtarea.css({
+					//"visibility" : "hidden",
+					"position" : "absolute",
+					"display" : "inline",
+					"width" : "0",
+					"margin-left" : "30px",
+					"height" : "0",
+					"padding" : "0px",
+					"border-width" : "0"
+				});*/
 					this.$txtarea.appendTo($('.CodeMirror'));
 				},
 				setContent:function(str){
@@ -60,19 +72,39 @@
 			init:function(){
 				this.prepared();
 				this.bindEventListener();
+				this.initclipboard();
 			},
-			prepared:function(){
+			prepared:function(needfillRefExample){
 				var code_id= $(ctx.VIEW.Optionselected_Tasktype).data('ref');
 				var isRequired = $(ctx.VIEW.Optionselected_Tasktype).data('required');
 				isRequired = (isRequired!=undefined && (isRequired || isRequired=="true")) ;
 				ctx.VIEW.components.refEditor.setRequired(isRequired);
-				var sRef = $("#"+code_id).text();
-				ctx.VIEW.components.refEditor.setContent(sRef);
+				if(needfillRefExample && needfillRefExample==true){
+					var sRef = $("#"+code_id).text();
+					ctx.VIEW.components.refEditor.setContent(sRef);
+				}
 			},
 			bindEventListener:function(){
 				var _this = this;
 				$(ctx.VIEW.Select_Tasktype).change(function(){
 					_this.prepared();
+				});
+				$(ctx.VIEW.Btn_Ref_example).click(function(){
+					_this.prepared(true);
+				});
+				$(ctx.VIEW.Btn_Ref_clear).click(function(){
+					ctx.VIEW.components.refEditor.setContent("");
+				});
+			},
+			initclipboard:function(){
+				var clipboard = new Clipboard('[data-role="copy"]');
+
+				clipboard.on('success', function(e) {
+				    console.log(e);
+				});
+
+				clipboard.on('error', function(e) {
+				     console.log(e);
 				});
 			}
 			
