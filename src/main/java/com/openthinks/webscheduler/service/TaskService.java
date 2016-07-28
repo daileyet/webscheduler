@@ -1,16 +1,16 @@
 package com.openthinks.webscheduler.service;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.webscheduler.dao.ITaskDao;
-import com.openthinks.webscheduler.dao.impl.TaskStore;
+import com.openthinks.webscheduler.dao.impl.TaskODBStore;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 
 public class TaskService {
-	private ITaskDao taskStore = WebContexts.get().lookup(TaskStore.class);
+	private ITaskDao taskStore = WebContexts.get().lookup(TaskODBStore.class);
 
-	public List<TaskRunTimeData> getValidTasks() {
+	public Collection<TaskRunTimeData> getValidTasks() {
 		return taskStore.getTasks((task) -> {
 			return task.isValid();
 		});
@@ -27,4 +27,5 @@ public class TaskService {
 	public boolean remove(TaskRunTimeData taskRunTimeData) {
 		return taskStore.delete(taskRunTimeData.getTaskId());
 	}
+
 }

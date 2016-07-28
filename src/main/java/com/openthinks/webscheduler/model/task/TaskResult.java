@@ -25,6 +25,7 @@
 */
 package com.openthinks.webscheduler.model.task;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.openthinks.webscheduler.help.StaticUtils;
@@ -33,7 +34,11 @@ import com.openthinks.webscheduler.help.StaticUtils;
  * @author dailey.yet@outlook.com
  *
  */
-public final class TaskResult {
+public final class TaskResult implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9178343032918042351L;
 	private Boolean isSuccess;
 	private Date startTime;
 	private Date endTime;

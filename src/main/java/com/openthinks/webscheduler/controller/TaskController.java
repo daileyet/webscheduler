@@ -1,6 +1,6 @@
 package com.openthinks.webscheduler.controller;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -229,7 +229,7 @@ public class TaskController {
 
 	@Mapping("/index")
 	public String index(WebAttributers was) {
-		List<TaskRunTimeData> tasks = taskService.getValidTasks();
+		Collection<TaskRunTimeData> tasks = taskService.getValidTasks();
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_LIST, tasks);
 		return "WEB-INF/jsp/task/index.jsp";
 	}

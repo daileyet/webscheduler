@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: TaskStore.java 
+* @Title: TaskMemoryStore.java 
 * @Package com.openthinks.webscheduler.dao.impl 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
@@ -36,12 +36,13 @@ import java.util.function.Predicate;
 
 import com.openthinks.webscheduler.dao.ITaskDao;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.task.TaskState;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public class TaskStore implements ITaskDao {
+public class TaskMemoryStore implements ITaskDao {
 	private static final List<TaskRunTimeData> taskDB = Collections.synchronizedList(new ArrayList<TaskRunTimeData>());
 	private static final Map<String, TaskRunTimeData> taskMap = new ConcurrentHashMap<>();
 	private Lock lock = new ReentrantLock();
@@ -99,8 +100,9 @@ public class TaskStore implements ITaskDao {
 	public boolean delete(String taskId) {
 		try {
 			TaskRunTimeData taskRunTimeData = taskMap.get(taskId);
-			taskDB.remove(taskRunTimeData);
-			taskMap.remove(taskId);
+			taskRunTimeData.setTaskState(TaskState.INVALID);
+			//			taskDB.remove(taskRunTimeData);
+			//			taskMap.remove(taskId);
 			return true;
 		} catch (Exception e) {
 			return false;

@@ -50,4 +50,6 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_TASK_TYPE = "tasktype";
 	public static final String PAGE_PARAM_TASK_REF = "taskref";
 
+	public static final String STORE_DB = "webscheduler.odb";
+
 }

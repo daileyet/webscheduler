@@ -16,36 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: ITaskDao.java 
-* @Package com.openthinks.webscheduler.dao 
+* @Title: TaskSequenceHelper.java 
+* @Package com.openthinks.webscheduler.help 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Jul 12, 2016
+* @date Jul 28, 2016
 * @version V1.0   
 */
-package com.openthinks.webscheduler.dao;
+package com.openthinks.webscheduler.help;
 
-import java.util.Collection;
-import java.util.function.Predicate;
-
-import com.openthinks.webscheduler.model.TaskRunTimeData;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public interface ITaskDao {
-	/**
-	 * fetch task list by predicate
-	 * @param predicate Predicate<TaskRunTimeData>
-	 * @return List<TaskRunTimeData>
-	 */
-	public Collection<TaskRunTimeData> getTasks(Predicate<TaskRunTimeData> predicate);
+public final class TaskSequenceHelper {
+	private static AtomicInteger seq = new AtomicInteger(0);
 
-	public void save(TaskRunTimeData taskRunTimeData);
+	public static int getCurrentSeq() {
+		return seq.get();
+	}
 
-	public TaskRunTimeData get(String id);
+	public static int next() {
+		return seq.incrementAndGet();
+	}
 
-	public boolean delete(String taskId);
-
+	public static void reset() {
+		seq.set(0);
+	}
 }

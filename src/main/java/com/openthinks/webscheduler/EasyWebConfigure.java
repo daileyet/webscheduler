@@ -9,26 +9,31 @@ import com.openthinks.easyweb.context.Bootstrap;
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.help.ODBHelper;
 import com.openthinks.webscheduler.service.SchedulerService;
 
 @EasyConfigure
 @ScanPackages({ "com.openthinks.webscheduler" })
 @RequestSuffixs(".do,.htm")
 public class EasyWebConfigure implements Bootstrap {
+	private SchedulerService schedulerService;
 
 	@Override
 	public void cleanUp() {
+		if (schedulerService != null) {
+			try {
+				schedulerService.stop();
+			} catch (SchedulerException e) {
+				ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
+			}
+		}
+		ODBHelper.release();
 	}
 
 	@Override
 	public void initial() {
 		ProcessLogger.currentLevel = ProcessLogger.PLLevel.DEBUG;
-		//
-		//		Configurator configuration = ConfiguratorFactory.getInstance(getClass().getResourceAsStream(
-		//				"/dbconfig.properties"));
-		//		SessionFactory.setDefaultConfigurator(configuration);
-
-		SchedulerService schedulerService = WebContexts.get().lookup(SchedulerService.class);
+		schedulerService = WebContexts.get().lookup(SchedulerService.class);
 		ProcessLogger.info("Start WebScheduler...");
 		try {
 			schedulerService.start();

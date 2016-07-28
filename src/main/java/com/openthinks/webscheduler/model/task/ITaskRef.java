@@ -29,6 +29,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Enumeration;
 import java.util.InvalidPropertiesFormatException;
@@ -41,7 +42,7 @@ import com.openthinks.webscheduler.help.StaticChecker;
  * @author dailey.yet@outlook.com
  *
  */
-public interface ITaskRef {
+public interface ITaskRef extends Serializable {
 
 	/**
 	 * {@link Properties#getProperty(String)}

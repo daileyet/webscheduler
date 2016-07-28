@@ -55,6 +55,17 @@ public class SchedulerService {
 		return isSuccess;
 	}
 
+	public boolean delete(JobKey jobKey) {
+		boolean isSuccess = false;
+		try {
+			isSuccess = scheduler.deleteJob(jobKey);
+		} catch (SchedulerException e) {
+			isSuccess = false;
+			ProcessLogger.fatal(e);
+		}
+		return isSuccess;
+	}
+
 	public void stop() throws SchedulerException {
 		scheduler.shutdown();
 	}

@@ -1,6 +1,7 @@
 package com.openthinks.webscheduler.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.UUID;
 
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
@@ -9,8 +10,13 @@ import com.openthinks.webscheduler.model.task.TaskResult;
 import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.task.ITaskDefinition;
 
-public class TaskRunTimeData {
-	private int taskSeq;
+public class TaskRunTimeData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9156251287769007398L;
+
+	private Integer taskSeq;
 
 	private String taskId;
 	private String taskName;
@@ -38,7 +44,7 @@ public class TaskRunTimeData {
 		lastTaskResult = new TaskResult();
 	}
 
-	public int getTaskSeq() {
+	public Integer getTaskSeq() {
 		return taskSeq;
 	}
 
@@ -166,8 +172,8 @@ public class TaskRunTimeData {
 
 	@Override
 	public String toString() {
-		return "TaskRunTimeData [taskId=" + taskId + ", taskName=" + taskName + ", taskType=" + taskType + ", groupName="
-				+ groupName + ", taskRef=" + taskRef + ", taskState=" + taskState + "]";
+		return "TaskRunTimeData [taskId=" + taskId + ", taskName=" + taskName + ", taskType=" + taskType
+				+ ", groupName=" + groupName + ", taskRef=" + taskRef + ", taskState=" + taskState + "]";
 	}
 
 	public void update(TaskRunTimeData taskMetaDataNew) {
