@@ -46,7 +46,14 @@ public interface ITaskDefinition extends InterruptableJob {
 	@Override
 	@Deprecated
 	public default void execute(JobExecutionContext context) throws JobExecutionException {
-		execute(new TaskContext(context));
+		TaskContext taskContext = new TaskContext(context);
+		try {
+			execute(taskContext);
+		} catch (Exception e) {
+			taskContext.syncTaskMetaData();
+			throw e;
+		}
+		taskContext.syncTaskMetaData();
 	}
 
 	public void execute(TaskContext context);

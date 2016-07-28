@@ -97,6 +97,7 @@ class DefaultJobListener implements JobListener {
 			metaData.get().setTaskState(TaskState.INTERRUPT);
 			metaData.get().getLastTaskResult().setSuccess(false);
 			metaData.get().getLastTaskResult().setEndTime(new Date());
+			TaskContext.wrapper(ctx).syncTaskMetaData();
 		}
 	}
 
@@ -106,6 +107,7 @@ class DefaultJobListener implements JobListener {
 		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.RUNNING);
+			TaskContext.wrapper(ctx).syncTaskMetaData();
 		}
 
 	}
@@ -118,12 +120,14 @@ class DefaultJobListener implements JobListener {
 			metaData.get().setTaskState(TaskState.COMPLETE);
 			metaData.get().getLastTaskResult().setSuccess(true);
 			metaData.get().getLastTaskResult().setEndTime(new Date());
+			TaskContext.wrapper(ctx).syncTaskMetaData();
 		}
 		if (executionException != null) {
 			ProcessLogger.error(executionException);
 			if (metaData.isPresent()) {
 				metaData.get().getLastTaskResult().setSuccess(false);
 				metaData.get().getLastTaskResult().track(executionException.getMessage());
+				TaskContext.wrapper(ctx).syncTaskMetaData();
 			}
 		}
 
