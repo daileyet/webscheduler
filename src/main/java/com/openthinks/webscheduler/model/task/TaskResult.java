@@ -39,21 +39,35 @@ public final class TaskResult implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -9178343032918042351L;
-	private Boolean isSuccess;
+	private String taskId;
+	private Boolean success;
 	private Date startTime;
 	private Date endTime;
-	private StringBuilder logContent;
+	private String logContent;
 
 	public TaskResult() {
-		logContent = new StringBuilder();
+		this.logContent = "";
+	}
+
+	public TaskResult(String taskId) {
+		this.taskId = taskId;
+		this.logContent = "";
+	}
+
+	public String getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
 
 	public Boolean isSuccess() {
-		return isSuccess;
+		return success;
 	}
 
 	public void setSuccess(boolean isSuccess) {
-		this.isSuccess = isSuccess;
+		this.success = isSuccess;
 	}
 
 	public Date getStartTime() {
@@ -77,12 +91,17 @@ public final class TaskResult implements Serializable {
 	}
 
 	protected void setLogContent(String logContent) {
-		this.logContent = new StringBuilder(logContent);
+		this.logContent = logContent;
 	}
 
 	public void track(String log) {
-		this.logContent.append(log);
-		this.logContent.append("\r\n");
+		if (log != null) {
+			if (this.logContent == null) {
+				this.logContent = "";
+			}
+			this.logContent += log;
+			this.logContent += "\r\n";
+		}
 	}
 
 	@Override
@@ -90,7 +109,7 @@ public final class TaskResult implements Serializable {
 		StringBuilder sb = new StringBuilder();
 		if (this.isSuccess() != null) {
 			sb.append("Execution: ");
-			sb.append(this.isSuccess ? "Success" : "Failed");
+			sb.append(this.success ? "Success" : "Failed");
 			sb.append("\r\n");
 		}
 		if (this.getStartTime() != null) {
@@ -109,6 +128,13 @@ public final class TaskResult implements Serializable {
 			sb.append("\r\n");
 		}
 		return sb.toString();
+	}
+
+	public void clear() {
+		this.logContent = "";
+		this.success = null;
+		this.startTime = null;
+		this.endTime = null;
 	}
 
 }

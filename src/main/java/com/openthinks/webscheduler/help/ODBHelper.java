@@ -31,6 +31,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.OdbConfiguration;
 
 import com.openthinks.easyweb.WebUtils;
 
@@ -43,6 +44,7 @@ public final class ODBHelper {
 	private static ODB instance;
 	private static Lock lock = new ReentrantLock();
 	static {
+		OdbConfiguration.setReconnectObjectsToSession(true);
 		setUp(new File(WebUtils.getWebClassDir()), StaticDict.STORE_DB);
 	}
 
@@ -50,11 +52,6 @@ public final class ODBHelper {
 		//File dbFile = new File(WebUtils.getWebClassDir(), StaticDict.STORE_DB);
 		File dbFile = new File(dir, name);
 		storeDBPath = dbFile.getAbsolutePath();
-	}
-
-	public static final ODB getODB() {
-		ODB instance = ODBFactory.open(storeDBPath);
-		return instance;
 	}
 
 	public static final ODB getSigltonODB() {
@@ -89,6 +86,30 @@ public final class ODBHelper {
 
 	public static final void closeSiglton() {
 		release();
+	}
+
+	public static final void commitSiglton() {
+		if (instance != null) {
+			lock.lock();
+			try {
+				if (instance != null && !instance.isClosed())
+					instance.commit();
+			} finally {
+				lock.unlock();
+			}
+		}
+	}
+
+	public static final void rollbackSiglton() {
+		if (instance != null) {
+			lock.lock();
+			try {
+				if (instance != null && !instance.isClosed())
+					instance.rollback();
+			} finally {
+				lock.unlock();
+			}
+		}
 	}
 
 }

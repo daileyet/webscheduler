@@ -35,7 +35,6 @@ import org.neodatis.odb.core.query.nq.SimpleNativeQuery;
 
 import com.openthinks.webscheduler.dao.ITaskDao;
 import com.openthinks.webscheduler.help.ODBHelper;
-import com.openthinks.webscheduler.help.TaskSequenceHelper;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.TaskState;
 
@@ -49,19 +48,14 @@ public class TaskODBStore implements ITaskDao {
 	public Collection<TaskRunTimeData> getTasks(Predicate<TaskRunTimeData> predicate) {
 		IQuery query = new PredicateNativeQuery(predicate);
 		Objects<TaskRunTimeData> taskRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
-		ODBHelper.closeSiglton();
 		return taskRunTimeDatas;
 	}
 
 	@Override
 	public void save(TaskRunTimeData taskRunTimeData) {
-		ODB odb = ODBHelper.getODB();
-		if (taskRunTimeData != null && taskRunTimeData.getTaskSeq() == null) {
-			taskRunTimeData.setTaskSeq(TaskSequenceHelper.next());
-		}
+		ODB odb = ODBHelper.getSigltonODB();
 		odb.store(taskRunTimeData);
 		odb.commit();
-		ODBHelper.close(odb);
 	}
 
 	@Override
@@ -71,22 +65,22 @@ public class TaskODBStore implements ITaskDao {
 		});
 		Objects<TaskRunTimeData> taskRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
 		TaskRunTimeData taskRunTimeData = taskRunTimeDatas.getFirst();
-		ODBHelper.closeSiglton();
 		return taskRunTimeData;
 	}
 
 	@Override
 	public boolean delete(String taskId) {
+		boolean isSuccess = false;
 		TaskRunTimeData taskRunTimeData = get(taskId);
-		ODB odb = ODBHelper.getODB();
+		ODB odb = ODBHelper.getSigltonODB();
 		if (taskRunTimeData != null) {
 			taskRunTimeData.setTaskState(TaskState.INVALID);
 			odb.store(taskRunTimeData);
+			//odb.delete(taskRunTimeData);
 			odb.commit();
-			return true;
+			isSuccess = true;
 		}
-		ODBHelper.close(odb);
-		return false;
+		return isSuccess;
 	}
 
 	class PredicateNativeQuery extends SimpleNativeQuery {

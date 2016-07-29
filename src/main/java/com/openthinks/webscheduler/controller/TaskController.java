@@ -106,7 +106,7 @@ public class TaskController {
 		} catch (Exception e) {
 			isSuccess = false;
 			ProcessLogger.error(e);
-			was.addError(e.getClass().getName(), "Save new task failed." + e.getMessage(), WebScope.REQUEST);
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Save new task failed." + e.getMessage(), WebScope.REQUEST);
 		}
 		if (!isSuccess) {
 			return errorPage(was, pm);
@@ -148,12 +148,17 @@ public class TaskController {
 
 	@Mapping("/edit")
 	public String edit(WebAttributers was) {
-		TaskRunTimeData taskRunTimeData = new TaskRunTimeData();
-		taskRunTimeData.setTaskId(was.get(StaticDict.PAGE_PARAM_TASK_ID));
+		PageMap pm = newPageMap();
+		TaskRunTimeData taskRunTimeData = taskService.getTask(was.get(StaticDict.PAGE_PARAM_TASK_ID));
+		if (taskRunTimeData == null) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not modify this entry, maybe it has been removed.",
+					WebScope.REQUEST);
+			return errorPage(was, pm);
+		}
 		taskRunTimeData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
 		taskRunTimeData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
 		taskRunTimeData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
-		PageMap pm = newPageMap();
+
 		if (!checkState(was, taskRunTimeData, TaskAction.Edit)) {
 			return errorPage(was, pm);
 		}
@@ -163,7 +168,7 @@ public class TaskController {
 		} catch (Exception e) {
 			isSuccess = false;
 			ProcessLogger.error(e);
-			was.addError(e.getClass().getName(), "Change task failed." + e.getMessage(), WebScope.REQUEST);
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2, "Change task failed." + e.getMessage(), WebScope.REQUEST);
 		}
 		if (!isSuccess) {
 			return errorPage(was, pm);

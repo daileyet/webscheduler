@@ -81,7 +81,6 @@ public class TaskMemoryStore implements ITaskDao {
 			try {
 				taskDB.add(taskMetaDataNew);
 				taskMap.put(taskMetaDataNew.getTaskId(), taskMetaDataNew);
-				taskMetaDataNew.setTaskSeq(taskDB.size());
 			} finally {
 				lock.unlock();
 			}

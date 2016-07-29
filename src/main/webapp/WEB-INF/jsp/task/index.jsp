@@ -58,9 +58,9 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="tm" items="${tms }">
+							<c:forEach var="tm" items="${tms }" varStatus="status">
 								<tr data-id="${tm.taskId }">
-									<td data-title="taskseq">${tm.taskSeq }</td>
+									<td data-title="taskseq">${status.index+1 }</td>
 									<td data-title="taskname"><a href="${ew:path('/task/to/view') }?taskid=${tm.taskId }">${tm.taskName }</a></td>
 									<td data-title="tasktype"><span title="${tm.taskType}">${tm.taskTypeShort }</span></td>
 									<td data-title="taskstate">${tm.taskState.display }

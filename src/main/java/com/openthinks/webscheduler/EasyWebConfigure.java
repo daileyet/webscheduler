@@ -40,6 +40,5 @@ public class EasyWebConfigure implements Bootstrap {
 		} catch (SchedulerException e) {
 			ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
 		}
-		//		TaskTypes.init();
 	}
 }

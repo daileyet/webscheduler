@@ -16,8 +16,6 @@ public class TaskRunTimeData implements Serializable {
 	 */
 	private static final long serialVersionUID = -9156251287769007398L;
 
-	private Integer taskSeq;
-
 	private String taskId;
 	private String taskName;
 	private String taskType;
@@ -41,15 +39,7 @@ public class TaskRunTimeData implements Serializable {
 		taskState = TaskState.UN_SCHEDULE;
 		taskRef = new DefaultTaskRef();
 		taskRefContent = "";
-		lastTaskResult = new TaskResult();
-	}
-
-	public Integer getTaskSeq() {
-		return taskSeq;
-	}
-
-	public void setTaskSeq(int taskSeq) {
-		this.taskSeq = taskSeq;
+		lastTaskResult = new TaskResult(taskId);
 	}
 
 	public String getTaskId() {
@@ -191,5 +181,7 @@ public class TaskRunTimeData implements Serializable {
 			this.setTaskState(taskMetaDataNew.getTaskState());
 		if (taskMetaDataNew.getTaskRefContent() != null)
 			this.setTaskRefContent(taskMetaDataNew.getTaskRefContent());
+		if (taskMetaDataNew.getLastTaskResult() != null)
+			this.setLastTaskResult(taskMetaDataNew.getLastTaskResult());
 	}
 }

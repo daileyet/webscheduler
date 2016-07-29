@@ -76,7 +76,6 @@ public class SchedulerService {
 		if (dataObj != null && dataObj instanceof TaskRunTimeData) {
 			TaskRunTimeData taskRunTimeData = (TaskRunTimeData) dataObj;
 			taskRunTimeData.setTaskState(TaskState.SCHEDULED);
-			taskRunTimeData.getLastTaskResult().setStartTime(new Date());
 		}
 	}
 
@@ -107,6 +106,8 @@ class DefaultJobListener implements JobListener {
 		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.RUNNING);
+			metaData.get().getLastTaskResult().clear();
+			metaData.get().getLastTaskResult().setStartTime(new Date());
 			TaskContext.wrapper(ctx).syncTaskMetaData();
 		}
 
