@@ -39,6 +39,11 @@ import java.util.Properties;
 import com.openthinks.webscheduler.help.StaticChecker;
 
 /**
+ * represent task reference configuration,<BR>
+ * support two type configuration:<BR>
+ * <li>properties file
+ * <li>XML type properties
+ * @see DefaultTaskRef
  * @author dailey.yet@outlook.com
  *
  */
@@ -75,10 +80,25 @@ public interface ITaskRef extends Serializable {
 	 */
 	public void load(Reader reader) throws IOException;
 
+	/**
+	 * {@link Properties#loadFromXML(InputStream)}
+	 * @param in
+	 * @throws IOException
+	 * @throws InvalidPropertiesFormatException
+	 */
 	public void loadFromXML(InputStream in) throws IOException, InvalidPropertiesFormatException;
 
+	/**
+	 * {@link Properties#propertyNames()}
+	 * @return
+	 */
 	public Enumeration<?> propertyNames();
 
+	/**
+	 * get property value by given property name
+	 * @param propertyName String 
+	 * @return Optional<String>
+	 */
 	public default Optional<String> getProp(String propertyName) {
 		try {
 			return Optional.of(this.getProperty(propertyName));
@@ -87,6 +107,12 @@ public interface ITaskRef extends Serializable {
 		return Optional.empty();
 	}
 
+	/**
+	 * read content and do load<BR>
+	 * this parameter: refContent could be XML properties or pure properties
+	 * @param refContent String
+	 * @throws IOException
+	 */
 	public default void readString(String refContent) throws IOException {
 		if (StaticChecker.isRefXML(refContent)) {
 			this.loadFromXML(new ByteArrayInputStream(refContent.getBytes()));

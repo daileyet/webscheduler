@@ -7,6 +7,11 @@ import com.openthinks.webscheduler.dao.ITaskDao;
 import com.openthinks.webscheduler.dao.impl.TaskODBStore;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 
+/**
+ * Task business service
+ * @author dailey.yet@outlook.com
+ *
+ */
 public class TaskService {
 	private ITaskDao taskStore = WebContexts.get().lookup(TaskODBStore.class);
 

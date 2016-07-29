@@ -36,6 +36,7 @@ import org.neodatis.odb.OdbConfiguration;
 import com.openthinks.easyweb.WebUtils;
 
 /**
+ * Neodatis ODB helper
  * @author dailey.yet@outlook.com
  *
  */
@@ -48,6 +49,11 @@ public final class ODBHelper {
 		setUp(new File(WebUtils.getWebClassDir()), StaticDict.STORE_DB);
 	}
 
+	/**
+	 * set location of DB
+	 * @param dir File director of DB
+	 * @param name String DB name
+	 */
 	public static final void setUp(File dir, String name) {
 		//File dbFile = new File(WebUtils.getWebClassDir(), StaticDict.STORE_DB);
 		File dbFile = new File(dir, name);

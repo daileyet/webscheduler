@@ -28,19 +28,13 @@ package com.openthinks.webscheduler.help;
 import java.util.HashMap;
 
 /**
+ * Page attribute map which used contain page attributes 
  * @author dailey.yet@outlook.com
  *
  */
 public class PageMap extends HashMap<String, Object> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3171294487394800798L;
-
-	/**
-	 * 
-	 */
 
 	public static PageMap build() {
 		return new PageMap();

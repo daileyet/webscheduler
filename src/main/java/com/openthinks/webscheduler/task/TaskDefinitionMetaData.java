@@ -26,7 +26,7 @@
 package com.openthinks.webscheduler.task;
 
 /**
- * Description for Task definition
+ * Description for Task definition, combine {@link TaskDefinitionDescriber} and {@link TaskRefDefinitionDescriber}
  * @author dailey.yet@outlook.com
  *
  */

@@ -10,6 +10,11 @@ import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.service.TaskService;
 
+/**
+ * simple wrapped for {@link JobExecutionContext}
+ * @author dailey.yet@outlook.com
+ *
+ */
 public class TaskContext {
 	private JobExecutionContext context;
 
@@ -27,8 +32,12 @@ public class TaskContext {
 		return (T) context.getMergedJobDataMap().get(key);
 	}
 
-	public Optional<TaskRunTimeData> getTaskMetaData() {
-		TaskRunTimeData taskRunTimeData = get(ITaskDefinition.TASK_META);
+	/**
+	 * get the instance of {@link TaskRunTimeData} from this context
+	 * @return Optional<TaskRunTimeData>
+	 */
+	public Optional<TaskRunTimeData> getTaskRuntimeData() {
+		TaskRunTimeData taskRunTimeData = get(ITaskDefinition.TASK_DATA);
 		return Optional.ofNullable(taskRunTimeData);
 	}
 
@@ -36,8 +45,11 @@ public class TaskContext {
 		return new TaskContext(jobExecutionContext);
 	}
 
-	public void syncTaskMetaData() {
-		Optional<TaskRunTimeData> optional = getTaskMetaData();
+	/**
+	 * sync {@link TaskRunTimeData} with persist layer, try to store current {@link TaskRunTimeData} instance in this context 
+	 */
+	public void syncTaskRuntimeData() {
+		Optional<TaskRunTimeData> optional = getTaskRuntimeData();
 		if (optional.isPresent()) {
 			try {
 				WebContexts.get().lookup(TaskService.class).saveTask(optional.get());

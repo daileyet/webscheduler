@@ -11,6 +11,11 @@ import com.openthinks.easyweb.annotation.process.filter.FileFilterVisitor;
 import com.openthinks.libs.utilities.InstanceUtilities;
 import com.openthinks.libs.utilities.InstanceUtilities.InstanceWrapper;
 
+/**
+ * all task definition keeper
+ * @author dailey.yet@outlook.com
+ *
+ */
 public final class TaskTypes {
 
 	private static final List<String> scanedPackages = new ArrayList<>();
@@ -28,6 +33,9 @@ public final class TaskTypes {
 
 	}
 
+	/**
+	 * scan and automatically find task definition class 
+	 */
 	public static void scan() {
 		clear();
 		for (String packName : scanedPackages) {

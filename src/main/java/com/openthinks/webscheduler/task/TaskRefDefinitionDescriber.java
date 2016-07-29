@@ -28,6 +28,7 @@ package com.openthinks.webscheduler.task;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 
 /**
+ * Description for {@link ITaskRef}, include the type class of {@link ITaskRef} , description details and required or not for associated {@link ITaskDefinition}
  * @author dailey.yet@outlook.com
  *
  */

@@ -31,6 +31,7 @@ import java.util.Date;
 import com.openthinks.webscheduler.help.StaticUtils;
 
 /**
+ * Result for task execution
  * @author dailey.yet@outlook.com
  *
  */

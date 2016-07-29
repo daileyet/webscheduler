@@ -33,6 +33,7 @@ import java.util.Properties;
 import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
 
 /**
+ * Default implementation by extends {@link Properties}
  * @author dailey.yet@outlook.com
  *
  */

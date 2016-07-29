@@ -21,6 +21,11 @@ import com.openthinks.webscheduler.task.ITaskDefinition;
 import com.openthinks.webscheduler.task.TaskContext;
 import com.openthinks.webscheduler.task.TaskInterruptException;
 
+/**
+ * Scheduler service
+ * @author dailey.yet@outlook.com
+ *
+ */
 public class SchedulerService {
 
 	private Scheduler scheduler;
@@ -72,7 +77,7 @@ public class SchedulerService {
 
 	public void scheduleJob(JobDetail job, Trigger trigger) throws SchedulerException {
 		scheduler.scheduleJob(job, trigger);
-		Object dataObj = job.getJobDataMap().get(ITaskDefinition.TASK_META);
+		Object dataObj = job.getJobDataMap().get(ITaskDefinition.TASK_DATA);
 		if (dataObj != null && dataObj instanceof TaskRunTimeData) {
 			TaskRunTimeData taskRunTimeData = (TaskRunTimeData) dataObj;
 			taskRunTimeData.setTaskState(TaskState.SCHEDULED);
@@ -91,24 +96,24 @@ class DefaultJobListener implements JobListener {
 	@Override
 	public void jobExecutionVetoed(JobExecutionContext ctx) {
 		ProcessLogger.debug("jobExecutionVetoed");
-		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
+		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskRuntimeData();
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.INTERRUPT);
 			metaData.get().getLastTaskResult().setSuccess(false);
 			metaData.get().getLastTaskResult().setEndTime(new Date());
-			TaskContext.wrapper(ctx).syncTaskMetaData();
+			TaskContext.wrapper(ctx).syncTaskRuntimeData();
 		}
 	}
 
 	@Override
 	public void jobToBeExecuted(JobExecutionContext ctx) {
 		ProcessLogger.debug("jobToBeExecuted");
-		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
+		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskRuntimeData();
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.RUNNING);
 			metaData.get().getLastTaskResult().clear();
 			metaData.get().getLastTaskResult().setStartTime(new Date());
-			TaskContext.wrapper(ctx).syncTaskMetaData();
+			TaskContext.wrapper(ctx).syncTaskRuntimeData();
 		}
 
 	}
@@ -116,19 +121,19 @@ class DefaultJobListener implements JobListener {
 	@Override
 	public void jobWasExecuted(JobExecutionContext ctx, JobExecutionException executionException) {
 		ProcessLogger.debug("jobWasExecuted");
-		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskMetaData();
+		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskRuntimeData();
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.COMPLETE);
 			metaData.get().getLastTaskResult().setSuccess(true);
 			metaData.get().getLastTaskResult().setEndTime(new Date());
-			TaskContext.wrapper(ctx).syncTaskMetaData();
+			TaskContext.wrapper(ctx).syncTaskRuntimeData();
 		}
 		if (executionException != null) {
 			ProcessLogger.error(executionException);
 			if (metaData.isPresent()) {
 				metaData.get().getLastTaskResult().setSuccess(false);
 				metaData.get().getLastTaskResult().track(executionException.getMessage());
-				TaskContext.wrapper(ctx).syncTaskMetaData();
+				TaskContext.wrapper(ctx).syncTaskRuntimeData();
 			}
 		}
 

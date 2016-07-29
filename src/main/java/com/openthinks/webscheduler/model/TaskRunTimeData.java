@@ -10,6 +10,11 @@ import com.openthinks.webscheduler.model.task.TaskResult;
 import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.task.ITaskDefinition;
 
+/**
+ * Task runtime record data
+ * @author dailey.yet@outlook.com
+ *
+ */
 public class TaskRunTimeData implements Serializable {
 	/**
 	 * 
@@ -115,6 +120,10 @@ public class TaskRunTimeData implements Serializable {
 		this.lastTaskResult = lastTaskResult;
 	}
 
+	/**
+	 * check current record is valid or not
+	 * @return boolean
+	 */
 	public boolean isValid() {
 		return taskState != null && taskState != TaskState.INVALID;
 	}
@@ -144,12 +153,20 @@ public class TaskRunTimeData implements Serializable {
 		return true;
 	}
 
+	/**
+	 * get associated task class
+	 * @return Class<T> 
+	 * @throws ClassNotFoundException
+	 */
 	@SuppressWarnings("unchecked")
 	public <T extends ITaskDefinition> Class<T> getTaskClass() throws ClassNotFoundException {
 
 		return (Class<T>) Class.forName(getTaskType());
 	}
 
+	/**
+	 * convert the task reference from text to {@link ITaskRef} 
+	 */
 	public void preparedTaskRef() {
 		if (this.taskRef != null) {
 			try {
@@ -166,6 +183,10 @@ public class TaskRunTimeData implements Serializable {
 				+ ", groupName=" + groupName + ", taskRef=" + taskRef + ", taskState=" + taskState + "]";
 	}
 
+	/**
+	 * update current task runtime record data by other
+	 * @param taskMetaDataNew TaskRunTimeData New instance of task runtime record data
+	 */
 	public void update(TaskRunTimeData taskMetaDataNew) {
 		if (taskMetaDataNew.getTaskId() != null)
 			this.setTaskId(taskMetaDataNew.getTaskId());

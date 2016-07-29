@@ -26,6 +26,7 @@
 package com.openthinks.webscheduler.task;
 
 /**
+ * Description for {@link ITaskDefinition}, include the type class of {@link ITaskDefinition} and description details
  * @author dailey.yet@outlook.com
  *
  */

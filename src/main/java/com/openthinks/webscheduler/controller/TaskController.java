@@ -72,7 +72,7 @@ public class TaskController {
 		}
 		JobDetail job = JobBuilder.newJob(clazz)
 				.withIdentity(taskRunTimeData.getTaskId(), taskRunTimeData.getGroupName()).build();
-		job.getJobDataMap().put(ITaskDefinition.TASK_META, taskRunTimeData);
+		job.getJobDataMap().put(ITaskDefinition.TASK_DATA, taskRunTimeData);
 		Trigger trigger = TriggerBuilder.newTrigger()
 				.withIdentity(taskRunTimeData.getTaskId() + "-trigger", taskRunTimeData.getGroupName()).startNow()
 				.build();
