@@ -239,6 +239,16 @@ public class TaskController {
 		return "WEB-INF/jsp/task/index.jsp";
 	}
 
+	@Mapping("/to/definition")
+	public String goToDefinition(WebAttributers was) {
+		return "WEB-INF/jsp/task/definition.jsp";
+	}
+
+	@Mapping("/definition")
+	public String definition(WebAttributers was) {
+		return "WEB-INF/jsp/task/definition.jsp";
+	}
+
 	private PageMap newPageMap() {
 		return PageMap.build().push("activeSidebar", "tasks");
 	}

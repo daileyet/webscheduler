@@ -14,16 +14,6 @@
 <%@ include file="../template/head.style.jsp"%>
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/css/task.css')}">
-<style>
-.CodeMirror{
-display: block;
-width: 100%;
-font-size: 14px;
-line-height: 1.42857143;
-border: 1px solid #ccc;
-border-radius: 4px;
-}
-</style>
 </head>
 <body>
 	<jsp:include page="../template/navbar.jsp" />
@@ -91,7 +81,7 @@ border-radius: 4px;
 							<div class="btn-toolbar" role="toolbar" id="taskref-toolbar" aria-label="Ref Toolbar">
 							  <div class="btn-group" role="group" aria-label="">
 							  	<button data-role="example" type="button" title="show example" class="btn btn-default"><i class="fa fa-lightbulb-o" aria-hidden="true"></i></button>
-							  	<button data-role="copy" type="button" title="copy to clipboard" class="btn btn-default" data-clipboard-target="#taskref"><i class="fa fa-copy" aria-hidden="true"></i></button>
+							  	<button data-role="copy" type="button" title="copy to clipboard" class="btn btn-default" data-clipboard-target="#taskref"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
 							  	<button data-role="clear" type="button" title="clear" class="btn btn-default"><i class="fa fa-eraser" aria-hidden="true"></i></button>
 							  </div>
 							</div>

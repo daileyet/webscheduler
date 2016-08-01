@@ -7,12 +7,12 @@
 	border-radius: 4px;
 }
 
-#taskref {
+#taskref, #taskdef {
 	position: absolute;
 	display: inline !important;
-	width: 0;
+	width: 0.5px;
 	margin-left: 30px;
-	height: 0;
+	height: 0.5px;
 	padding: 0px;
-	border-width: 0;
+	border-width: 0px;
 }

@@ -14,16 +14,6 @@
 <%@ include file="../template/head.style.jsp"%>
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/css/task.css')}">
-<style>
-.CodeMirror{
-display: block;
-width: 100%;
-font-size: 14px;
-line-height: 1.42857143;
-border: 1px solid #ccc;
-border-radius: 4px;
-}
-</style>
 </head>
 <body>
 	<jsp:include page="../template/navbar.jsp" />

@@ -1,10 +1,7 @@
 (function(ctx,$,win){
 	//View
 	ctx.VIEW = {
-			'Select_Tasktype':'#tasktype',
-			'Optionselected_Tasktype':'#tasktype option:selected',
-			'Div_Tasktype_Ref':'#tasktype-ref',
-			'Txtarea_Taskref':'#taskref',
+			'Txtarea_Taskdef':'#taskdef',
 			'Btn_Ref_example':'#taskref-toolbar button[data-role="example"]',
 			'Btn_Ref_copy':'#taskref-toolbar button[data-role="copy"]',
 			'Btn_Ref_clear':'#taskref-toolbar button[data-role="clear"]',
@@ -14,32 +11,24 @@
 	};
 	ctx.VIEW.components = {
 			init:function(){
-				this.refEditor.init();
+				this.defEditor.init();
 			},
-			refEditor : {
+			defEditor : {
 				init:function(){
-					this.$txtarea = $(ctx.VIEW.Txtarea_Taskref);
+					this.$txtarea = $(ctx.VIEW.Txtarea_Taskdef);
 					
 					var _this =this;
-					var editor = CodeMirror.fromTextArea($(ctx.VIEW.Txtarea_Taskref)[0], {
+					var editor = CodeMirror.fromTextArea($(ctx.VIEW.Txtarea_Taskdef)[0], {
 					    lineNumbers: true,
-					    lineWrapping: true
+					    lineWrapping: true,
+					    matchBrackets: true,
+				        mode: "text/x-java"
 					  });
 					editor.on("change",function(instance,changeObj){
 				    	var sNew = instance.doc.getValue();
 				    	_this.$txtarea.val(sNew);
 				    });
 					this.cm  = editor;
-//					this.$txtarea.css({
-//					"visibility" : "hidden",
-//					"position" : "absolute",
-//					"display" : "inline",
-//					"width" : "0",
-//					"margin-left" : "30px",
-//					"height" : "0",
-//					"padding" : "0px",
-//					"border-width" : "0"
-//				});
 					this.$txtarea.appendTo($('.CodeMirror'));
 				},
 				setContent:function(str){
@@ -75,25 +64,12 @@
 				this.initclipboard();
 			},
 			prepared:function(needfillRefExample){
-				var code_id= $(ctx.VIEW.Optionselected_Tasktype).data('ref');
-				var isRequired = $(ctx.VIEW.Optionselected_Tasktype).data('required');
-				isRequired = (isRequired!=undefined && (isRequired || isRequired=="true")) ;
-				ctx.VIEW.components.refEditor.setRequired(isRequired);
-				if(needfillRefExample && needfillRefExample==true){
-					var sRef = $("#"+code_id).text();
-					ctx.VIEW.components.refEditor.setContent(sRef);
-				}
+				
 			},
 			bindEventListener:function(){
-				var _this = this;
-				$(ctx.VIEW.Select_Tasktype).change(function(){
-					_this.prepared();
-				});
-				$(ctx.VIEW.Btn_Ref_example).click(function(){
-					_this.prepared(true);
-				});
+				
 				$(ctx.VIEW.Btn_Ref_clear).click(function(){
-					ctx.VIEW.components.refEditor.setContent("");
+					ctx.VIEW.components.defEditor.setContent("");
 				});
 			},
 			initclipboard:function(){

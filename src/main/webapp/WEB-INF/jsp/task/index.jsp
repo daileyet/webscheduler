@@ -35,6 +35,7 @@
 							<span class="text-muted">Create a task</span>
 						</div>
 					</a>
+					<a href="${ew:path('/task/to/definition') }">
 					<div class="col-xs-6 col-sm-6 placeholder">
 						<img src="${ew:pathS('/static/img/definetask_512.png')}"
 							width="200" height="200" class="img-responsive"
@@ -42,6 +43,7 @@
 						<h4>Define</h4>
 						<span class="text-muted">Customize task definition</span>
 					</div>
+					</a>
 				</div>
 
 				<!-- <h2 class="sub-header">Task List</h2> -->

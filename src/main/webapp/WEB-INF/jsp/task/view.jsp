@@ -14,16 +14,7 @@
 <title>Task - View</title>
 <%@ include file="../template/head.style.jsp"%>
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
-<style>
-.CodeMirror{
-display: block;
-width: 100%;
-font-size: 14px;
-line-height: 1.42857143;
-border: 1px solid #ccc;
-border-radius: 4px;
-}
-</style>
+<link rel="stylesheet" href="${ew:pathS('/static/css/task.css')}">
 </head>
 <body>
 	<jsp:include page="../template/navbar.jsp" />
@@ -112,14 +103,14 @@ border-radius: 4px;
 							
 							<ul class="nav nav-tabs" role="tablist">
 							  <li role="presentation" class="active"><a href="#taskproperties" role="tab" data-toggle="tab">Properties</a></li>
-							  <li role="presentation"><a href="#taskresult" role="tab" data-toggle="tab">Result</a></li>
+							  <li role="presentation"><a href="#taskresultcontainer" role="tab" data-toggle="tab">Result</a></li>
 							</ul>
 							
 							<div class="tab-content">
 							    <div role="tabpanel" class="tab-pane active" id="taskproperties">
 							    	<textarea class="form-control " id="taskref" name="taskref" rows="10" readonly>${pm.tm.taskRefContent}</textarea>
 							    </div>
-							    <div role="tabpanel" class="tab-pane" id="taskresult">
+							    <div role="tabpanel" class="tab-pane" id="taskresultcontainer">
 							    	<textarea class="form-control " id="taskresult" name="taskresult" rows="10" readonly>${pm.tm.lastTaskResult}</textarea>
 							    </div>
 							</div>
