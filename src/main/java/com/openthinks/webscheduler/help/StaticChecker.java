@@ -26,8 +26,8 @@
 package com.openthinks.webscheduler.help;
 
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.task.ExecutionResult;
 import com.openthinks.webscheduler.model.task.TaskAction;
-import com.openthinks.webscheduler.model.task.TaskResult;
 import com.openthinks.webscheduler.model.task.TaskState;
 
 /**
@@ -51,7 +51,7 @@ public final class StaticChecker {
 
 	public static boolean isCompleteWith(TaskRunTimeData taskRunTimeData, boolean isSuccess) {
 		if (taskRunTimeData != null && taskRunTimeData.getTaskState() == TaskState.COMPLETE) {
-			TaskResult taskResult = taskRunTimeData.getLastTaskResult();
+			ExecutionResult taskResult = taskRunTimeData.getLastTaskResult();
 			if (taskResult != null && taskResult.isSuccess() != null && taskResult.isSuccess() == isSuccess) {
 				return true;
 			}

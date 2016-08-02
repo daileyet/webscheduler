@@ -16,39 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: TaskExecuteResult.java 
-* @Package com.openthinks.webscheduler.model.task 
+* @Title: CompileResult.java 
+* @Package com.openthinks.webscheduler.model.task.def 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Jul 20, 2016
+* @date Aug 2, 2016
 * @version V1.0   
 */
-package com.openthinks.webscheduler.model.task;
+package com.openthinks.webscheduler.model.task.def;
+
+import com.openthinks.webscheduler.model.task.ExecutionResult;
 
 /**
- * Result for task execution
  * @author dailey.yet@outlook.com
  *
  */
-public final class TaskResult extends ExecutionResult {
-	private static final long serialVersionUID = -9178343032918042351L;
-	private String taskId;
+public class CompileResult extends ExecutionResult {
 
-	public TaskResult() {
-		this.logContent = "";
+	private static final long serialVersionUID = 7732715946774124932L;
+	private String taskDefFullName;
+
+	public String getTaskDefFullName() {
+		return taskDefFullName;
 	}
 
-	public TaskResult(String taskId) {
-		this.taskId = taskId;
-		this.logContent = "";
+	public void setTaskDefFullName(String taskDefFullName) {
+		this.taskDefFullName = taskDefFullName;
 	}
-
-	public String getTaskId() {
-		return taskId;
-	}
-
-	public void setTaskId(String taskId) {
-		this.taskId = taskId;
-	}
-
 }

@@ -29,14 +29,24 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.openthinks.easyweb.WebUtils;
+
 /**
  * @author dailey.yet@outlook.com
  *
  */
 public final class StaticUtils {
-	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(StaticDict.DEFAULT_DATE_FORMAT_STYLE);
 
 	public static String formatDate(Date date) {
 		return DATE_FORMAT.format(date);
+	}
+
+	public static String getDefaultCustomTaskSourceDir() {
+		return WebUtils.getPackPath(StaticDict.CUSTOM_TASK_DEF_PACKAGE);
+	}
+
+	public static String getDefaultCustomTaskTargetDir() {
+		return WebUtils.getPackPath(StaticDict.CUSTOM_TASK_DEF_PACKAGE);
 	}
 }

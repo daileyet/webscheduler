@@ -52,4 +52,7 @@ public interface StaticDict {
 
 	public static final String STORE_DB = "webscheduler.odb";
 
+	public static final String CUSTOM_TASK_DEF_PACKAGE = "com.openthinks.webscheduler.task.custom";
+	public static final String DEFAULT_DATE_FORMAT_STYLE = "yyyy-MM-dd HH:mm:ss";
+
 }
