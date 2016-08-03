@@ -27,6 +27,7 @@ package com.openthinks.webscheduler.help;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -100,7 +101,7 @@ public final class JavaCompileHelper {
 			}
 			sb.append(defRuntimeData.getTargetDir());
 			options.add(sb.toString());
-			boolean isSuccess = javaCompiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits)
+			boolean isSuccess = javaCompiler.getTask(new PrintWriter(System.err), fileManager, diagnostics, options, null, compilationUnits)
 					.call();
 			return isSuccess;
 		}

@@ -47,11 +47,23 @@ public final class StaticUtils {
 	}
 
 	public static String getDefaultCustomTaskSourceDir() {
-		return WebUtils.getPackPath(StaticDict.CUSTOM_TASK_DEF_PACKAGE);
+		 File webInfDir = new File(WebUtils.getWebClassDir()).getParentFile();
+		 File sourceDir = new File(webInfDir,"ext/src");
+		 makeFileExist(sourceDir);
+		return sourceDir.getAbsolutePath();
+	}
+
+	public static void makeFileExist(File sourceDir) {
+		if(!sourceDir.exists()){
+			 sourceDir.mkdirs(); 
+		 }
 	}
 
 	public static String getDefaultCustomTaskTargetDir() {
-		return WebUtils.getPackPath(StaticDict.CUSTOM_TASK_DEF_PACKAGE);
+		 File webInfDir = new File(WebUtils.getWebClassDir()).getParentFile();
+		 File targetClassDir = new File(webInfDir,"ext/classes");
+		 makeFileExist(targetClassDir);
+		return targetClassDir.getAbsolutePath();
 	}
 
 	public static void writeSourceCode(TaskDefRuntimeData defRuntimeData) throws IOException {
