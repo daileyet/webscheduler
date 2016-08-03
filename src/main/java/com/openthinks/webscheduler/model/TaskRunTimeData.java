@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
-import com.openthinks.webscheduler.model.task.ExecutionResult;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.model.task.TaskResult;
 import com.openthinks.webscheduler.model.task.TaskState;
@@ -33,7 +32,7 @@ public class TaskRunTimeData implements Serializable {
 
 	private TaskState taskState;
 
-	private ExecutionResult lastTaskResult;
+	private TaskResult lastTaskResult;
 
 	public TaskRunTimeData() {
 	}
@@ -113,11 +112,11 @@ public class TaskRunTimeData implements Serializable {
 		this.taskRefContent = taskRefContent;
 	}
 
-	public ExecutionResult getLastTaskResult() {
+	public TaskResult getLastTaskResult() {
 		return lastTaskResult;
 	}
 
-	public void setLastTaskResult(ExecutionResult lastTaskResult) {
+	public void setLastTaskResult(TaskResult lastTaskResult) {
 		this.lastTaskResult = lastTaskResult;
 	}
 

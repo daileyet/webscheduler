@@ -27,15 +27,24 @@ package com.openthinks.webscheduler.help;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
+import javax.tools.JavaFileObject.Kind;
+import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
+
+import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
 /**
  * @author dailey.yet@outlook.com
@@ -46,60 +55,19 @@ public final class JavaCompileHelper {
 	private static JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 	private static JavaFileFitler javaFileFitler = new JavaFileFitler();
 
-	static class JCompiler {
-		private File sourceDir;
-		private File sourceFile;
-		private File targetDir;
+	public static class JCompiler {
+		private TaskDefRuntimeData defRuntimeData;
 		private DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 		private StandardJavaFileManager fileManager = javaCompiler.getStandardFileManager(diagnostics, Locale.US,
 				Charset.forName("UTF-8"));
 
 		public JCompiler() {
-			init();
+			this.defRuntimeData = new TaskDefRuntimeData();
+			this.defRuntimeData.makeDefault();
 		}
 
-		/**
-		 * 
-		 * @param sourceFile File source java file 
-		 */
-		public JCompiler(File sourceFile) {
-			super();
-			this.sourceFile = sourceFile;
-			init();
-		}
-
-		/**
-		 * @param sourceDir File source java file directory
-		 * @param sourceFile File source java file 
-		 * @param targetDir File target java compile directory
-		 */
-		public JCompiler(File sourceDir, File sourceFile, File targetDir) {
-			super();
-			this.sourceDir = sourceDir;
-			this.sourceFile = sourceFile;
-			this.targetDir = targetDir;
-			init();
-		}
-
-		public void setSourceFile(File sourceFile) {
-			this.sourceFile = sourceFile;
-		}
-
-		public void setSourceDir(File sourceDir) {
-			this.sourceDir = sourceDir;
-		}
-
-		public void setTargetDir(File targetDir) {
-			this.targetDir = targetDir;
-		}
-
-		protected void init() {
-			if (this.sourceDir == null) {
-				this.sourceDir = new File(StaticUtils.getDefaultCustomTaskSourceDir());
-			}
-			if (this.targetDir == null) {
-				this.targetDir = new File(StaticUtils.getDefaultCustomTaskTargetDir());
-			}
+		public JCompiler(TaskDefRuntimeData defRuntimeData) {
+			this.defRuntimeData = defRuntimeData;
 		}
 
 		/**
@@ -107,15 +75,32 @@ public final class JavaCompileHelper {
 		 * @return boolean compile success with error or not
 		 */
 		public boolean exec() {
-			File[] javaFiles = new File[0];
-			if (this.sourceFile == null) {
-				javaFiles = sourceDir.listFiles(javaFileFitler);
-			} else {
-				javaFiles = new File[] { this.sourceFile };
+			Iterable<? extends JavaFileObject> compilationUnits = null;
+			if (defRuntimeData.getSourceCode() != null && !defRuntimeData.isKeepSourceFile()) {
+				JavaSourceFromString jsfs = new JavaSourceFromString(defRuntimeData.getFullName(),
+						defRuntimeData.getSourceCode());
+				compilationUnits = Arrays.asList(jsfs);
+			} else if (defRuntimeData.isKeepSourceFile()) {
+				File[] javaFiles = new File[0];
+				if (defRuntimeData.getFileName() == null) {
+					javaFiles = defRuntimeData.getSourceDirFile().listFiles(javaFileFitler);
+				} else {
+					javaFiles = new File[] { defRuntimeData.getSourceFile() };
+				}
+				compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(javaFiles));
 			}
-			Iterable<? extends JavaFileObject> compilationUnits = fileManager
-					.getJavaFileObjectsFromFiles(Arrays.asList(javaFiles));
-			boolean isSuccess = javaCompiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits)
+			List<String> options = new ArrayList<>();
+			options.add("-d");
+			options.add(defRuntimeData.getTargetDir());
+			options.add("-classpath");
+			URLClassLoader urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+			StringBuilder sb = new StringBuilder();
+			for (URL url : urlClassLoader.getURLs()) {
+				sb.append(url.getFile()).append(File.pathSeparator);
+			}
+			sb.append(defRuntimeData.getTargetDir());
+			options.add(sb.toString());
+			boolean isSuccess = javaCompiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits)
 					.call();
 			return isSuccess;
 		}
@@ -123,14 +108,36 @@ public final class JavaCompileHelper {
 		public DiagnosticCollector<JavaFileObject> getDiagnostics() {
 			return diagnostics;
 		}
+
+		class JavaSourceFromString extends SimpleJavaFileObject {
+			final String code;
+
+			public JavaSourceFromString(String name, String code) {
+				super(URI.create("string:///" + name.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
+				this.code = code;
+			}
+
+			@Override
+			public CharSequence getCharContent(boolean ignoreEncodingErrors) {
+				return code;
+			}
+		}
 	}
 
 	static class JavaFileFitler implements FilenameFilter {
 
 		@Override
 		public boolean accept(File dir, String name) {
-			return name.endsWith(".java");
+			return name.endsWith(Kind.SOURCE.extension);
 		}
 
+	}
+
+	public static JCompiler getCompiler() {
+		return new JCompiler();
+	}
+
+	public static JCompiler getCompiler(TaskDefRuntimeData defRuntimeData) {
+		return new JCompiler(defRuntimeData);
 	}
 }

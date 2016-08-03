@@ -1,5 +1,6 @@
 package com.openthinks.webscheduler.controller;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import org.quartz.JobBuilder;
@@ -16,11 +17,16 @@ import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.help.JavaCompileHelper;
 import com.openthinks.webscheduler.help.PageMap;
+import com.openthinks.webscheduler.help.SourceCodeHelper;
 import com.openthinks.webscheduler.help.StaticChecker;
 import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.help.source.SourceCodeInfo;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.TaskAction;
+import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 import com.openthinks.webscheduler.service.SchedulerService;
 import com.openthinks.webscheduler.service.TaskService;
 import com.openthinks.webscheduler.task.ITaskDefinition;
@@ -246,7 +252,33 @@ public class TaskController {
 
 	@Mapping("/definition")
 	public String definition(WebAttributers was) {
-		return "WEB-INF/jsp/task/definition.jsp";
+		PageMap pm = newPageMap();
+		String defSourceCode = was.get(StaticDict.PAGE_PARAM_TASK_DEF);
+		TaskDefRuntimeData defRuntimeData = new TaskDefRuntimeData();
+
+		SourceCodeInfo sci = SourceCodeHelper.buildTaskDef(defSourceCode);
+		if (!sci.validate()) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Invalid custom task definition source code.",
+					WebScope.REQUEST);
+			return errorPage(was, pm);
+		}
+		defRuntimeData.setSourceCode(defSourceCode);
+		defRuntimeData.setFileName(sci.getFileName());
+		defRuntimeData.setFullName(sci.getClassFullName());
+		defRuntimeData.setKeepSourceFile(true);
+		defRuntimeData.makeDefault();
+		if (defRuntimeData.isKeepSourceFile())
+			try {
+				StaticUtils.writeSourceCode(defRuntimeData);
+			} catch (IOException e) {
+				ProcessLogger.error(e);
+				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2, "Failed to save source code to local java file.",
+						WebScope.REQUEST);
+				return errorPage(was, pm);
+			}
+		JavaCompileHelper.getCompiler(defRuntimeData).exec();
+		pm.push("title", "Task - Defining").push("redirectUrl", WebUtils.path("/task/index"));
+		return intermediatePage(was, pm);
 	}
 
 	private PageMap newPageMap() {

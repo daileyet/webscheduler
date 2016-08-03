@@ -16,39 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: CompileResult.java 
-* @Package com.openthinks.webscheduler.model.task.def 
+* @Title: SourceCodeHelper.java 
+* @Package com.openthinks.webscheduler.help 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Aug 2, 2016
+* @date Aug 3, 2016
 * @version V1.0   
 */
-package com.openthinks.webscheduler.model.task.def;
+package com.openthinks.webscheduler.help;
 
-import com.openthinks.webscheduler.model.task.ExecutionResult;
+import com.openthinks.webscheduler.help.source.SourceCodeInfo;
+import com.openthinks.webscheduler.help.source.TaskDefSourceCodeInfo;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public class CompileResult extends ExecutionResult {
+public class SourceCodeHelper {
 
-	private static final long serialVersionUID = 7732715946774124932L;
-	private String taskDefFullName;
-
-	public CompileResult() {
+	/**
+	 * create instance of {@link SourceCodeInfo} by the string of java source code
+	 * @param defSourceCode String 
+	 * @return SourceCodeInfo
+	 */
+	public static SourceCodeInfo buildTaskDef(String defSourceCode) {
+		return new TaskDefSourceCodeInfo(defSourceCode);
 	}
 
-	public CompileResult(String taskDefFullName) {
-		super();
-		this.taskDefFullName = taskDefFullName;
-	}
-
-	public String getTaskDefFullName() {
-		return taskDefFullName;
-	}
-
-	public void setTaskDefFullName(String taskDefFullName) {
-		this.taskDefFullName = taskDefFullName;
-	}
 }

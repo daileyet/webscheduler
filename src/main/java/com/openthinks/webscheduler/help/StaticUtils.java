@@ -25,11 +25,15 @@
 */
 package com.openthinks.webscheduler.help;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.openthinks.easyweb.WebUtils;
+import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
 /**
  * @author dailey.yet@outlook.com
@@ -48,5 +52,16 @@ public final class StaticUtils {
 
 	public static String getDefaultCustomTaskTargetDir() {
 		return WebUtils.getPackPath(StaticDict.CUSTOM_TASK_DEF_PACKAGE);
+	}
+
+	public static void writeSourceCode(TaskDefRuntimeData defRuntimeData) throws IOException {
+		if (defRuntimeData.getSourceCode() == null || defRuntimeData.getSourceFile() == null) {
+			return;
+		}
+		File storeFile = defRuntimeData.getSourceFile();
+		FileWriter fw = new FileWriter(storeFile);
+		fw.write(defRuntimeData.getSourceCode());
+		fw.flush();
+		fw.close();
 	}
 }

@@ -25,16 +25,51 @@
 */
 package com.openthinks.webscheduler.model.task.def;
 
+import java.io.File;
+
+import com.openthinks.webscheduler.help.StaticUtils;
+
 /**
  * @author dailey.yet@outlook.com
  *
  */
 public class TaskDefRuntimeData {
+	// xxxx.java
 	private String fileName;
 	private String fullName;
 	private String sourceCode;
 	private String sourceDir;
 	private String targetDir;
+	private CompileResult lastCompileResult;
+	private boolean keepSourceFile;
+
+	public void makeDefault() {
+		if (sourceDir == null)
+			sourceDir = StaticUtils.getDefaultCustomTaskSourceDir();
+		if (targetDir == null)
+			targetDir = StaticUtils.getDefaultCustomTaskTargetDir();
+		if (fullName == null) {
+			lastCompileResult = new CompileResult();
+		} else {
+			lastCompileResult = new CompileResult(getFullName());
+		}
+	}
+
+	public boolean isKeepSourceFile() {
+		return keepSourceFile;
+	}
+
+	public void setKeepSourceFile(boolean keepSourceFile) {
+		this.keepSourceFile = keepSourceFile;
+	}
+
+	public CompileResult getLastCompileResult() {
+		return lastCompileResult;
+	}
+
+	public void setLastCompileResult(CompileResult lastCompileResult) {
+		this.lastCompileResult = lastCompileResult;
+	}
 
 	public String getFileName() {
 		return fileName;
@@ -61,7 +96,7 @@ public class TaskDefRuntimeData {
 	}
 
 	public String getSourceDir() {
-		return sourceDir;
+		return sourceDir == null ? StaticUtils.getDefaultCustomTaskSourceDir() : sourceDir;
 	}
 
 	public void setSourceDir(String sourceDir) {
@@ -69,11 +104,23 @@ public class TaskDefRuntimeData {
 	}
 
 	public String getTargetDir() {
-		return targetDir;
+		return targetDir == null ? StaticUtils.getDefaultCustomTaskTargetDir() : targetDir;
 	}
 
 	public void setTargetDir(String targetDir) {
 		this.targetDir = targetDir;
+	}
+
+	public File getSourceFile() {
+		return new File(this.getSourceDir(), getFileName());
+	}
+
+	public File getSourceDirFile() {
+		return new File(this.getSourceDir());
+	}
+
+	public File getTargetDirFile() {
+		return new File(this.getTargetDir());
 	}
 
 }
