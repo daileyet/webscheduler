@@ -37,6 +37,7 @@ public interface StaticDict {
 	public static final String PAGE_ATTRIBUTE_MAP = "pm";
 	public static final String PAGE_ATTRIBUTE_TASK_META = "tm";
 	public static final String PAGE_ATTRIBUTE_ERROR_PRE = "error_";
+	public static final String PAGE_ATTRIBUTE_ACTIVESIDEBAR = "activeSidebar";
 
 	public static final String PAGE_ATTRIBUTE_ERROR_1 = "error_1";
 	public static final String PAGE_ATTRIBUTE_ERROR_2 = "error_2";

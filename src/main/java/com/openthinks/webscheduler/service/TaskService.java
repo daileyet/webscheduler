@@ -4,8 +4,11 @@ import java.util.Collection;
 
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.webscheduler.dao.ITaskDao;
+import com.openthinks.webscheduler.dao.ITaskDefDao;
+import com.openthinks.webscheduler.dao.impl.TaskDefODBStore;
 import com.openthinks.webscheduler.dao.impl.TaskODBStore;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
 /**
  * Task business service
@@ -14,6 +17,7 @@ import com.openthinks.webscheduler.model.TaskRunTimeData;
  */
 public class TaskService {
 	private ITaskDao taskStore = WebContexts.get().lookup(TaskODBStore.class);
+	private ITaskDefDao taskDefStore = WebContexts.get().lookup(TaskDefODBStore.class);
 
 	public Collection<TaskRunTimeData> getValidTasks() {
 		return taskStore.getTasks((task) -> {
@@ -31,6 +35,25 @@ public class TaskService {
 
 	public boolean remove(TaskRunTimeData taskRunTimeData) {
 		return taskStore.delete(taskRunTimeData.getTaskId());
+	}
+
+	//////////////////////////////////////////////////////////////////
+	public Collection<TaskDefRuntimeData> getTaskDefs() {
+		return taskDefStore.getTaskDefs((task) -> {
+			return true;
+		});
+	}
+
+	public void saveTaskDef(TaskDefRuntimeData taskDefRunTimeData) {
+		taskDefStore.save(taskDefRunTimeData);
+	}
+
+	public TaskDefRuntimeData getTaskDef(String fullclassname) {
+		return taskDefStore.get(fullclassname);
+	}
+
+	public boolean remove(TaskDefRuntimeData taskDefRunTimeData) {
+		return taskDefStore.delete(taskDefRunTimeData.getFullName());
 	}
 
 }

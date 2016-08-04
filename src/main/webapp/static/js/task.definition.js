@@ -2,9 +2,10 @@
 	//View
 	ctx.VIEW = {
 			'Txtarea_Taskdef':'#taskdef',
-			'Btn_Ref_example':'#taskref-toolbar button[data-role="example"]',
-			'Btn_Ref_copy':'#taskref-toolbar button[data-role="copy"]',
-			'Btn_Ref_clear':'#taskref-toolbar button[data-role="clear"]',
+			'Btn_Ref_example':'#taskdef-toolbar button[data-role="example"]',
+			'Btn_Ref_copy':'#taskdef-toolbar button[data-role="copy"]',
+			'Btn_Ref_clear':'#taskdef-toolbar button[data-role="clear"]',
+			'Btn_Ref_full':'#taskdef-toolbar button[data-role="fullscreen"]',
 		init:function(){
 			this.components.init();
 		}
@@ -22,7 +23,15 @@
 					    lineNumbers: true,
 					    lineWrapping: true,
 					    matchBrackets: true,
-				        mode: "text/x-java"
+				        mode: "text/x-java",
+				        extraKeys: {
+				            "F11": function(cm) {
+				              cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+				            },
+				            "Esc": function(cm) {
+				              if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+				            }
+				          }
 					  });
 					editor.on("change",function(instance,changeObj){
 				    	var sNew = instance.doc.getValue();
@@ -47,6 +56,9 @@
 				},
 				setRequired:function(isRequired){
 					this.$txtarea.prop("required",isRequired);
+				},
+				fullscreen:function(){
+					this.cm.setOption("fullScreen", !this.cm.getOption("fullScreen"));
 				}
 			}
 	}
@@ -70,6 +82,10 @@
 				
 				$(ctx.VIEW.Btn_Ref_clear).click(function(){
 					ctx.VIEW.components.defEditor.setContent("");
+				});
+				
+				$(ctx.VIEW.Btn_Ref_full).click(function(){
+					ctx.VIEW.components.defEditor.fullscreen();
 				});
 			},
 			initclipboard:function(){

@@ -11,21 +11,22 @@
 <meta name="description" content="">
 <meta name="author" content="dailey.yet@outlook.com">
 <title>Task - New</title>
-<%@ include file="../template/head.style.jsp"%>
+<%@ include file="../../template/head.style.jsp"%>
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
+<link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/addon/display/fullscreen.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/bootstrap-select/css/bootstrap-select.min.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/css/task.css')}">
 </head>
 <body>
-	<jsp:include page="../template/navbar.jsp" />
+	<jsp:include page="../../template/navbar.jsp" />
 	<div class="container-fluid">
 		<div class="row">
-			<jsp:include page="../template/sidebar.jsp">
+			<jsp:include page="../../template/sidebar.jsp">
 				<jsp:param name="active" value="tasks" />
 			</jsp:include>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Define Task</h1>
-				<form action="${ew:path('/task/definition')}" method="post"
+				<form action="${ew:path('/task/def/apply')}" method="post"
 					class="form-horizontal">
 					<div class="form-group">
 						<!-- <label for="customtasktype" class="col-sm-4 col-md-2 col-lg-2 control-label" style="text-align:left">Custom Task Type</label> -->
@@ -34,9 +35,9 @@
 							<select id="customtasktype" name="customtasktype" class="selectpicker show-tick " data-width="auto" data-live-search="true" data-show-subtext="true">
 								<option data-content="<span class='label label-warning'>New Task Definition</span>" value=""  >New Task Definition</option>
 								<option data-divider="true"></option>
-								<option>CustomEcho1</option>
-								<option>CustomEcho2</option>
-								<option>CustomEcho3</option>  
+								<c:forEach var="tm" items="${pm.customTasks }">
+									<option value="${tm.type.name }" title="${tm.describer.description }">${tm.type.simpleName }</option>
+								</c:forEach>
 							</select>
 						</div>
 						
@@ -49,9 +50,23 @@
 							  	<button data-role="example" type="button" title="show example" class="btn btn-default"><i class="fa fa-lightbulb-o" aria-hidden="true"></i></button>
 							  	<button data-role="copy" type="button" title="copy to clipboard" class="btn btn-default" data-clipboard-target="#taskdef"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
 							  	<button data-role="clear" type="button" title="clear" class="btn btn-default"><i class="fa fa-eraser" aria-hidden="true"></i></button>
+							  	<button data-role="fullscreen" type="button" title="fullscreen" class="btn btn-default"><i class="fa fa-expand" aria-hidden="true"></i></button>
+							  	
 							  </div>
 							</div>
-							<textarea class="form-control" id="taskdef" name="taskdef" rows="10" required></textarea>
+							<ul class="nav nav-tabs" role="tablist">
+							  <li role="presentation" class="active"><a href="#taskdefcontainer" role="tab" data-toggle="tab">Source</a></li>
+							  <li role="presentation"><a href="#taskdefresultcontainer" role="tab" data-toggle="tab">Result</a></li>
+							</ul>
+							
+							<div class="tab-content">
+							    <div role="tabpanel" class="tab-pane active" id="taskdefcontainer">
+							    	<textarea class="form-control " id="taskdef" name="taskdef" rows="10" required></textarea>
+							    </div>
+							    <div role="tabpanel" class="tab-pane" id="taskdefresultcontainer">
+							    	<textarea class="form-control " id="taskdefresult" name="taskdefresult" rows="10" readonly></textarea>
+							    </div>
+							</div>
 						</div>
 					</div>
 					<div class="form-group">
@@ -66,9 +81,10 @@
 		</div>
 	</div>
 
-	<%@ include file="../template/body.script.jsp"%>
+	<%@ include file="../../template/body.script.jsp"%>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/lib/codemirror.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/clike/clike.js')}"></script>
+	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/addon/display/fullscreen.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/js/clipboard.js/clipboard.min.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/bootstrap-select/js/bootstrap-select.min.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/js/task.definition.js')}"></script>

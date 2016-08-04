@@ -1,6 +1,5 @@
 package com.openthinks.webscheduler.controller;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import org.quartz.JobBuilder;
@@ -17,16 +16,12 @@ import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
-import com.openthinks.webscheduler.help.JavaCompileHelper;
 import com.openthinks.webscheduler.help.PageMap;
-import com.openthinks.webscheduler.help.SourceCodeHelper;
 import com.openthinks.webscheduler.help.StaticChecker;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.help.StaticUtils;
-import com.openthinks.webscheduler.help.source.SourceCodeInfo;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.TaskAction;
-import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 import com.openthinks.webscheduler.service.SchedulerService;
 import com.openthinks.webscheduler.service.TaskService;
 import com.openthinks.webscheduler.task.ITaskDefinition;
@@ -40,12 +35,16 @@ public class TaskController {
 	@AutoComponent
 	TaskService taskService;
 
+	private PageMap newPageMap() {
+		return PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_ACTIVESIDEBAR, "tasks");
+	}
+
 	@Mapping("/stop")
 	public String stop(WebAttributers was) {
 		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
 		TaskRunTimeData taskRunTimeData = taskService.getTask(taskId);
 		if (!checkState(was, taskRunTimeData, TaskAction.Stop)) {
-			return errorPage(was, this.newPageMap());
+			return StaticUtils.errorPage(was, this.newPageMap());
 		}
 		boolean isSuccess = true;
 		try {
@@ -56,7 +55,7 @@ public class TaskController {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not stop this task.", WebScope.REQUEST);
 		}
 		if (!isSuccess) {
-			return errorPage(was, this.newPageMap());
+			return StaticUtils.errorPage(was, this.newPageMap());
 		}
 		return index(was);
 	}
@@ -66,7 +65,7 @@ public class TaskController {
 		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
 		TaskRunTimeData taskRunTimeData = taskService.getTask(taskId);
 		if (!checkState(was, taskRunTimeData, TaskAction.Schedule)) {
-			return errorPage(was, this.newPageMap());
+			return StaticUtils.errorPage(was, this.newPageMap());
 		}
 		boolean isSuccess = true;
 		Class<? extends ITaskDefinition> clazz = null;
@@ -92,7 +91,7 @@ public class TaskController {
 					WebScope.REQUEST);
 		}
 		if (!isSuccess) {
-			return errorPage(was, this.newPageMap());
+			return StaticUtils.errorPage(was, this.newPageMap());
 		}
 		return index(was);
 	}
@@ -115,20 +114,10 @@ public class TaskController {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Save new task failed." + e.getMessage(), WebScope.REQUEST);
 		}
 		if (!isSuccess) {
-			return errorPage(was, pm);
+			return StaticUtils.errorPage(was, pm);
 		}
 		pm.push("title", "Task - Adding").push("redirectUrl", WebUtils.path("/task/index"));
-		return intermediatePage(was, pm);
-	}
-
-	private String intermediatePage(WebAttributers was, PageMap pm) {
-		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
-		return "WEB-INF/jsp/template/intermediate.jsp";
-	}
-
-	private String errorPage(WebAttributers was, PageMap pm) {
-		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
-		return "WEB-INF/jsp/template/business.error.jsp";
+		return StaticUtils.intermediatePage(was, pm);
 	}
 
 	@Mapping("/to/add")
@@ -159,14 +148,14 @@ public class TaskController {
 		if (taskRunTimeData == null) {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not modify this entry, maybe it has been removed.",
 					WebScope.REQUEST);
-			return errorPage(was, pm);
+			return StaticUtils.errorPage(was, pm);
 		}
 		taskRunTimeData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
 		taskRunTimeData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
 		taskRunTimeData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
 
 		if (!checkState(was, taskRunTimeData, TaskAction.Edit)) {
-			return errorPage(was, pm);
+			return StaticUtils.errorPage(was, pm);
 		}
 		boolean isSuccess = true;
 		try {
@@ -177,10 +166,10 @@ public class TaskController {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2, "Change task failed." + e.getMessage(), WebScope.REQUEST);
 		}
 		if (!isSuccess) {
-			return errorPage(was, pm);
+			return StaticUtils.errorPage(was, pm);
 		}
 		pm.push("title", "Task - Editing").push("redirectUrl", WebUtils.path("/task/index"));
-		return intermediatePage(was, pm);
+		return StaticUtils.intermediatePage(was, pm);
 	}
 
 	/**
@@ -205,7 +194,7 @@ public class TaskController {
 		PageMap pm = newPageMap();
 		TaskRunTimeData taskRunTimeData = taskService.getTask(was.get(StaticDict.PAGE_PARAM_TASK_ID));
 		if (taskRunTimeData != null && !checkState(was, taskRunTimeData, TaskAction.Remove)) {
-			return errorPage(was, pm);
+			return StaticUtils.errorPage(was, pm);
 		}
 		boolean isSuccess = true;
 		if (taskRunTimeData != null) {
@@ -219,10 +208,10 @@ public class TaskController {
 					WebScope.REQUEST);
 		}
 		if (!isSuccess) {
-			return errorPage(was, pm);
+			return StaticUtils.errorPage(was, pm);
 		}
 		pm.push("title", "Task - Removing").push("redirectUrl", WebUtils.path("/task/index"));
-		return intermediatePage(was, pm);
+		return StaticUtils.intermediatePage(was, pm);
 	}
 
 	@Mapping("/to/view")
@@ -232,7 +221,7 @@ public class TaskController {
 		if (taskRunTimeData == null) {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not found this entry, maybe it has been removed.",
 					WebScope.REQUEST);
-			return errorPage(was, pm);
+			return StaticUtils.errorPage(was, pm);
 		}
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm.push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskRunTimeData));
 		return "WEB-INF/jsp/task/view.jsp";
@@ -243,45 +232,5 @@ public class TaskController {
 		Collection<TaskRunTimeData> tasks = taskService.getValidTasks();
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_LIST, tasks);
 		return "WEB-INF/jsp/task/index.jsp";
-	}
-
-	@Mapping("/to/definition")
-	public String goToDefinition(WebAttributers was) {
-		return "WEB-INF/jsp/task/definition.jsp";
-	}
-
-	@Mapping("/definition")
-	public String definition(WebAttributers was) {
-		PageMap pm = newPageMap();
-		String defSourceCode = was.get(StaticDict.PAGE_PARAM_TASK_DEF);
-		TaskDefRuntimeData defRuntimeData = new TaskDefRuntimeData();
-
-		SourceCodeInfo sci = SourceCodeHelper.buildTaskDef(defSourceCode);
-		if (!sci.validate()) {
-			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Invalid custom task definition source code.",
-					WebScope.REQUEST);
-			return errorPage(was, pm);
-		}
-		defRuntimeData.setSourceCode(defSourceCode);
-		defRuntimeData.setFileName(sci.getFileName());
-		defRuntimeData.setFullName(sci.getClassFullName());
-		defRuntimeData.setKeepSourceFile(true);
-		defRuntimeData.makeDefault();
-		if (defRuntimeData.isKeepSourceFile())
-			try {
-				StaticUtils.writeSourceCode(defRuntimeData);
-			} catch (IOException e) {
-				ProcessLogger.error(e);
-				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2, "Failed to save source code to local java file.",
-						WebScope.REQUEST);
-				return errorPage(was, pm);
-			}
-		JavaCompileHelper.getCompiler(defRuntimeData).exec();
-		pm.push("title", "Task - Defining").push("redirectUrl", WebUtils.path("/task/index"));
-		return intermediatePage(was, pm);
-	}
-
-	private PageMap newPageMap() {
-		return PageMap.build().push("activeSidebar", "tasks");
 	}
 }

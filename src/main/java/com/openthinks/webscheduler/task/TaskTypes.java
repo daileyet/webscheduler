@@ -2,14 +2,17 @@ package com.openthinks.webscheduler.task;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.process.filter.FileFilterVisitor;
 import com.openthinks.libs.utilities.InstanceUtilities;
 import com.openthinks.libs.utilities.InstanceUtilities.InstanceWrapper;
+import com.openthinks.webscheduler.help.StaticUtils;
 
 /**
  * all task definition keeper
@@ -18,14 +21,75 @@ import com.openthinks.libs.utilities.InstanceUtilities.InstanceWrapper;
  */
 public final class TaskTypes {
 
-	private static final List<String> scanedPackages = new ArrayList<>();
+	private static final Set<PackageUnit> scanedPackages = new HashSet<>();
 	private static final List<Class<? extends ITaskDefinition>> supportTasks = new ArrayList<>();
 	private static final List<Class<? extends CustomTaskDefinition>> customTaskDefinitions = new ArrayList<>();
 	private static final List<Class<?>> allTasks = new ArrayList<>();
 	private static final Map<Class<? extends ITaskDefinition>, ITaskDefinition> taskInstanceSingletonMap = new ConcurrentHashMap<>();
+
+	static class PackageUnit {
+		private String packageRootDir;
+		private String packageName;
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((packageName == null) ? 0 : packageName.hashCode());
+			result = prime * result + ((packageRootDir == null) ? 0 : packageRootDir.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			PackageUnit other = (PackageUnit) obj;
+			if (packageName == null) {
+				if (other.packageName != null)
+					return false;
+			} else if (!packageName.equals(other.packageName))
+				return false;
+			if (packageRootDir == null) {
+				if (other.packageRootDir != null)
+					return false;
+			} else if (!packageRootDir.equals(other.packageRootDir))
+				return false;
+			return true;
+		}
+
+		static PackageUnit of(String packageName) {
+			return of(WebUtils.getWebClassDir(), packageName);
+		}
+
+		static PackageUnit of(String rootDir, String packageName) {
+			PackageUnit pu = new PackageUnit();
+			pu.packageRootDir = rootDir;
+			pu.packageName = packageName;
+			return pu;
+		}
+
+		public String getPackageName() {
+			return packageName;
+		}
+
+		public String getPackageRootDir() {
+			if (this.packageRootDir == null) {
+				this.packageRootDir = WebUtils.getWebClassDir();
+			}
+			return packageRootDir;
+		}
+	}
+
 	static {
-		scanedPackages.add("com.openthinks.webscheduler.task.support");
-		scanedPackages.add("com.openthinks.webscheduler.task.custom");
+		scanedPackages.add(PackageUnit.of("com.openthinks.webscheduler.task.support"));
+		scanedPackages.add(PackageUnit.of("com.openthinks.webscheduler.task.custom"));
+		scanedPackages.add(
+				PackageUnit.of(StaticUtils.getDefaultCustomTaskTargetDir(), "com.openthinks.webscheduler.task.custom"));
 		scan();
 	}
 
@@ -38,7 +102,7 @@ public final class TaskTypes {
 	 */
 	public static void scan() {
 		clear();
-		for (String packName : scanedPackages) {
+		for (PackageUnit packName : scanedPackages) {
 			visitPackage(packName);
 		}
 	}
@@ -79,16 +143,19 @@ public final class TaskTypes {
 		customTaskDefinitions.clear();
 	}
 
-	private static void visitPackage(String packName) {
-		String packPath = WebUtils.getPackPath(packName);
+	private static void visitPackage(PackageUnit pu) {
+		String packPath = WebUtils.contactFilePath(pu.getPackageRootDir(),
+				WebUtils.getPackagePath(pu.getPackageName()));
 		File dir = new File(packPath);
-		dir.listFiles(new TaskFilterVistor(allTasks));
+		dir.listFiles(new TaskFilterVistor(pu, allTasks));
 	}
 
 	static class TaskFilterVistor extends FileFilterVisitor {
+		private final PackageUnit pu;
 
-		public TaskFilterVistor(List<Class<?>> filterClasss) {
+		public TaskFilterVistor(final PackageUnit pu, List<Class<?>> filterClasss) {
 			super(filterClasss);
+			this.pu = pu;
 		}
 
 		@Override
@@ -102,6 +169,11 @@ public final class TaskTypes {
 		@Override
 		public boolean acceptClassName(File file) {
 			return true;
+		}
+
+		@Override
+		protected String getFullClassName(File file) {
+			return WebUtils.getClassName(file.getAbsolutePath(), pu.getPackageRootDir());
 		}
 
 		@SuppressWarnings("unchecked")

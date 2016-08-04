@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.openthinks.easyweb.WebUtils;
+import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
 /**
@@ -47,23 +48,24 @@ public final class StaticUtils {
 	}
 
 	public static String getDefaultCustomTaskSourceDir() {
-		 File webInfDir = new File(WebUtils.getWebClassDir()).getParentFile();
-		 File sourceDir = new File(webInfDir,"ext/src");
-		 makeFileExist(sourceDir);
+		File webInfDir = new File(WebUtils.getWebClassDir()).getParentFile();
+		File sourceDir = new File(webInfDir, "ext/src");
+		makeFileExist(sourceDir);
 		return sourceDir.getAbsolutePath();
 	}
 
 	public static void makeFileExist(File sourceDir) {
-		if(!sourceDir.exists()){
-			 sourceDir.mkdirs(); 
-		 }
+		if (!sourceDir.exists()) {
+			sourceDir.mkdirs();
+		}
 	}
 
 	public static String getDefaultCustomTaskTargetDir() {
-		 File webInfDir = new File(WebUtils.getWebClassDir()).getParentFile();
-		 File targetClassDir = new File(webInfDir,"ext/classes");
-		 makeFileExist(targetClassDir);
-		return targetClassDir.getAbsolutePath();
+		//		File webInfDir = new File(WebUtils.getWebClassDir()).getParentFile();
+		//		File targetClassDir = new File(webInfDir, "ext/classes");
+		//		makeFileExist(targetClassDir);
+		//		return targetClassDir.getAbsolutePath();
+		return WebUtils.getWebClassDir();
 	}
 
 	public static void writeSourceCode(TaskDefRuntimeData defRuntimeData) throws IOException {
@@ -76,4 +78,15 @@ public final class StaticUtils {
 		fw.flush();
 		fw.close();
 	}
+
+	public static String intermediatePage(WebAttributers was, PageMap pm) {
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
+		return "WEB-INF/jsp/template/intermediate.jsp";
+	}
+
+	public static String errorPage(WebAttributers was, PageMap pm) {
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
+		return "WEB-INF/jsp/template/business.error.jsp";
+	}
+
 }

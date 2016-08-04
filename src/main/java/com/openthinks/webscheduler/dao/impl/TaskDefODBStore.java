@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: TaskODBStore.java 
+* @Title: TaskDefODBStore.java 
 * @Package com.openthinks.webscheduler.dao.impl 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Jul 28, 2016
+* @date Aug 4, 2016
 * @version V1.0   
 */
 package com.openthinks.webscheduler.dao.impl;
@@ -32,51 +32,48 @@ import org.neodatis.odb.ODB;
 import org.neodatis.odb.Objects;
 import org.neodatis.odb.core.query.IQuery;
 
-import com.openthinks.webscheduler.dao.ITaskDao;
+import com.openthinks.webscheduler.dao.ITaskDefDao;
 import com.openthinks.webscheduler.help.ODBHelper;
-import com.openthinks.webscheduler.model.TaskRunTimeData;
-import com.openthinks.webscheduler.model.task.TaskState;
+import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public class TaskODBStore implements ITaskDao {
+public class TaskDefODBStore implements ITaskDefDao {
 
 	@Override
-	public Collection<TaskRunTimeData> getTasks(Predicate<TaskRunTimeData> predicate) {
+	public Collection<TaskDefRuntimeData> getTaskDefs(Predicate<TaskDefRuntimeData> predicate) {
 		IQuery query = new PredicateNativeQuery<>(predicate);
-		Objects<TaskRunTimeData> taskRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
-		return taskRunTimeDatas;
+		Objects<TaskDefRuntimeData> taskDefRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
+		return taskDefRunTimeDatas;
 	}
 
 	@Override
-	public void save(TaskRunTimeData taskRunTimeData) {
+	public void save(TaskDefRuntimeData taskDefRunTimeData) {
 		ODB odb = ODBHelper.getSigltonODB();
-		odb.store(taskRunTimeData);
+		odb.store(taskDefRunTimeData);
 		odb.commit();
 	}
 
 	@Override
-	public TaskRunTimeData get(String taskId) {
-		IQuery query = new PredicateNativeQuery<TaskRunTimeData>(taskData -> {
-			return taskData.getTaskId() != null && taskData.getTaskId().equals(taskId);
+	public TaskDefRuntimeData get(String classFullName) {
+		IQuery query = new PredicateNativeQuery<TaskDefRuntimeData>(taskDefData -> {
+			return taskDefData.getFullName() != null && taskDefData.getFullName().equals(classFullName);
 		});
-		Objects<TaskRunTimeData> taskRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
-		TaskRunTimeData taskRunTimeData = taskRunTimeDatas.getFirst();
-		return taskRunTimeData;
+		Objects<TaskDefRuntimeData> taskDefRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
+		TaskDefRuntimeData taskDefRunTimeData = taskDefRunTimeDatas.getFirst();
+		return taskDefRunTimeData;
 	}
 
 	@Override
-	public boolean delete(String taskId) {
+	public boolean delete(String classFullName) {
 		boolean isSuccess = false;
-		TaskRunTimeData taskRunTimeData = get(taskId);
+		TaskDefRuntimeData taskDefRunTimeData = get(classFullName);
 		ODB odb = ODBHelper.getSigltonODB();
-		if (taskRunTimeData != null) {
-			taskRunTimeData.setTaskState(TaskState.INVALID);
-			odb.store(taskRunTimeData);
-			//odb.delete(taskRunTimeData);
-			odb.commit();
+		if (taskDefRunTimeData != null) {
+			odb.delete(taskDefRunTimeData);
+			odb.close();
 			isSuccess = true;
 		}
 		return isSuccess;

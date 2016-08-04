@@ -7,6 +7,10 @@
 	border-radius: 4px;
 }
 
+.CodeMirror-fullscreen{
+	z-index:2000;
+}
+
 #taskref, #taskdef {
 	position: absolute;
 	display: inline !important;
