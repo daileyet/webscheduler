@@ -123,4 +123,11 @@ public class TaskDefRuntimeData {
 		return new File(this.getTargetDir());
 	}
 
+	@Override
+	public String toString() {
+		return "TaskDefRuntimeData [fileName=" + fileName + ", fullName=" + fullName + ", sourceCode=" + sourceCode
+				+ ", lastCompileResult=" + lastCompileResult + ", keepSourceFile=" + keepSourceFile
+				+ ", getSourceDir()=" + getSourceDir() + ", getTargetDir()=" + getTargetDir() + "]";
+	}
+
 }

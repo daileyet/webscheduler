@@ -45,7 +45,8 @@ public class TaskODBStore implements ITaskDao {
 
 	@Override
 	public Collection<TaskRunTimeData> getTasks(Predicate<TaskRunTimeData> predicate) {
-		IQuery query = new PredicateNativeQuery<>(predicate);
+		IQuery query = new PredicateNativeQuery<>(predicate, TaskRunTimeData.class);
+		ODBHelper.closeSiglton();
 		Objects<TaskRunTimeData> taskRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
 		return taskRunTimeDatas;
 	}
@@ -59,11 +60,14 @@ public class TaskODBStore implements ITaskDao {
 
 	@Override
 	public TaskRunTimeData get(String taskId) {
-		IQuery query = new PredicateNativeQuery<TaskRunTimeData>(taskData -> {
+		IQuery query = new PredicateNativeQuery<>(taskData -> {
 			return taskData.getTaskId() != null && taskData.getTaskId().equals(taskId);
-		});
+		}, TaskRunTimeData.class);
+
 		Objects<TaskRunTimeData> taskRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
-		TaskRunTimeData taskRunTimeData = taskRunTimeDatas.getFirst();
+		TaskRunTimeData taskRunTimeData = null;
+		if (!taskRunTimeDatas.isEmpty())
+			taskRunTimeData = taskRunTimeDatas.getFirst();
 		return taskRunTimeData;
 	}
 

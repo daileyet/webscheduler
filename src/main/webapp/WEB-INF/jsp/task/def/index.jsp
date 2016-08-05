@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/addon/display/fullscreen.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/bootstrap-select/css/bootstrap-select.min.css')}">
+<%-- <link rel="stylesheet" href="${ew:pathS('/static/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css')}"> --%>
 <link rel="stylesheet" href="${ew:pathS('/static/css/task.css')}">
 </head>
 <body>
@@ -36,12 +37,18 @@
 								<option data-content="<span class='label label-warning'>New Task Definition</span>" value=""  >New Task Definition</option>
 								<option data-divider="true"></option>
 								<c:forEach var="tm" items="${pm.customTasks }">
-									<option value="${tm.type.name }" title="${tm.describer.description }">${tm.type.simpleName }</option>
+									<option value="${tm.type.name }"  <c:if test="${pm.customtasktype==tm.type.name }">selected</c:if> >${tm.type.simpleName }</option>
 								</c:forEach>
 							</select>
 						</div>
-						
 					</div>
+					<!-- <div class="form-group">
+						<div class="col-sm-12">
+							<label for="keepfile" class="control-label" >Keep Source File</label>&nbsp;&nbsp;&nbsp;&nbsp;
+							<input type="checkbox" id="keepfile" name="keepfile" checked>
+						</div>
+					</div> -->
+					
 					<div class="form-group">
 						<div class="col-sm-12">
 							<div class="btn-toolbar" role="toolbar" id="taskdef-toolbar" aria-label="Definition Toolbar">
@@ -87,6 +94,7 @@
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/addon/display/fullscreen.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/js/clipboard.js/clipboard.min.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/bootstrap-select/js/bootstrap-select.min.js')}"></script>
+	<%-- <script type="text/javascript" src="${ew:pathS('/static/bootstrap-switch/js/bootstrap-switch.min.js')}"></script> --%>
 	<script type="text/javascript" src="${ew:pathS('/static/js/task.definition.js')}"></script>
 </body>
 </html>

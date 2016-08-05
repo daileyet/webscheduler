@@ -17,6 +17,16 @@ public class ExecutionResult implements Serializable {
 		super();
 	}
 
+	public ExecutionResult start() {
+		setStartTime(new Date());
+		return this;
+	}
+
+	public ExecutionResult end() {
+		setEndTime(new Date());
+		return this;
+	}
+
 	public Boolean isSuccess() {
 		return success;
 	}
@@ -42,7 +52,7 @@ public class ExecutionResult implements Serializable {
 	}
 
 	public String getLogContent() {
-		return logContent.toString();
+		return logContent;
 	}
 
 	protected void setLogContent(String logContent) {

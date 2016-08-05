@@ -2,10 +2,12 @@
 	//View
 	ctx.VIEW = {
 			'Txtarea_Taskdef':'#taskdef',
-			'Btn_Ref_example':'#taskdef-toolbar button[data-role="example"]',
-			'Btn_Ref_copy':'#taskdef-toolbar button[data-role="copy"]',
-			'Btn_Ref_clear':'#taskdef-toolbar button[data-role="clear"]',
-			'Btn_Ref_full':'#taskdef-toolbar button[data-role="fullscreen"]',
+			'Select_tasktype':'#customtasktype',
+			'Btn_Def_example':'#taskdef-toolbar button[data-role="example"]',
+			'Btn_Def_copy':'#taskdef-toolbar button[data-role="copy"]',
+			'Btn_Def_clear':'#taskdef-toolbar button[data-role="clear"]',
+			'Btn_Def_full':'#taskdef-toolbar button[data-role="fullscreen"]',
+			'Chk_Def_keepfile':'#keepfile',
 		init:function(){
 			this.components.init();
 		}
@@ -71,20 +73,22 @@
 	//Controller
 	ctx.CONTROLLER = {
 			init:function(){
+				//$(ctx.VIEW.Chk_Def_keepfile).bootstrapSwitch();
 				this.prepared();
 				this.bindEventListener();
 				this.initclipboard();
+				
 			},
-			prepared:function(needfillRefExample){
+			prepared:function(needfillDefExample){
 				
 			},
 			bindEventListener:function(){
 				
-				$(ctx.VIEW.Btn_Ref_clear).click(function(){
+				$(ctx.VIEW.Btn_Def_clear).click(function(){
 					ctx.VIEW.components.defEditor.setContent("");
 				});
 				
-				$(ctx.VIEW.Btn_Ref_full).click(function(){
+				$(ctx.VIEW.Btn_Def_full).click(function(){
 					ctx.VIEW.components.defEditor.fullscreen();
 				});
 			},

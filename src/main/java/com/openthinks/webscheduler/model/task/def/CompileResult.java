@@ -51,4 +51,10 @@ public class CompileResult extends ExecutionResult {
 	public void setTaskDefFullName(String taskDefFullName) {
 		this.taskDefFullName = taskDefFullName;
 	}
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
 }

@@ -50,11 +50,12 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_TASK_NAME = "taskname";
 	public static final String PAGE_PARAM_TASK_TYPE = "tasktype";
 	public static final String PAGE_PARAM_TASK_REF = "taskref";
-	public static final String PAGE_PARAM_TASK_DEF = "taskdef";
+	public static final String PAGE_PARAM_TASK_DEF_CLASS_NAME = "customtasktype";
 
 	public static final String STORE_DB = "webscheduler.odb";
 
 	public static final String CUSTOM_TASK_DEF_PACKAGE = "com.openthinks.webscheduler.task.custom";
 	public static final String DEFAULT_DATE_FORMAT_STYLE = "yyyy-MM-dd HH:mm:ss";
+	public static final String PAGE_PARAM_TASK_DEF_CODE = "taskdef";
 
 }

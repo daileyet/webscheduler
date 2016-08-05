@@ -44,7 +44,8 @@ public class TaskDefODBStore implements ITaskDefDao {
 
 	@Override
 	public Collection<TaskDefRuntimeData> getTaskDefs(Predicate<TaskDefRuntimeData> predicate) {
-		IQuery query = new PredicateNativeQuery<>(predicate);
+		IQuery query = new PredicateNativeQuery<>(predicate, TaskDefRuntimeData.class);
+		ODBHelper.closeSiglton();
 		Objects<TaskDefRuntimeData> taskDefRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
 		return taskDefRunTimeDatas;
 	}
@@ -58,11 +59,17 @@ public class TaskDefODBStore implements ITaskDefDao {
 
 	@Override
 	public TaskDefRuntimeData get(String classFullName) {
-		IQuery query = new PredicateNativeQuery<TaskDefRuntimeData>(taskDefData -> {
+		IQuery query = new PredicateNativeQuery<>(taskDefData -> {
 			return taskDefData.getFullName() != null && taskDefData.getFullName().equals(classFullName);
-		});
+		}, TaskDefRuntimeData.class);
+
 		Objects<TaskDefRuntimeData> taskDefRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
-		TaskDefRuntimeData taskDefRunTimeData = taskDefRunTimeDatas.getFirst();
+		TaskDefRuntimeData taskDefRunTimeData = null;
+		if (taskDefRunTimeDatas.isEmpty()) {
+			taskDefRunTimeDatas = ODBHelper.getSigltonODB().getObjects(query);
+		}
+		if (!taskDefRunTimeDatas.isEmpty())
+			taskDefRunTimeData = taskDefRunTimeDatas.getFirst();
 		return taskDefRunTimeData;
 	}
 

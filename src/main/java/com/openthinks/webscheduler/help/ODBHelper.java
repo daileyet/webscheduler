@@ -34,6 +34,7 @@ import org.neodatis.odb.ODBFactory;
 import org.neodatis.odb.OdbConfiguration;
 
 import com.openthinks.easyweb.WebUtils;
+import com.openthinks.libs.utilities.logger.ProcessLogger;
 
 /**
  * Neodatis ODB helper
@@ -46,7 +47,11 @@ public final class ODBHelper {
 	private static Lock lock = new ReentrantLock();
 	static {
 		OdbConfiguration.setReconnectObjectsToSession(true);
-		setUp(new File(WebUtils.getWebClassDir()), StaticDict.STORE_DB);
+		try {
+			setUp(new File(WebUtils.getWebClassDir()), StaticDict.STORE_DB);
+		} catch (Exception e) {
+			ProcessLogger.warn(e);
+		}
 	}
 
 	/**

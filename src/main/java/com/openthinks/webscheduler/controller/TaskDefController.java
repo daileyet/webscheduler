@@ -33,6 +33,7 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 
 import com.openthinks.easyweb.WebUtils;
+import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
 import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.context.handler.WebAttributers;
@@ -46,6 +47,7 @@ import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.help.StaticUtils;
 import com.openthinks.webscheduler.help.source.SourceCodeInfo;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
+import com.openthinks.webscheduler.service.TaskService;
 import com.openthinks.webscheduler.task.TaskTypes;
 
 /**
@@ -54,6 +56,9 @@ import com.openthinks.webscheduler.task.TaskTypes;
  */
 @Controller("/task/def")
 public class TaskDefController {
+	@AutoComponent
+	private TaskService taskService;
+
 	private PageMap newPageMap() {
 		return PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_ACTIVESIDEBAR, "tasks");
 	}
@@ -61,7 +66,14 @@ public class TaskDefController {
 	@Mapping("/index")
 	public String index(WebAttributers was) {
 		PageMap pm = newPageMap();
+		taskService.getTaskDefs();
 		pm.push(StaticDict.PAGE_ATTRIBUTE_CUSTOM_TASKS, TaskTypes.getCustomTaskMetaData());
+		String fullclassname = was.get(StaticDict.PAGE_PARAM_TASK_DEF_CLASS_NAME);
+		if (fullclassname != null && !"".equals(fullclassname.trim())) {
+			TaskDefRuntimeData defRuntimeData = taskService.getTaskDef(fullclassname);
+			pm.push(StaticDict.PAGE_PARAM_TASK_DEF_CODE, defRuntimeData.getSourceCode());
+			pm.push(StaticDict.PAGE_PARAM_TASK_DEF_CLASS_NAME, fullclassname);
+		}
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
 		return "WEB-INF/jsp/task/def/index.jsp";
 	}
@@ -69,13 +81,14 @@ public class TaskDefController {
 	@Mapping("/apply")
 	public String definition(WebAttributers was) {
 		PageMap pm = newPageMap();
-		String defSourceCode = was.get(StaticDict.PAGE_PARAM_TASK_DEF);
-		TaskDefRuntimeData defRuntimeData = new TaskDefRuntimeData();
-
+		String defSourceCode = was.get(StaticDict.PAGE_PARAM_TASK_DEF_CODE);
+		String defFullclassnmae = was.get(StaticDict.PAGE_PARAM_TASK_DEF_CLASS_NAME);
+		TaskDefRuntimeData defRuntimeData = taskService.getTaskDef(defFullclassnmae);
+		if (defRuntimeData == null) {
+			defRuntimeData = new TaskDefRuntimeData();
+		}
 		SourceCodeInfo sci = SourceCodeHelper.buildTaskDef(defSourceCode);
-		if (!sci.validate()) {
-			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Invalid custom task definition source code.",
-					WebScope.REQUEST);
+		if (!checkDefinition(was, defFullclassnmae, sci)) {
 			return StaticUtils.errorPage(was, pm);
 		}
 		defRuntimeData.setSourceCode(defSourceCode);
@@ -83,17 +96,19 @@ public class TaskDefController {
 		defRuntimeData.setFullName(sci.getClassFullName());
 		defRuntimeData.setKeepSourceFile(true);
 		defRuntimeData.makeDefault();
-		if (defRuntimeData.isKeepSourceFile())
-			try {
-				StaticUtils.writeSourceCode(defRuntimeData);
-			} catch (IOException e) {
-				ProcessLogger.error(e);
-				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2, "Failed to save source code to local java file.",
-						WebScope.REQUEST);
-				return StaticUtils.errorPage(was, pm);
-			}
+		try {
+			StaticUtils.writeSourceCode(defRuntimeData);
+		} catch (IOException e) {
+			ProcessLogger.error(e);
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2, "Failed to save source code to local java file.",
+					WebScope.REQUEST);
+			return StaticUtils.errorPage(was, pm);
+		}
 		JCompiler compiler = JavaCompileHelper.getCompiler(defRuntimeData);
+		defRuntimeData.getLastCompileResult().start();
 		boolean isSuccess = compiler.exec();
+		defRuntimeData.getLastCompileResult().end();
+		defRuntimeData.getLastCompileResult().setSuccess(isSuccess);
 		if (!isSuccess) {
 			DiagnosticCollector<JavaFileObject> diagnosticCollector = compiler.getDiagnostics();
 			List<Diagnostic<? extends JavaFileObject>> diagnostics = diagnosticCollector.getDiagnostics();
@@ -102,11 +117,29 @@ public class TaskDefController {
 				index++;
 				ProcessLogger.error(diagnostic.toString());
 				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_PRE + index, diagnostic.toString(), WebScope.REQUEST);
+				defRuntimeData.getLastCompileResult().track(diagnostic.toString());
 			}
-			return StaticUtils.errorPage(was, pm);
 		}
+		taskService.saveTaskDef(defRuntimeData);
+		if (!isSuccess)
+			return StaticUtils.errorPage(was, pm);
 		pm.push("title", "Task - Defining").push("redirectUrl", WebUtils.path("/task/index"));
 		TaskTypes.scan();
 		return StaticUtils.intermediatePage(was, pm);
+	}
+
+	protected boolean checkDefinition(WebAttributers was, String defFullclassnmae, SourceCodeInfo sci) {
+		if (!sci.validate()) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Invalid custom task definition source code.",
+					WebScope.REQUEST);
+			return false;
+		}
+		if (defFullclassnmae != null && !"".equals(defFullclassnmae.trim())
+				&& !defFullclassnmae.equals(sci.getClassFullName())) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2,
+					"Could not match class name with selected custom task type.", WebScope.REQUEST);
+			return false;
+		}
+		return true;
 	}
 }
