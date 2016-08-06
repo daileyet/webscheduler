@@ -23,7 +23,7 @@
 * @date Jul 28, 2016
 * @version V1.0   
 */
-package com.openthinks.webscheduler.help;
+package com.openthinks.webscheduler.dao.impl.odb;
 
 import java.io.File;
 import java.util.concurrent.locks.Lock;
@@ -35,6 +35,7 @@ import org.neodatis.odb.OdbConfiguration;
 
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.help.StaticDict;
 
 /**
  * Neodatis ODB helper

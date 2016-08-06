@@ -9,7 +9,7 @@ import com.openthinks.easyweb.context.Bootstrap;
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
-import com.openthinks.webscheduler.help.ODBHelper;
+import com.openthinks.webscheduler.dao.impl.odb.ODBHelper;
 import com.openthinks.webscheduler.service.SchedulerService;
 
 @EasyConfigure

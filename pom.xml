@@ -62,11 +62,13 @@
 		    <version>1.9.30.689</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/org.mapdb/mapdb -->
 		<dependency>
-		  <groupId>org.lightcouch</groupId>
-		  <artifactId>lightcouch</artifactId>
-		  <version>0.1.8</version>
+		    <groupId>org.mapdb</groupId>
+		    <artifactId>mapdb</artifactId>
+		    <version>3.0.1</version>
 		</dependency>
+		
 		
 		<dependency>
 			<groupId>com.openthinks.others</groupId>

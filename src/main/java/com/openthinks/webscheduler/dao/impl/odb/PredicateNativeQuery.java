@@ -1,4 +1,4 @@
-package com.openthinks.webscheduler.dao.impl;
+package com.openthinks.webscheduler.dao.impl.odb;
 
 import java.util.function.Predicate;
 

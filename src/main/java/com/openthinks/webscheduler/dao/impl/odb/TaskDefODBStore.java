@@ -23,7 +23,7 @@
 * @date Aug 4, 2016
 * @version V1.0   
 */
-package com.openthinks.webscheduler.dao.impl;
+package com.openthinks.webscheduler.dao.impl.odb;
 
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -33,7 +33,6 @@ import org.neodatis.odb.Objects;
 import org.neodatis.odb.core.query.IQuery;
 
 import com.openthinks.webscheduler.dao.ITaskDefDao;
-import com.openthinks.webscheduler.help.ODBHelper;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
 /**

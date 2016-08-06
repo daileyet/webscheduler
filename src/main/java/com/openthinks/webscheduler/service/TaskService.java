@@ -5,8 +5,8 @@ import java.util.Collection;
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.webscheduler.dao.ITaskDao;
 import com.openthinks.webscheduler.dao.ITaskDefDao;
-import com.openthinks.webscheduler.dao.impl.TaskDefODBStore;
-import com.openthinks.webscheduler.dao.impl.TaskODBStore;
+import com.openthinks.webscheduler.dao.impl.odb.TaskDefODBStore;
+import com.openthinks.webscheduler.dao.impl.odb.TaskODBStore;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 

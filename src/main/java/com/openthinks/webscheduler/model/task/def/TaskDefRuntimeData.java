@@ -26,6 +26,7 @@
 package com.openthinks.webscheduler.model.task.def;
 
 import java.io.File;
+import java.io.Serializable;
 
 import com.openthinks.webscheduler.help.StaticUtils;
 
@@ -33,7 +34,11 @@ import com.openthinks.webscheduler.help.StaticUtils;
  * @author dailey.yet@outlook.com
  *
  */
-public class TaskDefRuntimeData {
+public class TaskDefRuntimeData implements Serializable,Comparable<TaskDefRuntimeData>{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1649976392291537981L;
 	// xxxx.java
 	private String fileName;
 	private String fullName;
@@ -127,7 +132,37 @@ public class TaskDefRuntimeData {
 	public String toString() {
 		return "TaskDefRuntimeData [fileName=" + fileName + ", fullName=" + fullName + ", sourceCode=" + sourceCode
 				+ ", lastCompileResult=" + lastCompileResult + ", keepSourceFile=" + keepSourceFile
-				+ ", getSourceDir()=" + getSourceDir() + ", getTargetDir()=" + getTargetDir() + "]";
+				+ ", sourceDir=" + this.sourceDir + ", targetDir=" + this.targetDir + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TaskDefRuntimeData other = (TaskDefRuntimeData) obj;
+		if (fullName == null) {
+			if (other.fullName != null)
+				return false;
+		} else if (!fullName.equals(other.fullName))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(TaskDefRuntimeData o) {
+		return getFullName().compareTo(o.getFullName());
 	}
 
 }

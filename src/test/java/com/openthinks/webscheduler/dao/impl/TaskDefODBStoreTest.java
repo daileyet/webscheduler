@@ -6,7 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.neodatis.odb.Objects;
 
-import com.openthinks.webscheduler.help.ODBHelper;
+import com.openthinks.webscheduler.dao.impl.odb.ODBHelper;
+import com.openthinks.webscheduler.dao.impl.odb.TaskDefODBStore;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
