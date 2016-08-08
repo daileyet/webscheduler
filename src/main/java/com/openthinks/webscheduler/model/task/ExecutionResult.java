@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.model.Updateable;
 
-public class ExecutionResult implements Serializable {
+public class ExecutionResult implements Serializable, Updateable<ExecutionResult> {
 
 	private static final long serialVersionUID = 840962776805761590L;
 	private Boolean success;

@@ -1,25 +1,29 @@
 package com.openthinks.webscheduler.dao.impl.mapdb;
 
 import java.io.File;
-import java.util.NavigableSet;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
-import org.mapdb.serializer.GroupSerializer;
-import org.mapdb.serializer.SerializerUtils;
 
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
 public final class MapDBHelper {
+	@SuppressWarnings("unchecked")
+	public static final Serializer<TaskDefRuntimeData> taskDefSerializer = Serializer.JAVA;
+	@SuppressWarnings("unchecked")
+	public static final Serializer<TaskRunTimeData> taskSerializer = Serializer.JAVA;
 
 	private static String storeDBPath;
-	private static DB dbInstance;
+	private static DB dbDisk;
+	private static DB dbMemory;
 	private static Lock lock = new ReentrantLock();
+
 	static {
 		try {
 			setUp(new File(WebUtils.getWebClassDir()), StaticDict.STORE_DB);
@@ -42,30 +46,56 @@ public final class MapDBHelper {
 		storeDBPath = dbFile.getAbsolutePath();
 	}
 
-	public static void initialize() {
+	public static final void initialize() {
 		lock.lock();
 		try {
-			if (dbInstance == null || dbInstance.isClosed()) {
-				dbInstance = DBMaker.fileDB(storeDBPath)
-						.transactionEnable()
-						.make();
+			if (dbDisk == null || dbDisk.isClosed()) {
+				dbDisk = DBMaker.fileDB(storeDBPath).closeOnJvmShutdown().transactionEnable().make();
+			}
+			if (dbMemory == null || dbMemory.isClosed()) {
+				dbMemory = DBMaker.memoryDB().closeOnJvmShutdown().transactionEnable().make();
 			}
 		} finally {
 			lock.unlock();
 		}
-		
 	}
 
-	public static DB getDB() {
+	public static final void destroy() {
 		lock.lock();
 		try {
-			if (dbInstance == null || dbInstance.isClosed()) {
-				dbInstance = DBMaker.fileDB(storeDBPath).make();
+			if (dbMemory != null && !dbMemory.isClosed()) {
+				dbMemory.close();
+			}
+			if (dbDisk != null && !dbDisk.isClosed()) {
+				dbDisk.close();
 			}
 		} finally {
 			lock.unlock();
 		}
-		return dbInstance;
+	}
+
+	public static final DB getDiskDB() {
+		lock.lock();
+		try {
+			if (dbDisk == null || dbDisk.isClosed()) {
+				dbDisk = DBMaker.fileDB(storeDBPath).closeOnJvmShutdown().transactionEnable().make();
+			}
+		} finally {
+			lock.unlock();
+		}
+		return dbDisk;
+	}
+
+	public static final DB getMemoryDB() {
+		lock.lock();
+		try {
+			if (dbMemory == null || dbMemory.isClosed()) {
+				dbMemory = DBMaker.memoryDB().closeOnJvmShutdown().transactionEnable().make();
+			}
+		} finally {
+			lock.unlock();
+		}
+		return dbMemory;
 	}
 
 }

@@ -122,19 +122,23 @@ class DefaultJobListener implements JobListener {
 	public void jobWasExecuted(JobExecutionContext ctx, JobExecutionException executionException) {
 		ProcessLogger.debug("jobWasExecuted");
 		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskRuntimeData();
+		boolean needSync = false;
 		if (metaData.isPresent()) {
 			metaData.get().setTaskState(TaskState.COMPLETE);
 			metaData.get().getLastTaskResult().setSuccess(true);
 			metaData.get().getLastTaskResult().setEndTime(new Date());
-			TaskContext.wrapper(ctx).syncTaskRuntimeData();
+			needSync = true;
 		}
 		if (executionException != null) {
 			ProcessLogger.error(executionException);
 			if (metaData.isPresent()) {
 				metaData.get().getLastTaskResult().setSuccess(false);
 				metaData.get().getLastTaskResult().track(executionException.getMessage());
-				TaskContext.wrapper(ctx).syncTaskRuntimeData();
+				needSync = true;
 			}
+		}
+		if (needSync) {
+			TaskContext.wrapper(ctx).syncTaskRuntimeData();
 		}
 
 	}

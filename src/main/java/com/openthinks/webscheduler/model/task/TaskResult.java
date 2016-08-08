@@ -51,4 +51,15 @@ public final class TaskResult extends ExecutionResult {
 		this.taskId = taskId;
 	}
 
+	@Override
+	public void update(ExecutionResult newValue) {
+		super.update(newValue);
+		if (newValue instanceof TaskResult) {
+			String newtaskId = ((TaskResult) newValue).getTaskId();
+			if (newtaskId != null) {
+				this.setTaskId(newtaskId);
+			}
+		}
+	}
+
 }

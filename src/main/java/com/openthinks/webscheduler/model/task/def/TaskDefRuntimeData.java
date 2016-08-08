@@ -29,15 +29,13 @@ import java.io.File;
 import java.io.Serializable;
 
 import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.model.Updateable;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public class TaskDefRuntimeData implements Serializable,Comparable<TaskDefRuntimeData>{
-	/**
-	 * 
-	 */
+public class TaskDefRuntimeData implements Serializable, Updateable<TaskDefRuntimeData> {
 	private static final long serialVersionUID = -1649976392291537981L;
 	// xxxx.java
 	private String fileName;
@@ -46,7 +44,7 @@ public class TaskDefRuntimeData implements Serializable,Comparable<TaskDefRuntim
 	private String sourceDir;
 	private String targetDir;
 	private CompileResult lastCompileResult;
-	private boolean keepSourceFile;
+	private Boolean keepSourceFile = true;
 
 	public void makeDefault() {
 		if (sourceDir == null)
@@ -131,8 +129,8 @@ public class TaskDefRuntimeData implements Serializable,Comparable<TaskDefRuntim
 	@Override
 	public String toString() {
 		return "TaskDefRuntimeData [fileName=" + fileName + ", fullName=" + fullName + ", sourceCode=" + sourceCode
-				+ ", lastCompileResult=" + lastCompileResult + ", keepSourceFile=" + keepSourceFile
-				+ ", sourceDir=" + this.sourceDir + ", targetDir=" + this.targetDir + "]";
+				+ ", lastCompileResult=" + lastCompileResult + ", keepSourceFile=" + keepSourceFile + ", sourceDir="
+				+ this.sourceDir + ", targetDir=" + this.targetDir + "]";
 	}
 
 	@Override
@@ -161,8 +159,8 @@ public class TaskDefRuntimeData implements Serializable,Comparable<TaskDefRuntim
 	}
 
 	@Override
-	public int compareTo(TaskDefRuntimeData o) {
-		return getFullName().compareTo(o.getFullName());
+	public void update(TaskDefRuntimeData newValue) {
+
 	}
 
 }

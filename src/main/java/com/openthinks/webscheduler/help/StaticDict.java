@@ -57,5 +57,9 @@ public interface StaticDict {
 	public static final String CUSTOM_TASK_DEF_PACKAGE = "com.openthinks.webscheduler.task.custom";
 	public static final String DEFAULT_DATE_FORMAT_STYLE = "yyyy-MM-dd HH:mm:ss";
 	public static final String PAGE_PARAM_TASK_DEF_CODE = "taskdef";
+	public static final String DISK_STORE_TASKDEF = "taskdef_disk";
+	public static final String MEMORY_STORE_TASKDEF = "taskdef_memory";
+	public static final String DISK_STORE_TASK = "task_disk";
+	public static final String MEMORY_STORE_TASK = "task_memory";
 
 }

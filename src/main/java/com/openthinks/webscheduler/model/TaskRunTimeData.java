@@ -15,7 +15,7 @@ import com.openthinks.webscheduler.task.ITaskDefinition;
  * @author dailey.yet@outlook.com
  *
  */
-public class TaskRunTimeData implements Serializable {
+public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData> {
 	/**
 	 * 
 	 */
@@ -180,29 +180,31 @@ public class TaskRunTimeData implements Serializable {
 	@Override
 	public String toString() {
 		return "TaskRunTimeData [taskId=" + taskId + ", taskName=" + taskName + ", taskType=" + taskType
-				+ ", groupName=" + groupName + ", taskRef=" + taskRef + ", taskState=" + taskState + "]";
+				+ ", groupName=" + groupName + ", taskRefContent=" + taskRefContent + ", taskState=" + taskState
+				+ ", lastTaskResult=" + lastTaskResult + "]";
 	}
 
-	/**
-	 * update current task runtime record data by other
-	 * @param taskMetaDataNew TaskRunTimeData New instance of task runtime record data
-	 */
-	public void update(TaskRunTimeData taskMetaDataNew) {
-		if (taskMetaDataNew.getTaskId() != null)
-			this.setTaskId(taskMetaDataNew.getTaskId());
-		if (taskMetaDataNew.getTaskName() != null)
-			this.setTaskName(taskMetaDataNew.getTaskName());
-		if (taskMetaDataNew.getTaskType() != null)
-			this.setTaskType(taskMetaDataNew.getTaskType());
-		if (taskMetaDataNew.getGroupName() != null)
-			this.setGroupName(taskMetaDataNew.getGroupName());
-		if (taskMetaDataNew.getTaskRef() != null)
-			this.setTaskRef(taskMetaDataNew.getTaskRef());
-		if (taskMetaDataNew.getTaskState() != null)
-			this.setTaskState(taskMetaDataNew.getTaskState());
-		if (taskMetaDataNew.getTaskRefContent() != null)
-			this.setTaskRefContent(taskMetaDataNew.getTaskRefContent());
-		if (taskMetaDataNew.getLastTaskResult() != null)
-			this.setLastTaskResult(taskMetaDataNew.getLastTaskResult());
-	}
+	//	/**
+	//	 * update current task runtime record data by other
+	//	 * @param taskMetaDataNew TaskRunTimeData New instance of task runtime record data
+	//	 */
+	//	@Override
+	//	public void update(TaskRunTimeData taskMetaDataNew) {
+	//		if (taskMetaDataNew.getTaskId() != null)
+	//			this.setTaskId(taskMetaDataNew.getTaskId());
+	//		if (taskMetaDataNew.getTaskName() != null)
+	//			this.setTaskName(taskMetaDataNew.getTaskName());
+	//		if (taskMetaDataNew.getTaskType() != null)
+	//			this.setTaskType(taskMetaDataNew.getTaskType());
+	//		if (taskMetaDataNew.getGroupName() != null)
+	//			this.setGroupName(taskMetaDataNew.getGroupName());
+	//		if (taskMetaDataNew.getTaskRef() != null)
+	//			this.setTaskRef(taskMetaDataNew.getTaskRef());
+	//		if (taskMetaDataNew.getTaskState() != null)
+	//			this.setTaskState(taskMetaDataNew.getTaskState());
+	//		if (taskMetaDataNew.getTaskRefContent() != null)
+	//			this.setTaskRefContent(taskMetaDataNew.getTaskRefContent());
+	//		if (taskMetaDataNew.getLastTaskResult() != null)
+	//			this.setLastTaskResult(taskMetaDataNew.getLastTaskResult());
+	//	}
 }

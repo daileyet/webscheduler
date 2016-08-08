@@ -5,8 +5,8 @@ import java.util.Collection;
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.webscheduler.dao.ITaskDao;
 import com.openthinks.webscheduler.dao.ITaskDefDao;
-import com.openthinks.webscheduler.dao.impl.odb.TaskDefODBStore;
-import com.openthinks.webscheduler.dao.impl.odb.TaskODBStore;
+import com.openthinks.webscheduler.dao.impl.mapdb.TaskDefMapDBStore;
+import com.openthinks.webscheduler.dao.impl.mapdb.TaskMapDBStore;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
@@ -16,8 +16,8 @@ import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
  *
  */
 public class TaskService {
-	private ITaskDao taskStore = WebContexts.get().lookup(TaskODBStore.class);
-	private ITaskDefDao taskDefStore = WebContexts.get().lookup(TaskDefODBStore.class);
+	private ITaskDao taskStore = WebContexts.get().lookup(TaskMapDBStore.class);
+	private ITaskDefDao taskDefStore = WebContexts.get().lookup(TaskDefMapDBStore.class);
 
 	public Collection<TaskRunTimeData> getValidTasks() {
 		return taskStore.getTasks((task) -> {

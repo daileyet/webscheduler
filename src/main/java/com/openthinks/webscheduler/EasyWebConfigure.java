@@ -9,7 +9,7 @@ import com.openthinks.easyweb.context.Bootstrap;
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
-import com.openthinks.webscheduler.dao.impl.odb.ODBHelper;
+import com.openthinks.webscheduler.dao.impl.mapdb.MapDBHelper;
 import com.openthinks.webscheduler.service.SchedulerService;
 
 @EasyConfigure
@@ -20,6 +20,7 @@ public class EasyWebConfigure implements Bootstrap {
 
 	@Override
 	public void cleanUp() {
+		ProcessLogger.info("Stop WebScheduler...");
 		if (schedulerService != null) {
 			try {
 				schedulerService.stop();
@@ -27,7 +28,7 @@ public class EasyWebConfigure implements Bootstrap {
 				ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
 			}
 		}
-		ODBHelper.release();
+		MapDBHelper.destroy();
 	}
 
 	@Override
