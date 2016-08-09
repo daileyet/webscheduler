@@ -12,6 +12,8 @@
 <meta name="author" content="dailey.yet@outlook.com">
 <title>Task - New</title>
 <%@ include file="../template/head.style.jsp"%>
+<link rel="stylesheet" href="${ew:pathS('/static/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css')}">
+<link rel="stylesheet" href="${ew:pathS('/static/bootstrap-select/css/bootstrap-select.min.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/css/task.css')}">
 </head>
@@ -59,6 +61,75 @@
 							</div>
 						</div>
 					</div>
+					
+					<div class="form-group">
+						<label for="tasktrigger" class="col-sm-2 control-label">Task Trigger</label>
+						<div class="col-sm-10">
+							<select id="tasktrigger" name="tasktrigger" class="form-control" required>
+								<c:forEach var="trigger" items="${pm.triggers }" varStatus="status">
+									<option  data-ref=".${trigger.tag}" value="${trigger.name }" title="${trigger.display }">${trigger.display }</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					<div class="trigger-group simple1-trigger simple2-trigger">
+						<div class="form-group" data-bind-target=".simple2-trigger">
+							<label for="startdate" class="col-sm-2 control-label">Start Date</label>
+							<div class="col-sm-10">
+								<input class="form-control"  type="datetime" name="startdate" id="startdate">
+							</div>
+						</div>					
+						<div class="form-group">
+							<label for="repeatable" class="col-sm-2 control-label">Repeat Option</label>
+							<div class="col-sm-10">
+								<input class="bootstrap-switch" data-label-text="Repeatable" type="checkbox" name="repeatable" id="repeatable">
+								<!-- <input class="bootstrap-switch" data-label-text="Forever" type="checkbox" name="repeatforever" id="repeatforever"> -->
+							</div>
+						</div>
+						<div class="repeat-group">
+						<div class="form-group">
+							<div class="col-sm-5 col-sm-offset-2">
+								<div class="input-group">
+									<input placeholder="Repeat interval" min="0" title="Repeat interval" class="form-control" type="number" name="repeatinterval" id="repeatinterval">
+									<span class="input-group-addon">Second</span>
+								</div>
+							</div>
+							<div class="visible-xs-inline">
+								<p></p>
+							</div>
+							<div class="col-sm-5">
+								<!-- <input placeholder="Repeat count" min="0" title="Repeat count" class="" type="number" name="repeatcount" id="repeatcount"> -->
+								<select name="repeatcount"
+								title="Choose one of the following..."
+								 class="selectpicker show-tick " id="repeatcount" data-width="auto" data-live-search="true" data-show-subtext="true">
+									<option data-content="<span class='label label-warning'>Repeat forever</span>" value="-1"  >Repeat forever</option>
+									<option data-divider="true"></option>
+									<option value="0">No repeat</option>
+									<option value="1">Repeat 1 time</option>
+									<option value="2">Repeat 2 times</option>
+									<option value="3">Repeat 3 times</option>
+									<option value="4">Repeat 4 times</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-10 col-sm-offset-2">
+								<input class="form-control" placeholder="End Date" data-label-text="Repeatable" type="datetime" name="enddate" id="enddate">
+							</div>
+						</div>	
+						</div>
+					</div>
+					
+					<div class="form-group trigger-group cron-trigger">
+						<label for="cronexpr" class="col-sm-2 control-label">Cron Expression</label>
+						<div class="col-sm-10">
+							<!-- <div class=" input-group"> -->
+								<!-- <span class="input-group-addon">@</span> -->
+								<input class="form-control" type="text" name="cronexpr" id="cronexpr">
+							<!-- </div> -->
+						</div>
+					</div>
+					
 					<div class="form-group">
 						<label for="taskref" class="col-sm-2 control-label">Task
 							Properties</label>
@@ -66,6 +137,7 @@
 							<textarea class="form-control" id="taskref" name="taskref" rows="10"></textarea>
 						</div>
 					</div>
+					
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10 ">
 							<button type="submit" class="btn btn-primary">Create</button>
@@ -79,6 +151,8 @@
 	</div>
 
 	<%@ include file="../template/body.script.jsp"%>
+	<script type="text/javascript" src="${ew:pathS('/static/bootstrap-select/js/bootstrap-select.min.js')}"></script>
+	<script type="text/javascript" src="${ew:pathS('/static/bootstrap-switch/js/bootstrap-switch.min.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/lib/codemirror.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/properties/properties.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/xml/xml.js')}"></script>

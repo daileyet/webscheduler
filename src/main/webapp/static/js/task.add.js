@@ -3,8 +3,14 @@
 	ctx.VIEW = {
 			'Select_Tasktype':'#tasktype',
 			'Optionselected_Tasktype':'#tasktype option:selected',
+			'Select_Triggertype':'#tasktrigger',
+			'Optionselected_Triggertype':'#tasktrigger option:selected',
 			'Div_Tasktype_Ref':'#tasktype-ref',
 			'Txtarea_Taskref':'#taskref',
+			'Input_Repeatable':'#repeatable',
+			'Switch_bootstrap':'.bootstrap-switch',
+			'Div_trigger_group':'.trigger-group',
+			'Div_bind_element':'[data-bind-target]',
 		init:function(){
 			this.components.init();
 		}
@@ -59,9 +65,10 @@
 	ctx.CONTROLLER = {
 			init:function(){
 				this.prepared();
+				this.preparedTrigger();
 				this.bindEventListener();
 			},
-			prepared:function(){
+			prepared:function(){//for ctx.VIEW.Select_Tasktype change callback
 				var code_id= $(ctx.VIEW.Optionselected_Tasktype).data('ref');
 				var isRequired = $(ctx.VIEW.Optionselected_Tasktype).data('required');
 				isRequired = (isRequired!=undefined && (isRequired || isRequired=="true")) ;
@@ -69,11 +76,23 @@
 				var sRef = $("#"+code_id).text();
 				ctx.VIEW.components.refEditor.setContent(sRef);
 			},
+			preparedTrigger:function(){
+				var sRefClass  = $(ctx.VIEW.Optionselected_Triggertype).data("ref")
+				$(ctx.VIEW.Div_trigger_group).hide();
+				$(ctx.VIEW.Div_bind_element).hide();
+				$(sRefClass).fadeIn();
+				$('[data-bind-target="'+sRefClass+'"]').fadeIn();
+			},
 			bindEventListener:function(){
 				var _this = this;
 				$(ctx.VIEW.Select_Tasktype).change(function(){
 					_this.prepared();
 				});
+				$(ctx.VIEW.Select_Triggertype).change(function(){
+					_this.preparedTrigger();
+				});
+				
+				$(ctx.VIEW.Switch_bootstrap).bootstrapSwitch();
 			}
 			
 	}//end of definition

@@ -21,6 +21,7 @@ import com.openthinks.webscheduler.help.StaticChecker;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.help.StaticUtils;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.task.SupportedTrigger;
 import com.openthinks.webscheduler.model.task.TaskAction;
 import com.openthinks.webscheduler.service.SchedulerService;
 import com.openthinks.webscheduler.service.TaskService;
@@ -125,6 +126,7 @@ public class TaskController {
 		PageMap pm = newPageMap();
 		pm.push(StaticDict.PAGE_ATTRIBUTE_SUPPORT_TASKS, TaskTypes.getSupportTaskMetaData());
 		pm.push(StaticDict.PAGE_ATTRIBUTE_CUSTOM_TASKS, TaskTypes.getCustomTaskMetaData());
+		pm.push(StaticDict.PAGE_ATTRIBUTE_TASK_TRIGGERS, SupportedTrigger.values());
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
 		return "WEB-INF/jsp/task/add.jsp";
 	}
