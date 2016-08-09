@@ -11,6 +11,11 @@
 			'Switch_bootstrap':'.bootstrap-switch',
 			'Div_trigger_group':'.trigger-group',
 			'Div_bind_element':'[data-bind-target]',
+			'Div_repeat_options_group':'.repeat-options-group',
+			'Div_form_datetime':'.form-datetime',
+			'Addon_datetime':'.input-group-addon[role="datetime-addon"] ',
+			'Addon_datetime_remove':'.input-group-addon[data-action="remove"]',
+			'Addon_datetime_show':'.input-group-addon[data-action="show"]',
 		init:function(){
 			this.components.init();
 		}
@@ -33,7 +38,6 @@
 				    	_this.$txtarea.val(sNew);
 				    });
 					this.cm  = editor;
-					//this.$txtarea.css({"visibility":"hidden","display":"inline","width":"0","margin-left":"30px","height":"0","padding":"0px","border-width":"0"});
 					this.$txtarea.appendTo($('.CodeMirror'));
 				},
 				setContent:function(str){
@@ -64,8 +68,17 @@
 	//Controller
 	ctx.CONTROLLER = {
 			init:function(){
+				$(ctx.VIEW.Switch_bootstrap).bootstrapSwitch();
+				$(ctx.VIEW.Div_form_datetime).datetimepicker({
+			        autoclose: true,
+			        todayBtn: true,
+			        todayHighlight: true,
+			        startDate: new Date(),
+			        minuteStep: 10
+			    });
 				this.prepared();
 				this.preparedTrigger();
+				this.preparedRepeatable();
 				this.bindEventListener();
 			},
 			prepared:function(){//for ctx.VIEW.Select_Tasktype change callback
@@ -83,6 +96,17 @@
 				$(sRefClass).fadeIn();
 				$('[data-bind-target="'+sRefClass+'"]').fadeIn();
 			},
+			preparedRepeatable:function(state){
+				var sRefClass = $(ctx.VIEW.Input_Repeatable).data("ref");
+				$(sRefClass).hide();
+				var _state = state;
+				if(_state==undefined){
+					_state = $(ctx.VIEW.Input_Repeatable).bootstrapSwitch('state');
+				}
+				if(_state){
+					$(sRefClass).fadeIn();
+				}
+			},
 			bindEventListener:function(){
 				var _this = this;
 				$(ctx.VIEW.Select_Tasktype).change(function(){
@@ -92,7 +116,21 @@
 					_this.preparedTrigger();
 				});
 				
-				$(ctx.VIEW.Switch_bootstrap).bootstrapSwitch();
+				$(ctx.VIEW.Input_Repeatable).on('switchChange.bootstrapSwitch', function(event, state) {
+					_this.preparedRepeatable(state);
+				});
+				
+				$(ctx.VIEW.Addon_datetime_show).click(function(){
+					var $addon = $(this);
+					var sRole = $addon.data("action");
+					$addon.siblings(ctx.VIEW.Div_form_datetime).datetimepicker(sRole);
+				});
+				
+				$(ctx.VIEW.Addon_datetime_remove).click(function(){
+					var $addon = $(this);
+					var sRole = $addon.data("action");
+					$addon.siblings(ctx.VIEW.Div_form_datetime).val("");
+				});
 			}
 			
 	}//end of definition
