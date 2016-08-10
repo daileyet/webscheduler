@@ -37,6 +37,9 @@ public abstract class AbstractTaskTrigger implements ITaskTrigger {
 	private static final long serialVersionUID = -1941036319617531194L;
 	protected TriggerKey triggerKey;
 
+	public AbstractTaskTrigger() {
+	}
+
 	public AbstractTaskTrigger(TriggerKey triggerKey) {
 		super();
 		this.triggerKey = triggerKey;
@@ -46,6 +49,7 @@ public abstract class AbstractTaskTrigger implements ITaskTrigger {
 		this.triggerKey = TriggerKey.triggerKey(name, group);
 	}
 
+	@Override
 	public TriggerKey getTriggerKey() {
 		return triggerKey;
 	}

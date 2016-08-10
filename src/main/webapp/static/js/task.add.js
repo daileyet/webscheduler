@@ -98,6 +98,7 @@
 			},
 			preparedRepeatable:function(state){
 				var sRefClass = $(ctx.VIEW.Input_Repeatable).data("ref");
+				$(ctx.VIEW.Input_Repeatable).val(state);
 				$(sRefClass).hide();
 				var _state = state;
 				if(_state==undefined){
@@ -128,7 +129,6 @@
 				
 				$(ctx.VIEW.Addon_datetime_remove).click(function(){
 					var $addon = $(this);
-					var sRole = $addon.data("action");
 					$addon.siblings(ctx.VIEW.Div_form_datetime).val("");
 				});
 			}

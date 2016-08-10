@@ -29,11 +29,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.quartz.TriggerKey;
 
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.context.handler.WebAttributers;
+import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
 /**
@@ -42,9 +49,38 @@ import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
  */
 public final class StaticUtils {
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(StaticDict.DEFAULT_DATE_FORMAT_STYLE);
+	private static final Map<String, DateFormat> cache = new ConcurrentHashMap<String, DateFormat>() {
+		private static final long serialVersionUID = -2718845512195138169L;
+		{
+			this.put(StaticDict.DEFAULT_DATE_FORMAT_STYLE, DATE_FORMAT);
+		}
+	};
 
 	public static String formatDate(Date date) {
 		return DATE_FORMAT.format(date);
+	}
+
+	public static Date parseDate(String dateStr) {
+		return parseDate(dateStr, StaticDict.DEFAULT_DATE_FORMAT_STYLE);
+	}
+
+	public static Date parseDate(String dateStr, String formatStly) {
+		DateFormat df = cache.get(formatStly);
+		if (df == null) {
+			try {
+				df = new SimpleDateFormat(formatStly);
+				cache.put(formatStly, df);
+			} catch (Exception e) {
+				ProcessLogger.error(e);
+				return null;
+			}
+		}
+		try {
+			return df.parse(dateStr);
+		} catch (ParseException e) {
+			ProcessLogger.warn(e);
+		}
+		return null;
 	}
 
 	public static String getDefaultCustomTaskSourceDir() {
@@ -87,6 +123,16 @@ public final class StaticUtils {
 	public static String errorPage(WebAttributers was, PageMap pm) {
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
 		return "WEB-INF/jsp/template/business.error.jsp";
+	}
+
+	public static TriggerKey createTriggerKey(TaskRunTimeData taskRunTimeData) {
+		if (taskRunTimeData == null) {
+			taskRunTimeData = new TaskRunTimeData();
+			taskRunTimeData.makeDefault();
+		}
+		String name = taskRunTimeData.getTaskId() + StaticDict.TRIGGER_SUFFIX;
+		String group = taskRunTimeData.getGroupName() + StaticDict.TRIGGER_SUFFIX;
+		return TriggerKey.triggerKey(name, group);
 	}
 
 }

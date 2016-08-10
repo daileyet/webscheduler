@@ -83,7 +83,7 @@
 					
 					<div class="form-group">
 						<label for="taskstate" class="col-sm-2 control-label">Task
-							type</label>
+							state</label>
 						<div class="col-sm-10">
 							<p class="form-control-static">${pm.tm.taskState.display }
 							<c:if test="${wsfn:isCompleteWith(pm.tm,true) }">
@@ -95,6 +95,56 @@
 							</p>
 						</div>
 					</div>
+					
+					<div class="form-group">
+						<label for="tasktrigger" class="col-sm-2 control-label">Task
+							trigger</label>
+						<div class="col-sm-10">
+							<p class="form-control-static">${pm.tm.taskTrigger.triggerType.display }</p>
+						</div>
+					</div>
+					<!-- trigger details for simple  -->
+					<c:if test="${wsfn:isSimpleTaskTrigger(pm.tm) }">
+						<c:if test="${wsfn:isSimple4FixDate(pm.tm) }">
+							<div class="form-group">
+								<label for="startdate" class="col-sm-2 control-label">Start date</label>
+								<div class="col-sm-10">
+									<p class="form-control-static">${wsfn:getStartDate(pm.tm)}</p>
+								</div>
+							</div>	
+						</c:if>
+						<c:if test="${wsfn:isSimple4Repeatable(pm.tm) }">
+							<div class="form-group">
+								<label for="repeatinterval" class="col-sm-2 control-label">Repeat interval</label>
+								<div class="col-sm-10">
+									<p class="form-control-static">${wsfn:getRepeatInterval(pm.tm)} <i title="Second" class="fa fa-clock-o" aria-hidden="true"></i></p>
+								</div>
+							</div>	
+							<div class="form-group">
+								<label for="repeatcount" class="col-sm-2 control-label">Repeat count</label>
+								<div class="col-sm-10">
+									<p class="form-control-static">${wsfn:getRepeatCount(pm.tm)}</p>
+								</div>
+							</div>
+							<c:if test="${wsfn:getEndDate(pm.tm)!=''}">
+								<div class="form-group">
+									<label for="enddate" class="col-sm-2 control-label">End date</label>
+									<div class="col-sm-10">
+										<p class="form-control-static">${wsfn:getEndDate(pm.tm)}</p>
+									</div>
+								</div>	
+							</c:if>	
+						</c:if>
+					</c:if>
+					<!-- trigger details for cron -->
+					<c:if test="${wsfn:isCronTaskTrigger(pm.tm) }">
+						<div class="form-group">
+							<label for="cronexpr" class="col-sm-2 control-label">Cron expression</label>
+							<div class="col-sm-10">
+								<p class="form-control-static">${wsfn:getCronExpr(pm.tm)}</p>
+							</div>
+						</div>		
+					</c:if>
 					
 					<div class="form-group">
 						<label for="taskname" class="col-sm-2 control-label">Task

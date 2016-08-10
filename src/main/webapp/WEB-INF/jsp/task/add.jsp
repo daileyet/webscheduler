@@ -64,7 +64,7 @@
 					</div>
 					
 					<div class="form-group">
-						<label for="tasktrigger" class="col-sm-2 control-label">Task Trigger</label>
+						<label for="tasktrigger" class="col-sm-2 control-label">Task trigger</label>
 						<div class="col-sm-10">
 							<select id="tasktrigger" name="tasktrigger" class="form-control" required>
 								<c:forEach var="trigger" items="${pm.triggers }" varStatus="status">
@@ -74,9 +74,9 @@
 						</div>
 					</div>
 					<!-- trigger details for simple -->
-					<div class="trigger-group simple1-trigger simple2-trigger">
+					<div class="trigger-group simple1-trigger simple2-trigger" style="display: none">
 						<div class="form-group" data-bind-target=".simple2-trigger">
-							<label for="startdate" class="col-sm-2 control-label">Start Date</label>
+							<label for="startdate" class="col-sm-2 control-label">Start date</label>
 							<div class="col-sm-10">
 								<div class="input-group">
 									<input class="form-control form-datetime" size="16" type="datetime" name="startdate" id="startdate" data-date-format="yyyy-mm-dd hh:ii" readonly>
@@ -86,7 +86,7 @@
 							</div>
 						</div>					
 						<div class="form-group">
-							<label for="repeatable" class="col-sm-2 control-label">Repeat Option</label>
+							<label for="repeatable" class="col-sm-2 control-label">Repeat options</label>
 							<div class="col-sm-10">
 								<input class="bootstrap-switch" data-ref=".repeat-options-group" data-label-text="Repeatable" type="checkbox" name="repeatable" id="repeatable">
 								<!-- <input class="bootstrap-switch" data-label-text="Forever" type="checkbox" name="repeatforever" id="repeatforever"> -->
@@ -109,9 +109,8 @@
 									<select name="repeatcount"
 									title="Choose one of the following..."
 									 class="selectpicker show-tick " id="repeatcount" data-width="auto" data-live-search="true" data-show-subtext="true">
-										<option data-content="<span class='label label-warning'>Repeat forever</span>" value="-1"  >Repeat forever</option>
+										<option data-content="<span class='label label-warning'>Repeat forever</span>" value="2147483647"  >Repeat forever</option>
 										<option data-divider="true"></option>
-										<option value="0">No repeat</option>
 										<option value="1">Repeat 1 time</option>
 										<option value="2">Repeat 2 times</option>
 										<option value="3">Repeat 3 times</option>
@@ -122,7 +121,7 @@
 							<div class="form-group">
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="input-group">
-										<input class="form-control form-datetime" placeholder="End Date" type="datetime" name="enddate" id="enddate" data-date-format="yyyy-mm-dd hh:ii" readonly>
+										<input class="form-control form-datetime" placeholder="End date" type="datetime" name="enddate" id="enddate" data-date-format="yyyy-mm-dd hh:ii" readonly>
 										<span class="input-group-addon" role="datetime-addon" data-action="remove"><i class="fa fa-times" aria-hidden="true"></i></span>
 										<span class="input-group-addon" role="datetime-addon" data-action="show"><i class="fa fa-calendar" aria-hidden="true"></i></span>
 									</div>
@@ -133,8 +132,8 @@
 					</div>
 					
 					<!-- trigger details for cron -->
-					<div class="form-group trigger-group cron-trigger">
-						<label for="cronexpr" class="col-sm-2 control-label">Cron Expression</label>
+					<div class="form-group trigger-group cron-trigger " style="display: none">
+						<label for="cronexpr" class="col-sm-2 control-label">Cron expression</label>
 						<div class="col-sm-10">
 							<!-- <div class=" input-group"> -->
 								<!-- <span class="input-group-addon">@</span> -->
@@ -145,7 +144,7 @@
 					
 					<div class="form-group">
 						<label for="taskref" class="col-sm-2 control-label">Task
-							Properties</label>
+							properties</label>
 						<div class="col-sm-10">
 							<textarea class="form-control" id="taskref" name="taskref" rows="10"></textarea>
 						</div>

@@ -31,6 +31,9 @@ import static org.quartz.TriggerBuilder.newTrigger;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
+import com.openthinks.libs.utilities.Checker;
+import com.openthinks.webscheduler.model.task.SupportedTrigger;
+
 /**
  * @author dailey.yet@outlook.com
  *
@@ -39,6 +42,9 @@ public class CronTaskTrigger extends AbstractTaskTrigger {
 
 	private static final long serialVersionUID = -2226334860757677179L;
 	private String cronExpression;
+
+	public CronTaskTrigger() {
+	}
 
 	public CronTaskTrigger(TriggerKey triggerKey) {
 		super(triggerKey);
@@ -50,6 +56,7 @@ public class CronTaskTrigger extends AbstractTaskTrigger {
 
 	@Override
 	public Trigger getTrigger() {
+		Checker.require(triggerKey).notNull();
 		return newTrigger().withIdentity(triggerKey).withSchedule(cronSchedule(getCronExpression())).build();
 	}
 
@@ -64,6 +71,11 @@ public class CronTaskTrigger extends AbstractTaskTrigger {
 	@Override
 	public String toString() {
 		return "CronTaskTrigger [cronExpression=" + cronExpression + ", toString()=" + super.toString() + "]";
+	}
+
+	@Override
+	public SupportedTrigger getTriggerType() {
+		return SupportedTrigger.CRON;
 	}
 
 }

@@ -35,7 +35,10 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 
+import com.openthinks.libs.utilities.Checker;
 import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.model.task.SupportedTrigger;
 
 /**
  * @author dailey.yet@outlook.com
@@ -47,6 +50,9 @@ public class SimpleTaskTrigger extends AbstractTaskTrigger {
 	private int repeatCount = StaticDict.NO_REPEAT_TRIGGER;
 	private int intervalInSeconds;
 
+	public SimpleTaskTrigger() {
+	}
+
 	public SimpleTaskTrigger(TriggerKey triggerKey) {
 		super(triggerKey);
 	}
@@ -57,6 +63,7 @@ public class SimpleTaskTrigger extends AbstractTaskTrigger {
 
 	@Override
 	public Trigger getTrigger() {
+		Checker.require(triggerKey).notNull();
 		TriggerBuilder<Trigger> triggerBuilder = newTrigger().withIdentity(triggerKey);
 		if (getStartTime() == null) {
 			triggerBuilder.startNow();
@@ -74,6 +81,7 @@ public class SimpleTaskTrigger extends AbstractTaskTrigger {
 			} else {
 				scheduleBuilder.withRepeatCount(getRepeatCount());
 			}
+			triggerBuilder.withSchedule(scheduleBuilder);
 		}
 		return triggerBuilder.build();
 	}
@@ -82,12 +90,28 @@ public class SimpleTaskTrigger extends AbstractTaskTrigger {
 		return startTime;
 	}
 
+	public String getStartTimeString() {
+		try {
+			return StaticUtils.formatDate(getStartTime());
+		} catch (Exception e) {
+			return "";
+		}
+	}
+
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 
 	public Date getEndTime() {
 		return endTime;
+	}
+
+	public String getEndTimeString() {
+		try {
+			return StaticUtils.formatDate(getEndTime());
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	public void setEndTime(Date endTime) {
@@ -117,4 +141,18 @@ public class SimpleTaskTrigger extends AbstractTaskTrigger {
 	public boolean isRepeatForever() {
 		return this.repeatCount == StaticDict.FOREVER_REPEAT_TRIGGER;
 	}
+
+	@Override
+	public String toString() {
+		return "SimpleTaskTrigger [startTime=" + startTime + ", endTime=" + endTime + ", repeatCount=" + repeatCount
+				+ ", intervalInSeconds=" + intervalInSeconds + ", toString()=" + super.toString() + "]";
+	}
+
+	@Override
+	public SupportedTrigger getTriggerType() {
+		if (this.startTime != null)
+			return SupportedTrigger.START_FIX_DATE;
+		return SupportedTrigger.START_NOW;
+	}
+
 }

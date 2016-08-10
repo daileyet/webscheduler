@@ -7,7 +7,6 @@ import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
 
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.AutoComponent;
@@ -20,7 +19,9 @@ import com.openthinks.webscheduler.help.PageMap;
 import com.openthinks.webscheduler.help.StaticChecker;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.help.trigger.TriggerGenerator;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.task.ITaskTrigger;
 import com.openthinks.webscheduler.model.task.SupportedTrigger;
 import com.openthinks.webscheduler.model.task.TaskAction;
 import com.openthinks.webscheduler.service.SchedulerService;
@@ -79,10 +80,10 @@ public class TaskController {
 		JobDetail job = JobBuilder.newJob(clazz)
 				.withIdentity(taskRunTimeData.getTaskId(), taskRunTimeData.getGroupName()).build();
 		job.getJobDataMap().put(ITaskDefinition.TASK_DATA, taskRunTimeData);
-		Trigger trigger = TriggerBuilder.newTrigger()
-				.withIdentity(taskRunTimeData.getTaskId() + "-trigger", taskRunTimeData.getGroupName()).startNow()
-				.build();
-
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		taskTrigger.setTriggerKey(StaticUtils.createTriggerKey(taskRunTimeData));
+		Trigger trigger = taskTrigger.getTrigger();
+		ProcessLogger.debug(taskRunTimeData.toString());
 		try {
 			schedulerService.scheduleJob(job, trigger);
 		} catch (SchedulerException e) {
@@ -99,16 +100,18 @@ public class TaskController {
 
 	@Mapping("/add")
 	public String add(WebAttributers was) {
-
 		TaskRunTimeData taskRunTimeData = new TaskRunTimeData();
 		taskRunTimeData.makeDefault();
 		taskRunTimeData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
 		taskRunTimeData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
 		taskRunTimeData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
+		ITaskTrigger taskTrigger = TriggerGenerator.valueOf(was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER)).generate(was);
+		taskRunTimeData.setTaskTrigger(taskTrigger);
 		PageMap pm = newPageMap();
 		boolean isSuccess = true;
 		try {
 			taskService.saveTask(taskRunTimeData);
+			ProcessLogger.debug(taskRunTimeData.toString());
 		} catch (Exception e) {
 			isSuccess = false;
 			ProcessLogger.error(e);

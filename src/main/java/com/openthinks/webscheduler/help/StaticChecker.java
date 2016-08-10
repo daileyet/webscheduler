@@ -25,10 +25,15 @@
 */
 package com.openthinks.webscheduler.help;
 
+import com.openthinks.libs.utilities.Checker;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.ExecutionResult;
+import com.openthinks.webscheduler.model.task.ITaskTrigger;
+import com.openthinks.webscheduler.model.task.SupportedTrigger;
 import com.openthinks.webscheduler.model.task.TaskAction;
 import com.openthinks.webscheduler.model.task.TaskState;
+import com.openthinks.webscheduler.model.task.trigger.CronTaskTrigger;
+import com.openthinks.webscheduler.model.task.trigger.SimpleTaskTrigger;
 
 /**
  * @author dailey.yet@outlook.com
@@ -91,4 +96,90 @@ public final class StaticChecker {
 		return isAvaiable;
 	}
 
+	public static boolean isSimpleTaskTrigger(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		return taskTrigger instanceof SimpleTaskTrigger;
+	}
+
+	public static boolean isSimple4FixDate(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		return taskTrigger.getTriggerType() == SupportedTrigger.START_FIX_DATE;
+	}
+
+	public static boolean isSimple4Repeatable(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		if (taskTrigger instanceof SimpleTaskTrigger) {
+			return ((SimpleTaskTrigger) taskTrigger).isRepeatable();
+		}
+		return false;
+	}
+
+	//isCronTaskTrigger
+	public static boolean isCronTaskTrigger(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		return taskTrigger instanceof CronTaskTrigger;
+	}
+
+	//getRepeatInterval
+	public static String getRepeatInterval(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		if (taskTrigger instanceof SimpleTaskTrigger) {
+			return ((SimpleTaskTrigger) taskTrigger).getIntervalInSeconds() + "";
+		}
+		return "";
+	}
+
+	//getRepeatCount
+	public static String getRepeatCount(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		if (taskTrigger instanceof SimpleTaskTrigger) {
+			return ((SimpleTaskTrigger) taskTrigger).getRepeatCount() + "";
+		}
+		return "";
+	}
+
+	//getStartDate
+	public static String getStartDate(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		if (taskTrigger instanceof SimpleTaskTrigger) {
+			return ((SimpleTaskTrigger) taskTrigger).getStartTimeString();
+		}
+		return "";
+	}
+
+	//getEndDate
+	public static String getEndDate(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		if (taskTrigger instanceof SimpleTaskTrigger) {
+			return ((SimpleTaskTrigger) taskTrigger).getEndTimeString();
+		}
+		return "";
+	}
+
+	//getCronExpr
+	public static String getCronExpr(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		if (taskTrigger instanceof CronTaskTrigger) {
+			return ((CronTaskTrigger) taskTrigger).getCronExpression();
+		}
+		return "";
+	}
 }

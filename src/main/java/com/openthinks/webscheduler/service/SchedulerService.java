@@ -11,6 +11,8 @@ import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.Trigger.CompletedExecutionInstruction;
+import org.quartz.TriggerListener;
 import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -81,7 +83,41 @@ public class SchedulerService {
 		if (dataObj != null && dataObj instanceof TaskRunTimeData) {
 			TaskRunTimeData taskRunTimeData = (TaskRunTimeData) dataObj;
 			taskRunTimeData.setTaskState(TaskState.SCHEDULED);
+
 		}
+	}
+
+}
+
+class DefaultTriggerListener implements TriggerListener {
+
+	@Override
+	public String getName() {
+		return "DEFAULT-TRIGGER-LISTENER";
+	}
+
+	@Override
+	public void triggerFired(Trigger trigger, JobExecutionContext context) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean vetoJobExecution(Trigger trigger, JobExecutionContext context) {
+		return false;
+	}
+
+	@Override
+	public void triggerMisfired(Trigger trigger) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void triggerComplete(Trigger trigger, JobExecutionContext context,
+			CompletedExecutionInstruction triggerInstructionCode) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

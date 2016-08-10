@@ -54,7 +54,7 @@ public class TaskContext {
 			try {
 				WebContexts.get().lookup(TaskService.class).saveTask(optional.get());
 			} catch (Exception e) {
-				ProcessLogger.warn(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
+				ProcessLogger.warn(CommonUtilities.getCurrentInvokerMethod(), e);
 			}
 		}
 	}

@@ -28,17 +28,31 @@ package com.openthinks.webscheduler.model.task;
 import java.io.Serializable;
 
 import org.quartz.Trigger;
+import org.quartz.TriggerKey;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
 public interface ITaskTrigger extends Serializable {
+	public SupportedTrigger getTriggerType();
 
 	/**
 	 * get the final job trigger
 	 * @return Trigger
 	 */
 	public Trigger getTrigger();
+
+	/**
+	 * 
+	 * @return TriggerKey
+	 */
+	public TriggerKey getTriggerKey();
+
+	/**
+	 * 
+	 * @param triggerKey TriggerKey
+	 */
+	public void setTriggerKey(TriggerKey triggerKey);
 
 }

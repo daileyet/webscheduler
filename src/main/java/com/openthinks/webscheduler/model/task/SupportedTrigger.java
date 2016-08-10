@@ -56,4 +56,5 @@ public enum SupportedTrigger {
 	public String toString() {
 		return getDisplay();
 	}
+
 }

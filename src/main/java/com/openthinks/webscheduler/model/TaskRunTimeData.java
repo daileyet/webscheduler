@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.UUID;
 
+import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.model.task.ITaskTrigger;
@@ -43,7 +44,7 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 	public void makeDefault() {
 		taskId = UUID.randomUUID().toString();
 		taskName = "default_task";
-		groupName = "default_group";
+		groupName = StaticDict.DEFAULT_TASK_GROUP_NAME;
 		taskState = TaskState.UN_SCHEDULE;
 		taskRef = new DefaultTaskRef();
 		taskRefContent = "";
@@ -192,7 +193,7 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 	public String toString() {
 		return "TaskRunTimeData [taskId=" + taskId + ", taskName=" + taskName + ", taskType=" + taskType
 				+ ", groupName=" + groupName + ", taskRefContent=" + taskRefContent + ", taskState=" + taskState
-				+ ", lastTaskResult=" + lastTaskResult + "]";
+				+ ", lastTaskResult=" + lastTaskResult + ", taskTrigger=" + taskTrigger + "]";
 	}
 
 	//	/**

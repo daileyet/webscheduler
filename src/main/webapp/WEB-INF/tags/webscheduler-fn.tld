@@ -22,4 +22,53 @@
 		<function-signature>boolean isAvaiableWith(com.openthinks.webscheduler.model.TaskRunTimeData, java.lang.String)</function-signature>
 	</function>
 	
+	<function>
+		<name>isSimpleTaskTrigger</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>boolean isSimpleTaskTrigger(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>
+
+	<function>
+		<name>isSimple4FixDate</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>boolean isSimple4FixDate(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>
+	
+	<function>
+		<name>isSimple4Repeatable</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>boolean isSimple4Repeatable(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>
+	
+	<function>
+		<name>isCronTaskTrigger</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>boolean isCronTaskTrigger(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>	
+	
+	<function>
+		<name>getRepeatInterval</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>java.lang.String getRepeatInterval(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>	
+	<function>
+		<name>getRepeatCount</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>java.lang.String getRepeatCount(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>
+	<function>
+		<name>getStartDate</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>java.lang.String getStartDate(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>			
+	<function>
+		<name>getEndDate</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>java.lang.String getEndDate(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>		
+	<function>
+		<name>getCronExpr</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>java.lang.String getCronExpr(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>	
 </taglib> 
