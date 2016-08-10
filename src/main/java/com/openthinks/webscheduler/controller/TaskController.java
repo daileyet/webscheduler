@@ -141,6 +141,7 @@ public class TaskController {
 		PageMap pm = newPageMap();
 		pm.push(StaticDict.PAGE_ATTRIBUTE_SUPPORT_TASKS, TaskTypes.getSupportTaskMetaData());
 		pm.push(StaticDict.PAGE_ATTRIBUTE_CUSTOM_TASKS, TaskTypes.getCustomTaskMetaData());
+		pm.push(StaticDict.PAGE_ATTRIBUTE_TASK_TRIGGERS, SupportedTrigger.values());
 		pm.push(StaticDict.PAGE_ATTRIBUTE_TASK_META, taskRunTimeData);
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
 		return "WEB-INF/jsp/task/edit.jsp";
@@ -162,9 +163,17 @@ public class TaskController {
 		if (!checkState(was, taskRunTimeData, TaskAction.Edit)) {
 			return StaticUtils.errorPage(was, pm);
 		}
+		ITaskTrigger oldTaskTrigger = taskRunTimeData.getTaskTrigger();
+		ProcessLogger.debug("On edit with old task trigger:"+oldTaskTrigger.toString());
+		ITaskTrigger newTaskTrigger = TriggerGenerator.valueOf(was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER)).generate(was);
+		ProcessLogger.debug("On edit with new task trigger:"+newTaskTrigger.toString());
+		newTaskTrigger.setTriggerKey(oldTaskTrigger.getTriggerKey());
+		taskRunTimeData.setTaskTrigger(newTaskTrigger);
+		
 		boolean isSuccess = true;
 		try {
 			taskService.saveTask(taskRunTimeData);
+			ProcessLogger.debug(taskRunTimeData.toString());
 		} catch (Exception e) {
 			isSuccess = false;
 			ProcessLogger.error(e);

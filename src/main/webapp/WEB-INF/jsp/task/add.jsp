@@ -111,10 +111,9 @@
 									 class="selectpicker show-tick " id="repeatcount" data-width="auto" data-live-search="true" data-show-subtext="true">
 										<option data-content="<span class='label label-warning'>Repeat forever</span>" value="2147483647"  >Repeat forever</option>
 										<option data-divider="true"></option>
-										<option value="1">Repeat 1 time</option>
-										<option value="2">Repeat 2 times</option>
-										<option value="3">Repeat 3 times</option>
-										<option value="4">Repeat 4 times</option>
+										<c:forEach var="i" begin="1" end="10">
+											<option value="${i}" >Repeat ${i} time</option>
+										</c:forEach>
 									</select>
 								</div>
 							</div>

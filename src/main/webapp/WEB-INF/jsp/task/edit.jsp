@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ew" uri="http://www.openthinks.com/easyweb"%>
+<%@ taglib prefix="wsfn" uri="http://www.openthinks.com/webscheduler/fns"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +13,9 @@
 <meta name="author" content="dailey.yet@outlook.com">
 <title>Task - Edit</title>
 <%@ include file="../template/head.style.jsp"%>
+<link rel="stylesheet" href="${ew:pathS('/static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}">
+<link rel="stylesheet" href="${ew:pathS('/static/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css')}">
+<link rel="stylesheet" href="${ew:pathS('/static/bootstrap-select/css/bootstrap-select.min.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/css/task.css')}">
 </head>
@@ -73,10 +77,88 @@
 							</div>
 						</div>
 					</div>
+					
+					<div class="form-group">
+						<label for="tasktrigger" class="col-sm-2 control-label">Task trigger</label>
+						<div class="col-sm-10">
+							<select id="tasktrigger" name="tasktrigger" class="form-control" required>
+								<c:forEach var="trigger" items="${pm.triggers }" varStatus="status">
+									<option  <c:if test="${pm.tm.taskTrigger.triggerType == trigger }">selected</c:if> data-ref=".${trigger.tag}" value="${trigger.name }" title="${trigger.display }">${trigger.display }</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					<!-- trigger details for simple -->
+					<div class="trigger-group simple1-trigger simple2-trigger" style="display: none">
+						<div class="form-group" data-bind-target=".simple2-trigger">
+							<label for="startdate" class="col-sm-2 control-label">Start date</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<input class="form-control form-datetime" size="16" type="datetime" name="startdate" id="startdate" value="${wsfn:getStartDate(pm.tm) }" data-date-format="yyyy-mm-dd hh:ii" readonly>
+									<span class="input-group-addon" role="datetime-addon" data-action="remove"><i class="fa fa-times" aria-hidden="true"></i></span>
+									<span class="input-group-addon" role="datetime-addon" data-action="show"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+								</div>
+							</div>
+						</div>					
+						<div class="form-group">
+							<label for="repeatable" class="col-sm-2 control-label">Repeat options</label>
+							<div class="col-sm-10">
+								<input class="bootstrap-switch" data-ref=".repeat-options-group" data-label-text="Repeatable" type="checkbox" name="repeatable" id="repeatable" <c:if test="${wsfn:isSimple4Repeatable(pm.tm) }">checked</c:if>>
+								<!-- <input class="bootstrap-switch" data-label-text="Forever" type="checkbox" name="repeatforever" id="repeatforever"> -->
+							</div>
+						</div>
+						<!-- repeat options -->
+						<div class="repeat-options-group">
+							<div class="form-group">
+								<div class="col-sm-5 col-sm-offset-2">
+									<div class="input-group">
+										<input placeholder="Repeat interval" min="0" title="Repeat interval" class="form-control" type="number" name="repeatinterval" id="repeatinterval" value="${wsfn:getRepeatInterval(pm.tm) }">
+										<span class="input-group-addon">Second</span>
+									</div>
+								</div>
+								<div class="visible-xs-inline">
+									<p></p>
+								</div>
+								<div class="col-sm-5">
+									<!-- <input placeholder="Repeat count" min="0" title="Repeat count" class="" type="number" name="repeatcount" id="repeatcount"> -->
+									<select name="repeatcount"
+									title="Choose one of the following..."
+									 class="selectpicker show-tick " id="repeatcount" data-width="auto" data-live-search="true" data-show-subtext="true">
+										<option data-content="<span class='label label-warning'>Repeat forever</span>" value="2147483647"  >Repeat forever</option>
+										<option data-divider="true"></option>
+										<c:forEach var="i" begin="1" end="10">
+											<option <c:if test="${wsfn:getRepeatCount(pm.tm)==i }">selected</c:if> value="${i}" >Repeat ${i} time</option>
+										</c:forEach>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="input-group">
+										<input class="form-control form-datetime" placeholder="End date" type="datetime" name="enddate" id="enddate" data-date-format="yyyy-mm-dd hh:ii" readonly value="${wsfn:getEndDate(pm.tm) }">
+										<span class="input-group-addon" role="datetime-addon" data-action="remove"><i class="fa fa-times" aria-hidden="true"></i></span>
+										<span class="input-group-addon" role="datetime-addon" data-action="show"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+									</div>
+								</div>
+							</div>	
+						</div><!-- end of repeat options -->
+						
+					</div>
+					
+					<!-- trigger details for cron -->
+					<div class="form-group trigger-group cron-trigger " style="display: none">
+						<label for="cronexpr" class="col-sm-2 control-label">Cron expression</label>
+						<div class="col-sm-10">
+							<!-- <div class=" input-group"> -->
+								<!-- <span class="input-group-addon">@</span> -->
+								<input class="form-control" type="text" name="cronexpr" id="cronexpr">
+							<!-- </div> -->
+						</div>
+					</div>					
+					
 					<div class="form-group">
 						<label for="taskname" class="col-sm-2 control-label">Task
-							Properties</label>
-							
+							properties</label>
 						<div class="col-sm-10">
 							<div class="btn-toolbar" role="toolbar" id="taskref-toolbar" aria-label="Ref Toolbar">
 							  <div class="btn-group" role="group" aria-label="">
@@ -101,6 +183,9 @@
 	</div>
 
 	<%@ include file="../template/body.script.jsp"%>
+	<script type="text/javascript" src="${ew:pathS('/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}"></script>
+	<script type="text/javascript" src="${ew:pathS('/static/bootstrap-select/js/bootstrap-select.min.js')}"></script>
+	<script type="text/javascript" src="${ew:pathS('/static/bootstrap-switch/js/bootstrap-switch.min.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/lib/codemirror.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/properties/properties.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/xml/xml.js')}"></script>
