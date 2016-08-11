@@ -18,9 +18,12 @@
 			'Div_bind_element':'[data-bind-target]',
 			'Div_repeat_options_group':'.repeat-options-group',
 			'Div_form_datetime':'.form-datetime',
-			'Addon_datetime':'.input-group-addon[role="datetime-addon"] ',
-			'Addon_datetime_remove':'.input-group-addon[data-action="remove"]',
-			'Addon_datetime_show':'.input-group-addon[data-action="show"]',
+			'Addon_datetime':'.input-group-addon[role="datetime-addon"]',
+			'Addon_datetime_remove':'.input-group-addon[role="datetime-addon"][data-action="remove"]',
+			'Addon_datetime_show':'.input-group-addon[role="datetime-addon"][data-action="show"]',
+			
+			'Addon_cron':'.input-group-addon[role="cron-addon"]',
+			'Addon_cron_help':'.input-group-addon[role="cron-addon"][data-link]',
 		init:function(){
 			this.components.init();
 		}
@@ -150,6 +153,12 @@
 				$(ctx.VIEW.Addon_datetime_remove).click(function(){
 					var $addon = $(this);
 					$addon.siblings(ctx.VIEW.Div_form_datetime).val("");
+				});
+				
+				$(ctx.VIEW.Addon_cron_help).click(function(){
+					var $addon = $(this);
+					var link = $addon.data("link");
+					window.open(link);
 				});
 			}
 			
