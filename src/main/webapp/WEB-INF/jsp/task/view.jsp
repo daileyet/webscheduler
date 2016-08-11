@@ -127,7 +127,7 @@
 										<c:if test="${wsfn:isRepeatForever(pm.tm) }">
 											Repeat forever
 										</c:if>
-										<c:if test="not ${wsfn:isRepeatForever(pm.tm) }">
+										<c:if test="${not wsfn:isRepeatForever(pm.tm) }">
 											${wsfn:getRepeatCount(pm.tm)}
 										</c:if>
 									</p>

@@ -16,6 +16,7 @@ import org.quartz.TriggerListener;
 import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.TaskState;
@@ -36,6 +37,7 @@ public class SchedulerService {
 		try {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
 			scheduler.getListenerManager().addJobListener(new DefaultJobListener());
+			scheduler.getListenerManager().addTriggerListener(new DefaultTriggerListener());
 		} catch (SchedulerException e) {
 			ProcessLogger.fatal(e);
 		}
@@ -83,7 +85,7 @@ public class SchedulerService {
 		if (dataObj != null && dataObj instanceof TaskRunTimeData) {
 			TaskRunTimeData taskRunTimeData = (TaskRunTimeData) dataObj;
 			taskRunTimeData.setTaskState(TaskState.SCHEDULED);
-
+			WebContexts.get().lookup(TaskService.class).saveTask(taskRunTimeData);
 		}
 	}
 
@@ -98,8 +100,7 @@ class DefaultTriggerListener implements TriggerListener {
 
 	@Override
 	public void triggerFired(Trigger trigger, JobExecutionContext context) {
-		// TODO Auto-generated method stub
-
+		ProcessLogger.debug("trigger fired:" + trigger);
 	}
 
 	@Override
@@ -109,15 +110,14 @@ class DefaultTriggerListener implements TriggerListener {
 
 	@Override
 	public void triggerMisfired(Trigger trigger) {
-		// TODO Auto-generated method stub
+		ProcessLogger.debug("trigger misfired:" + trigger);
 
 	}
 
 	@Override
 	public void triggerComplete(Trigger trigger, JobExecutionContext context,
 			CompletedExecutionInstruction triggerInstructionCode) {
-		// TODO Auto-generated method stub
-
+		ProcessLogger.debug("trigger complete:" + trigger);
 	}
 
 }
@@ -145,13 +145,13 @@ class DefaultJobListener implements JobListener {
 	public void jobToBeExecuted(JobExecutionContext ctx) {
 		ProcessLogger.debug("jobToBeExecuted");
 		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskRuntimeData();
-		if (metaData.isPresent()) {
+		//check task runtime data present and  its task state not equals TaskState.RUNNING
+		if (metaData.isPresent() && metaData.get().getTaskState() != TaskState.RUNNING) {
 			metaData.get().setTaskState(TaskState.RUNNING);
 			metaData.get().getLastTaskResult().clear();
 			metaData.get().getLastTaskResult().setStartTime(new Date());
 			TaskContext.wrapper(ctx).syncTaskRuntimeData();
 		}
-
 	}
 
 	@Override
@@ -159,13 +159,15 @@ class DefaultJobListener implements JobListener {
 		ProcessLogger.debug("jobWasExecuted");
 		Optional<TaskRunTimeData> metaData = TaskContext.wrapper(ctx).getTaskRuntimeData();
 		boolean needSync = false;
-		if (metaData.isPresent()) {
+		//check task runtime data present and it is the last execution
+		if (metaData.isPresent() && ctx.getNextFireTime() == null) {
 			metaData.get().setTaskState(TaskState.COMPLETE);
 			metaData.get().getLastTaskResult().setSuccess(true);
 			metaData.get().getLastTaskResult().setEndTime(new Date());
 			needSync = true;
 		}
-		if (executionException != null) {
+		//check execution exception present and it is the last execution
+		if (executionException != null && ctx.getNextFireTime() == null) {
 			ProcessLogger.error(executionException);
 			if (metaData.isPresent()) {
 				metaData.get().getLastTaskResult().setSuccess(false);
