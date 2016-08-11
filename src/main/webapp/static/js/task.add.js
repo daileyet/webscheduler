@@ -5,9 +5,14 @@
 			'Optionselected_Tasktype':'#tasktype option:selected',
 			'Select_Triggertype':'#tasktrigger',
 			'Optionselected_Triggertype':'#tasktrigger option:selected',
+			'Select_Triggerepeatcount':'#repeatcount',
+			'Optionselected_Triggerepeatcount':'#repeatcount option:selected',
 			'Div_Tasktype_Ref':'#tasktype-ref',
 			'Txtarea_Taskref':'#taskref',
 			'Input_Repeatable':'#repeatable',
+			'Input_Repeatinterval':'#repeatinterval',
+			'Input_Startdate':'#startdate',
+			'Input_Cronexpr':'#cronexpr',
 			'Switch_bootstrap':'.bootstrap-switch',
 			'Div_trigger_group':'.trigger-group',
 			'Div_bind_element':'[data-bind-target]',
@@ -95,18 +100,33 @@
 				$(ctx.VIEW.Div_bind_element).hide();
 				$(sRefClass).fadeIn();
 				$('[data-bind-target="'+sRefClass+'"]').fadeIn();
+				//add required property
+				$(ctx.VIEW.Input_Startdate).prop("required",false);
+				$(ctx.VIEW.Input_Cronexpr).prop("required",false);
+				switch(sRefClass){
+				case ".simple2-trigger":
+					$(ctx.VIEW.Input_Startdate).prop("required",true);
+					break;
+				case ".cron-trigger":
+					$(ctx.VIEW.Input_Cronexpr).prop("required",true);
+					break;
+				}
 			},
 			preparedRepeatable:function(state){
 				var sRefClass = $(ctx.VIEW.Input_Repeatable).data("ref");
-				$(ctx.VIEW.Input_Repeatable).val(state);
+				
 				$(sRefClass).hide();
 				var _state = state;
 				if(_state==undefined){
 					_state = $(ctx.VIEW.Input_Repeatable).bootstrapSwitch('state');
 				}
+				$(ctx.VIEW.Input_Repeatable).val(state);
 				if(_state){
 					$(sRefClass).fadeIn();
 				}
+				//add required property
+				$(ctx.VIEW.Input_Repeatinterval).prop("required",_state);
+				$(ctx.VIEW.Select_Triggerepeatcount).prop("required",_state);
 			},
 			bindEventListener:function(){
 				var _this = this;

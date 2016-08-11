@@ -123,7 +123,14 @@
 							<div class="form-group">
 								<label for="repeatcount" class="col-sm-2 control-label">Repeat count</label>
 								<div class="col-sm-10">
-									<p class="form-control-static">${wsfn:getRepeatCount(pm.tm)}</p>
+									<p class="form-control-static">
+										<c:if test="${wsfn:isRepeatForever(pm.tm) }">
+											Repeat forever
+										</c:if>
+										<c:if test="not ${wsfn:isRepeatForever(pm.tm) }">
+											${wsfn:getRepeatCount(pm.tm)}
+										</c:if>
+									</p>
 								</div>
 							</div>
 							<c:if test="${wsfn:getEndDate(pm.tm)!=''}">

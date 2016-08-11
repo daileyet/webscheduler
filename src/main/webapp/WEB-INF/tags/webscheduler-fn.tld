@@ -39,7 +39,13 @@
 		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
 		<function-signature>boolean isSimple4Repeatable(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
 	</function>
-	
+
+	<function>
+		<name>isRepeatForever</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>boolean isRepeatForever(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>
+		
 	<function>
 		<name>isCronTaskTrigger</name>
 		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>

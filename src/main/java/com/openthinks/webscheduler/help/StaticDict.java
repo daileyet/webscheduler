@@ -73,7 +73,7 @@ public interface StaticDict {
 	public static final String MEMORY_STORE_TASK = "task_memory";
 	public static final int NO_REPEAT_TRIGGER = -1;
 	public static final int FOREVER_REPEAT_TRIGGER = Integer.MAX_VALUE;
-	public static final int DEFAULT_REPEAT_INTERVAL = 3; //3 second
+	public static final int DEFAULT_REPEAT_INTERVAL = 0; //3 second
 
 	public static final String TRIGGER_SUFFIX = "-Trigger";
 	public static final String DEFAULT_TASK_GROUP_NAME = "default_group";

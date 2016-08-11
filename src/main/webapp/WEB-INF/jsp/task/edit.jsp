@@ -94,7 +94,7 @@
 							<label for="startdate" class="col-sm-2 control-label">Start date</label>
 							<div class="col-sm-10">
 								<div class="input-group">
-									<input class="form-control form-datetime" size="16" type="datetime" name="startdate" id="startdate" value="${wsfn:getStartDate(pm.tm) }" data-date-format="yyyy-mm-dd hh:ii" readonly>
+									<input class="form-control form-datetime" size="16" type="datetime" name="startdate" id="startdate" value="${wsfn:getStartDate(pm.tm) }" data-date-format="yyyy-mm-dd hh:ii"  readonly>
 									<span class="input-group-addon" role="datetime-addon" data-action="remove"><i class="fa fa-times" aria-hidden="true"></i></span>
 									<span class="input-group-addon" role="datetime-addon" data-action="show"><i class="fa fa-calendar" aria-hidden="true"></i></span>
 								</div>
@@ -103,7 +103,8 @@
 						<div class="form-group">
 							<label for="repeatable" class="col-sm-2 control-label">Repeat options</label>
 							<div class="col-sm-10">
-								<input class="bootstrap-switch" data-ref=".repeat-options-group" data-label-text="Repeatable" type="checkbox" name="repeatable" id="repeatable" <c:if test="${wsfn:isSimple4Repeatable(pm.tm) }">checked</c:if>>
+								<input class="bootstrap-switch" data-ref=".repeat-options-group" data-label-text="Repeatable" type="checkbox" 
+								name="repeatable" id="repeatable" <c:if test="${wsfn:isSimple4Repeatable(pm.tm) }">checked</c:if> >
 								<!-- <input class="bootstrap-switch" data-label-text="Forever" type="checkbox" name="repeatforever" id="repeatforever"> -->
 							</div>
 						</div>
@@ -124,7 +125,8 @@
 									<select name="repeatcount"
 									title="Choose one of the following..."
 									 class="selectpicker show-tick " id="repeatcount" data-width="auto" data-live-search="true" data-show-subtext="true">
-										<option data-content="<span class='label label-warning'>Repeat forever</span>" value="2147483647"  >Repeat forever</option>
+										<option data-content="<span class='label label-warning'>Repeat forever</span>" 
+										<c:if test="${wsfn:getRepeatCount(pm.tm)==2147483647 }">selected</c:if> value="2147483647">Repeat forever</option>
 										<option data-divider="true"></option>
 										<c:forEach var="i" begin="1" end="10">
 											<option <c:if test="${wsfn:getRepeatCount(pm.tm)==i }">selected</c:if> value="${i}" >Repeat ${i} time</option>
@@ -151,7 +153,7 @@
 						<div class="col-sm-10">
 							<!-- <div class=" input-group"> -->
 								<!-- <span class="input-group-addon">@</span> -->
-								<input class="form-control" type="text" name="cronexpr" id="cronexpr">
+								<input class="form-control" type="text" name="cronexpr" id="cronexpr" value="${wsfn:getCronExpr(pm.tm) }">
 							<!-- </div> -->
 						</div>
 					</div>					

@@ -128,6 +128,17 @@ public final class StaticChecker {
 		return taskTrigger instanceof CronTaskTrigger;
 	}
 
+	//isRepeatForever
+	public static boolean isRepeatForever(TaskRunTimeData taskRunTimeData) {
+		Checker.require(taskRunTimeData).notNull();
+		ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+		Checker.require(taskTrigger).notNull();
+		if (taskTrigger instanceof SimpleTaskTrigger) {
+			return ((SimpleTaskTrigger) taskTrigger).isRepeatForever();
+		}
+		return false;
+	}
+
 	//getRepeatInterval
 	public static String getRepeatInterval(TaskRunTimeData taskRunTimeData) {
 		Checker.require(taskRunTimeData).notNull();

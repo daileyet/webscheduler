@@ -25,13 +25,15 @@ class StartNowTriggerGenerator implements ITriggerGenerator {
 		Integer repeatInterval = StaticDict.DEFAULT_REPEAT_INTERVAL;
 		try {
 			repeatCount = Integer.valueOf(was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER_REPEAT_COUNT));
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			ProcessLogger.warn(e);
 		}
+		ProcessLogger.debug(
+				was.get("repeatcount:" + StaticDict.PAGE_PARAM_TASK_TRIGGER_REPEAT_COUNT) + " -> " + repeatCount);
 		taskTrigger.setRepeatCount(repeatCount);
 		try {
 			repeatInterval = Integer.valueOf(was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER_REPEAT_INTERVAL));
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			ProcessLogger.warn(e);
 		}
 		taskTrigger.setIntervalInSeconds(repeatInterval);

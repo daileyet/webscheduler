@@ -164,12 +164,13 @@ public class TaskController {
 			return StaticUtils.errorPage(was, pm);
 		}
 		ITaskTrigger oldTaskTrigger = taskRunTimeData.getTaskTrigger();
-		ProcessLogger.debug("On edit with old task trigger:"+oldTaskTrigger.toString());
-		ITaskTrigger newTaskTrigger = TriggerGenerator.valueOf(was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER)).generate(was);
-		ProcessLogger.debug("On edit with new task trigger:"+newTaskTrigger.toString());
+		ProcessLogger.debug("On edit with old task trigger:" + oldTaskTrigger.toString());
+		ITaskTrigger newTaskTrigger = TriggerGenerator.valueOf(was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER))
+				.generate(was);
 		newTaskTrigger.setTriggerKey(oldTaskTrigger.getTriggerKey());
+		ProcessLogger.debug("On edit with new task trigger:" + newTaskTrigger.toString());
 		taskRunTimeData.setTaskTrigger(newTaskTrigger);
-		
+
 		boolean isSuccess = true;
 		try {
 			taskService.saveTask(taskRunTimeData);
