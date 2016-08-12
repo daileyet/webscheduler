@@ -131,13 +131,13 @@
 					</div>
 					
 					<!-- trigger details for cron -->
-					<div class="form-group trigger-group cron-trigger " style="display: none">
+					<div class="form-group trigger-group cron-trigger" style="display: none" >
 						<label for="cronexpr" class="col-sm-2 control-label">Cron expression</label>
 						<div class="col-sm-10">
 							<div class=" input-group">
-								<input class="form-control" type="text" name="cronexpr" id="cronexpr">
-								<span class="input-group-addon" role="cron-addon" title="Expression validation"><i class="fa fa-check" aria-hidden="true"></i></span>
-								<span class="input-group-addon" role="cron-addon" title="Cron help" data-link="${ew:pathS('/static/html/croneditor/index.html')}"><i class="fa fa-question-circle" aria-hidden="true"></i></span>
+								<input class="form-control" type="text" name="cronexpr" id="cronexpr" >
+								<span class="input-group-addon" role="cron-addon" data-ref=".cron-trigger" data-action="check" title="Expression validation" data-link="${ew:path('/task/check/cron')}"><i class="fa fa-check" aria-hidden="true"></i></span>
+								<span class="input-group-addon" role="cron-addon" data-action="help" title="Cron help" data-link="${ew:path('/help')}#trigger-cron"><i class="fa fa-question-circle" aria-hidden="true"></i></span>
 							</div>
 						</div>
 					</div>

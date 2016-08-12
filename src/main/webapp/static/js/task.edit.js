@@ -22,6 +22,10 @@
 			'Addon_datetime_remove':'.input-group-addon[data-action="remove"]',
 			'Addon_datetime_show':'.input-group-addon[data-action="show"]',
 			
+			'Addon_cron':'.input-group-addon[role="cron-addon"]',
+			'Addon_cron_check':'.input-group-addon[role="cron-addon"][data-action="check"]',
+			'Addon_cron_help':'.input-group-addon[role="cron-addon"][data-action="help"]',
+			
 			'Btn_Ref_example':'#taskref-toolbar button[data-role="example"]',
 			'Btn_Ref_copy':'#taskref-toolbar button[data-role="copy"]',
 			'Btn_Ref_clear':'#taskref-toolbar button[data-role="clear"]',
@@ -163,6 +167,40 @@
 				$(ctx.VIEW.Btn_Ref_clear).click(function(){
 					ctx.VIEW.components.refEditor.setContent("");
 				});
+				
+				$(ctx.VIEW.Addon_cron_help).click(function(){
+					var $addon = $(this);
+					var link = $addon.data("link");
+					window.open(link);
+				});
+				$(ctx.VIEW.Addon_cron_check).click(function(){
+					var $addon=$(this);
+					var sRefClass = $addon.data("ref");
+					$.ajax({
+						type: "post",
+						url: $addon.data("link"),
+						async: false,
+						data: {
+							"cronexpr": $(ctx.VIEW.Input_Cronexpr).val()
+						},
+						dataType: "jsonp",
+						success: function(data) {
+							if (data.type == "SUCESS") {
+								$(sRefClass).removeClass("has-error");
+								$(sRefClass).addClass("has-success");
+							} else {
+								$(sRefClass).removeClass("has-success");
+								$(sRefClass).addClass("has-error");
+							}
+						},
+						error: function() {
+							$(sRefClass).removeClass("has-error");
+							$(sRefClass).removeClass("has-success");
+							$(sRefClass).addClass("has-warning");
+						}
+					});
+				});
+				
 			},
 			initclipboard:function(){
 				var clipboard = new Clipboard('[data-role="copy"]');
@@ -175,6 +213,7 @@
 				    //console.log(e);
 				});
 			}
+			
 			
 	}//end of definition
 	win.ctx = ctx;

@@ -78,7 +78,11 @@
 										<!-- <div class="btn-group btn-group-xs" role="group"> -->
 											<c:if test="${wsfn:isAvaiableWith(tm,'Schedule') }">
 												<a href="${ew:path('/task/schedule') }?taskid=${tm.taskId }" >
-												<span title="Schedule" class="glyphicon glyphicon-play" aria-hidden="true"></span></a> 
+												<span title="Schedule" class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a> 
+											</c:if>
+											<c:if test="${wsfn:isAvaiableWith(tm,'UnSchedule') }">
+												<a href="${ew:path('/task/unschedule') }?taskid=${tm.taskId }" >
+												<span title="UnSchedule" class="glyphicon glyphicon-log-out text-danger" aria-hidden="true"></span></a> 
 											</c:if>
 											<c:if test="${wsfn:isAvaiableWith(tm,'Stop') }">
 												<a href="${ew:path('/task/stop') }?taskid=${tm.taskId }" >
@@ -90,7 +94,7 @@
 											</c:if>
 											<c:if test="${wsfn:isAvaiableWith(tm,'Remove') }">
 												<a href="${ew:path('/task/remove') }?taskid=${tm.taskId }"  data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
-													<span title="Remove" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+													<span title="Remove" class="glyphicon glyphicon-trash text-danger" aria-hidden="true"></span>
 												</a>
 											</c:if>
 										<!-- </div> -->

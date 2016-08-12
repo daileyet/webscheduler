@@ -23,7 +23,8 @@
 			'Addon_datetime_show':'.input-group-addon[role="datetime-addon"][data-action="show"]',
 			
 			'Addon_cron':'.input-group-addon[role="cron-addon"]',
-			'Addon_cron_help':'.input-group-addon[role="cron-addon"][data-link]',
+			'Addon_cron_check':'.input-group-addon[role="cron-addon"][data-action="check"]',
+			'Addon_cron_help':'.input-group-addon[role="cron-addon"][data-action="help"]',
 		init:function(){
 			this.components.init();
 		}
@@ -159,6 +160,33 @@
 					var $addon = $(this);
 					var link = $addon.data("link");
 					window.open(link);
+				});
+				$(ctx.VIEW.Addon_cron_check).click(function(){
+					var $addon=$(this);
+					var sRefClass = $addon.data("ref");
+					$.ajax({
+						type: "post",
+						url: $addon.data("link"),
+						async: false,
+						data: {
+							"cronexpr": $(ctx.VIEW.Input_Cronexpr).val()
+						},
+						dataType: "jsonp",
+						success: function(data) {
+							if (data.type == "SUCESS") {
+								$(sRefClass).removeClass("has-error");
+								$(sRefClass).addClass("has-success");
+							} else {
+								$(sRefClass).removeClass("has-success");
+								$(sRefClass).addClass("has-error");
+							}
+						},
+						error: function() {
+							$(sRefClass).removeClass("has-error");
+							$(sRefClass).removeClass("has-success");
+							$(sRefClass).addClass("has-warning");
+						}
+					});
 				});
 			}
 			

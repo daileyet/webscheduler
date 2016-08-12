@@ -71,7 +71,12 @@ public final class StaticChecker {
 		}
 		switch (taskAction) {
 		case Schedule:
-			isAvaiable = (taskRunTimeData.getTaskState() != TaskState.RUNNING);
+			isAvaiable = (taskRunTimeData.getTaskState() != TaskState.RUNNING
+					&& taskRunTimeData.getTaskState() != TaskState.SCHEDULED);
+			break;
+		case UnSchedule:
+			isAvaiable = (taskRunTimeData.getTaskState() == TaskState.RUNNING
+					|| taskRunTimeData.getTaskState() == TaskState.SCHEDULED);
 			break;
 		case Stop:
 			isAvaiable = (taskRunTimeData.getTaskState() == TaskState.RUNNING);
@@ -79,11 +84,13 @@ public final class StaticChecker {
 			isAvaiable = false;
 			break;
 		case Edit:
-			isAvaiable = (taskRunTimeData.getTaskState() != TaskState.RUNNING);
+			isAvaiable = (taskRunTimeData.getTaskState() != TaskState.RUNNING
+					&& taskRunTimeData.getTaskState() != TaskState.SCHEDULED);
 			break;
 		case Remove:
 			isAvaiable = (taskRunTimeData.getTaskState() != TaskState.RUNNING
-					&& taskRunTimeData.getTaskState() != TaskState.INVALID);
+					&& taskRunTimeData.getTaskState() != TaskState.INVALID
+					&& taskRunTimeData.getTaskState() != TaskState.SCHEDULED);
 			break;
 		}
 		return isAvaiable;

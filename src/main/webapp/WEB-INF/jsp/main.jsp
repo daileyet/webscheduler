@@ -10,7 +10,7 @@
 <meta name="author" content="dailey.yet@outlook.com">
 <link rel="icon"
 	href="${pageContext.request.contextPath}/static/favicon.ico">
-<title>WebScheduler Console</title>
+<title>Dashboard</title>
 <%@ include file="./template/head.style.jsp" %>
 </head>
 <body>

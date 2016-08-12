@@ -2,6 +2,7 @@ package com.openthinks.webscheduler.controller;
 
 import java.util.Collection;
 
+import org.quartz.CronExpression;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
@@ -11,9 +12,12 @@ import org.quartz.Trigger;
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
+import com.openthinks.easyweb.annotation.Jsonp;
 import com.openthinks.easyweb.annotation.Mapping;
+import com.openthinks.easyweb.annotation.ResponseReturn;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
+import com.openthinks.easyweb.utils.json.OperationJson;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.PageMap;
 import com.openthinks.webscheduler.help.StaticChecker;
@@ -24,6 +28,7 @@ import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.ITaskTrigger;
 import com.openthinks.webscheduler.model.task.SupportedTrigger;
 import com.openthinks.webscheduler.model.task.TaskAction;
+import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.service.SchedulerService;
 import com.openthinks.webscheduler.service.TaskService;
 import com.openthinks.webscheduler.task.ITaskDefinition;
@@ -39,6 +44,34 @@ public class TaskController {
 
 	private PageMap newPageMap() {
 		return PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_ACTIVESIDEBAR, "tasks");
+	}
+
+	@Mapping("/check/cron")
+	@Jsonp
+	@ResponseReturn(contentType = "text/javascript")
+	public String validateCron(WebAttributers was) {
+		String cronExpr = was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER_CRON_EXPR);
+		ProcessLogger.debug("validating cron expression:" + cronExpr);
+		if (CronExpression.isValidExpression(cronExpr)) {
+			return OperationJson.build().sucess().toString();
+		}
+		return OperationJson.build().error().toString();
+	}
+
+	@Mapping("/unschedule")
+	public String unschedule(WebAttributers was) {
+		String taskId = was.get(StaticDict.PAGE_PARAM_TASK_ID);
+		TaskRunTimeData taskRunTimeData = taskService.getTask(taskId);
+		if (!checkState(was, taskRunTimeData, TaskAction.UnSchedule)) {
+			return StaticUtils.errorPage(was, this.newPageMap());
+		}
+		boolean isSuccess = schedulerService.unschedule(taskRunTimeData);
+		ProcessLogger.debug("Unschedule " + (isSuccess ? "success" : "failed") + " for task:[" + taskRunTimeData + "]");
+		if (isSuccess) {
+			taskRunTimeData.setTaskState(TaskState.UN_SCHEDULE);
+			taskService.saveTask(taskRunTimeData);
+		}
+		return index(was);
 	}
 
 	@Mapping("/stop")
@@ -95,6 +128,10 @@ public class TaskController {
 		if (!isSuccess) {
 			return StaticUtils.errorPage(was, this.newPageMap());
 		}
+		if (isSuccess) {
+			taskRunTimeData.setTaskState(TaskState.SCHEDULED);
+			taskService.saveTask(taskRunTimeData);
+		}
 		return index(was);
 	}
 
@@ -109,6 +146,15 @@ public class TaskController {
 		taskRunTimeData.setTaskTrigger(taskTrigger);
 		PageMap pm = newPageMap();
 		boolean isSuccess = true;
+		if (StaticChecker.isCronTaskTrigger(taskRunTimeData)) {
+			String cronExpr = StaticChecker.getCronExpr(taskRunTimeData);
+			isSuccess = CronExpression.isValidExpression(cronExpr);
+			if (!isSuccess) {
+				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
+						"Save new task failed, cann't parse the cron expression:[" + cronExpr + "]", WebScope.REQUEST);
+				return StaticUtils.errorPage(was, pm);
+			}
+		}
 		try {
 			taskService.saveTask(taskRunTimeData);
 			ProcessLogger.debug(taskRunTimeData.toString());
@@ -170,8 +216,16 @@ public class TaskController {
 		newTaskTrigger.setTriggerKey(oldTaskTrigger.getTriggerKey());
 		ProcessLogger.debug("On edit with new task trigger:" + newTaskTrigger.toString());
 		taskRunTimeData.setTaskTrigger(newTaskTrigger);
-
 		boolean isSuccess = true;
+		if (StaticChecker.isCronTaskTrigger(taskRunTimeData)) {
+			String cronExpr = StaticChecker.getCronExpr(taskRunTimeData);
+			isSuccess = CronExpression.isValidExpression(cronExpr);
+			if (!isSuccess) {
+				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
+						"Change task failed, cann't parse the cron expression:[" + cronExpr + "]", WebScope.REQUEST);
+				return StaticUtils.errorPage(was, pm);
+			}
+		}
 		try {
 			taskService.saveTask(taskRunTimeData);
 			ProcessLogger.debug(taskRunTimeData.toString());

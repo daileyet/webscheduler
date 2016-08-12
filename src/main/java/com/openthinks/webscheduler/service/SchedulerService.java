@@ -12,15 +12,15 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.Trigger.CompletedExecutionInstruction;
+import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
 import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 
-import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.task.ITaskTrigger;
 import com.openthinks.webscheduler.model.task.TaskState;
-import com.openthinks.webscheduler.task.ITaskDefinition;
 import com.openthinks.webscheduler.task.TaskContext;
 import com.openthinks.webscheduler.task.TaskInterruptException;
 
@@ -60,7 +60,26 @@ public class SchedulerService {
 			isSuccess = false;
 			ProcessLogger.fatal(e);
 		}
+		return isSuccess;
+	}
 
+	public boolean unschedule(TaskRunTimeData taskRunTimeData) {
+		boolean isSuccess = false;
+		try {
+			ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
+			TriggerKey triggerKey = taskTrigger.getTriggerKey();
+			if (scheduler.checkExists(triggerKey)) {
+				isSuccess = scheduler.unscheduleJob(triggerKey);
+			} else {
+				isSuccess = true;
+			}
+		} catch (SchedulerException e) {
+			isSuccess = false;
+			ProcessLogger.fatal(e);
+		} catch (Exception e) {
+			isSuccess = false;
+			ProcessLogger.fatal(e);
+		}
 		return isSuccess;
 	}
 
@@ -81,12 +100,6 @@ public class SchedulerService {
 
 	public void scheduleJob(JobDetail job, Trigger trigger) throws SchedulerException {
 		scheduler.scheduleJob(job, trigger);
-		Object dataObj = job.getJobDataMap().get(ITaskDefinition.TASK_DATA);
-		if (dataObj != null && dataObj instanceof TaskRunTimeData) {
-			TaskRunTimeData taskRunTimeData = (TaskRunTimeData) dataObj;
-			taskRunTimeData.setTaskState(TaskState.SCHEDULED);
-			WebContexts.get().lookup(TaskService.class).saveTask(taskRunTimeData);
-		}
 	}
 
 }

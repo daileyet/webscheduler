@@ -1,3 +1,4 @@
+<%@ taglib prefix="ew" uri="http://www.openthinks.com/easyweb"%>
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -12,10 +13,10 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#">Dashboard</a></li>
+				<li><a href="${ew:path('/index')}">Dashboard</a></li>
 				<li><a href="#">Settings</a></li>
 				<li><a href="#">Profile</a></li>
-				<li><a href="#">Help</a></li>
+				<li><a href="${ew:path('/help')}">Help</a></li>
 			</ul>
 			<form class="navbar-form navbar-right">
 				<input type="text" class="form-control" placeholder="Search...">

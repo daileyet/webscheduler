@@ -32,7 +32,12 @@
 							<div class="btn-group pull-right" role="group" aria-label="Action">
 								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Schedule') }">
 									<a class="btn btn-default " role="button" href="${ew:path('/task/schedule') }?taskid=${pm.tm.taskId }">
-										<span title="Schedule" class="glyphicon glyphicon-play" aria-hidden="true"></span>Schedule
+										<span title="Schedule" class="glyphicon glyphicon-log-in" aria-hidden="true"></span>Schedule
+									</a> 
+								</c:if>
+								<c:if test="${wsfn:isAvaiableWith(pm.tm,'UnSchedule') }">
+									<a class="btn btn-default btn-danger" role="button" href="${ew:path('/task/unschedule') }?taskid=${pm.tm.taskId }">
+										<span title="UnSchedule" class="glyphicon glyphicon-log-out" aria-hidden="true"></span>UnSchedule
 									</a> 
 								</c:if>
 								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Stop') }">
@@ -46,7 +51,7 @@
 								</a>
 								</c:if> 
 								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Remove') }">
-									<a class="btn btn-default " href="${ew:path('/task/remove') }?taskid=${pm.tm.taskId }" data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
+									<a class="btn btn-default btn-danger" href="${ew:path('/task/remove') }?taskid=${pm.tm.taskId }" data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
 										<span title="Remove" class="glyphicon glyphicon-trash" aria-hidden="true"></span>Remove
 									</a>
 								</c:if>	

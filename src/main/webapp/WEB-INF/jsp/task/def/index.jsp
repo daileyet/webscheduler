@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="dailey.yet@outlook.com">
-<title>Task - New</title>
+<title>Task - Definition</title>
 <%@ include file="../../template/head.style.jsp"%>
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/lib/codemirror.css')}">
 <link rel="stylesheet" href="${ew:pathS('/static/CodeMirror/addon/display/fullscreen.css')}">
