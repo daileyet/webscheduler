@@ -35,9 +35,13 @@ import javax.tools.JavaFileObject;
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
+import com.openthinks.easyweb.annotation.Jsonp;
 import com.openthinks.easyweb.annotation.Mapping;
+import com.openthinks.easyweb.annotation.ResponseReturn;
+import com.openthinks.easyweb.annotation.ResponseReturn.ResponseReturnType;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
+import com.openthinks.easyweb.utils.json.OperationJson;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.JavaCompileHelper;
 import com.openthinks.webscheduler.help.JavaCompileHelper.JCompiler;
@@ -66,16 +70,55 @@ public class TaskDefController {
 	@Mapping("/index")
 	public String index(WebAttributers was) {
 		PageMap pm = newPageMap();
-		taskService.getTaskDefs();
 		pm.push(StaticDict.PAGE_ATTRIBUTE_CUSTOM_TASKS, TaskTypes.getCustomTaskMetaData());
 		String fullclassname = was.get(StaticDict.PAGE_PARAM_TASK_DEF_CLASS_NAME);
 		if (fullclassname != null && !"".equals(fullclassname.trim())) {
 			TaskDefRuntimeData defRuntimeData = taskService.getTaskDef(fullclassname);
-			pm.push(StaticDict.PAGE_PARAM_TASK_DEF_CODE, defRuntimeData.getSourceCode());
-			pm.push(StaticDict.PAGE_PARAM_TASK_DEF_CLASS_NAME, fullclassname);
+			if (defRuntimeData == null) {
+				defRuntimeData = new TaskDefRuntimeData();
+				defRuntimeData.setFullName(fullclassname);
+				defRuntimeData.makeDefault();
+			}
+			pm.push(StaticDict.PAGE_ATTRIBUTE_TASK_DEF, defRuntimeData);
 		}
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
 		return "WEB-INF/jsp/task/def/index.jsp";
+	}
+
+	@Mapping("/check")
+	@Jsonp
+	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
+	public String checkCompile(WebAttributers was) {
+		String defSourceCode = was.get(StaticDict.PAGE_PARAM_TASK_DEF_CODE);
+		String defFullclassnmae = was.get(StaticDict.PAGE_PARAM_TASK_DEF_CLASS_NAME);
+		TaskDefRuntimeData defRuntimeData = new TaskDefRuntimeData();
+		SourceCodeInfo sci = SourceCodeHelper.buildTaskDef(defSourceCode);
+		defRuntimeData.setSourceCode(defSourceCode);
+		defRuntimeData.setFileName(sci.getFileName());
+		defRuntimeData.setFullName(sci.getClassFullName());
+		defRuntimeData.setKeepSourceFile(false);
+		defRuntimeData.makeDefault();
+		if (defFullclassnmae == null || "".equals(defFullclassnmae.trim()))
+			defFullclassnmae = sci.getClassFullName();
+		JCompiler compiler = JavaCompileHelper.getCompiler(defRuntimeData);
+		defRuntimeData.getLastCompileResult().start();
+		if (!checkDefinition(null, defRuntimeData, defFullclassnmae, sci)) {
+			defRuntimeData.getLastCompileResult().end();
+			defRuntimeData.getLastCompileResult().setSuccess(false);
+			return OperationJson.build().error(defRuntimeData.getLastCompileResult().toString()).toString();
+		}
+		boolean isSuccess = compiler.exec();
+		defRuntimeData.getLastCompileResult().end();
+		defRuntimeData.getLastCompileResult().setSuccess(isSuccess);
+		if (!isSuccess) {
+			DiagnosticCollector<JavaFileObject> diagnosticCollector = compiler.getDiagnostics();
+			List<Diagnostic<? extends JavaFileObject>> diagnostics = diagnosticCollector.getDiagnostics();
+			for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics) {
+				defRuntimeData.getLastCompileResult().track(diagnostic.toString());
+			}
+			return OperationJson.build().error(defRuntimeData.getLastCompileResult().toString()).toString();
+		}
+		return OperationJson.build().sucess(defRuntimeData.getLastCompileResult().toString()).toString();
 	}
 
 	@Mapping("/apply")
@@ -88,7 +131,7 @@ public class TaskDefController {
 			defRuntimeData = new TaskDefRuntimeData();
 		}
 		SourceCodeInfo sci = SourceCodeHelper.buildTaskDef(defSourceCode);
-		if (!checkDefinition(was, defFullclassnmae, sci)) {
+		if (!checkDefinition(was, null, defFullclassnmae, sci)) {
 			return StaticUtils.errorPage(was, pm);
 		}
 		defRuntimeData.setSourceCode(defSourceCode);
@@ -128,16 +171,25 @@ public class TaskDefController {
 		return StaticUtils.intermediatePage(was, pm);
 	}
 
-	protected boolean checkDefinition(WebAttributers was, String defFullclassnmae, SourceCodeInfo sci) {
+	protected boolean checkDefinition(WebAttributers was, TaskDefRuntimeData defRuntimeData, String defFullclassnmae,
+			SourceCodeInfo sci) {
+		String error_code = "Invalid custom task definition source code.";
 		if (!sci.validate()) {
-			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Invalid custom task definition source code.",
-					WebScope.REQUEST);
+			if (was != null)
+				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, error_code, WebScope.REQUEST);
+			if (defRuntimeData != null) {
+				defRuntimeData.getLastCompileResult().track(error_code);
+			}
 			return false;
 		}
+		error_code = "Could not match class name with selected custom task type.";
 		if (defFullclassnmae != null && !"".equals(defFullclassnmae.trim())
 				&& !defFullclassnmae.equals(sci.getClassFullName())) {
-			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2,
-					"Could not match class name with selected custom task type.", WebScope.REQUEST);
+			if (was != null)
+				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_2, error_code, WebScope.REQUEST);
+			if (defRuntimeData != null) {
+				defRuntimeData.getLastCompileResult().track(error_code);
+			}
 			return false;
 		}
 		return true;

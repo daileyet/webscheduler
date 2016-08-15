@@ -37,7 +37,9 @@
 								<option data-content="<span class='label label-warning'>New Task Definition</span>" value=""  >New Task Definition</option>
 								<option data-divider="true"></option>
 								<c:forEach var="tm" items="${pm.customTasks }">
-									<option value="${tm.type.name }"  <c:if test="${pm.customtasktype==tm.type.name }">selected</c:if> >${tm.type.simpleName }</option>
+									<option value="${tm.type.name }" 
+									 data-link="${ew:path('/task/def/index') }?customtasktype=${tm.type.name}" 
+									<c:if test="${pm.tdf.fullName==tm.type.name }">selected</c:if> >${tm.type.simpleName }</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -53,7 +55,7 @@
 						<div class="col-sm-12">
 							<div class="btn-toolbar" role="toolbar" id="taskdef-toolbar" aria-label="Definition Toolbar">
 							  <div class="btn-group" role="group" aria-label="Definition group">
-							  	<button data-role="compile" type="button" title="compile & check" class="btn btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
+							  	<button data-link="${ew:path('/task/def/check') }" data-role="compile" type="button" title="compile & check" class="btn btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
 							  	<button data-role="example" type="button" title="show example" class="btn btn-default"><i class="fa fa-lightbulb-o" aria-hidden="true"></i></button>
 							  	<button data-role="copy" type="button" title="copy to clipboard" class="btn btn-default" data-clipboard-target="#taskdef"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
 							  	<button data-role="clear" type="button" title="clear" class="btn btn-default"><i class="fa fa-eraser" aria-hidden="true"></i></button>
@@ -63,15 +65,17 @@
 							</div>
 							<ul class="nav nav-tabs" role="tablist">
 							  <li role="presentation" class="active"><a href="#taskdefcontainer" role="tab" data-toggle="tab">Source</a></li>
-							  <li role="presentation"><a href="#taskdefresultcontainer" role="tab" data-toggle="tab">Result</a></li>
+							  <li role="presentation">
+								  <a href="#taskdefresultcontainer" role="tab" data-toggle="tab" class="">Result</a>
+							  </li>
 							</ul>
 							
 							<div class="tab-content">
 							    <div role="tabpanel" class="tab-pane active" id="taskdefcontainer">
-							    	<textarea class="form-control " id="taskdef" name="taskdef" rows="10" required></textarea>
+							    	<textarea class="form-control " id="taskdef" name="taskdef" rows="10" required>${pm.tdf.sourceCode }</textarea>
 							    </div>
 							    <div role="tabpanel" class="tab-pane" id="taskdefresultcontainer">
-							    	<textarea class="form-control " id="taskdefresult" name="taskdefresult" rows="10" readonly></textarea>
+							    	<textarea class="form-control " id="taskdefresult" name="taskdefresult" rows="10" readonly>${pm.tdf.lastCompileResult }</textarea>
 							    </div>
 							</div>
 						</div>

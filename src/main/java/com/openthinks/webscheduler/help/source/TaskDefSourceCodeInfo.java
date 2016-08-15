@@ -14,7 +14,7 @@ import com.openthinks.webscheduler.help.StaticDict;
 public class TaskDefSourceCodeInfo implements SourceCodeInfo {
 	private String sourceCode;
 	private static Pattern validateRegex = Pattern
-			.compile("(?:\\s?)public(?:\\s+)(?:class)(?:\\s+)(\\w+)(?:.+)(?:(?=CustomTaskDefinition))(?:.+)");
+			.compile("(?:\\s?)public(?:\\s+)(?:class)(?:\\s+)(\\w+)(?:.+)(?:(?=CustomTaskDefinition\\b))(?:.+)");
 
 	private transient Matcher matcher;
 	private boolean validate;

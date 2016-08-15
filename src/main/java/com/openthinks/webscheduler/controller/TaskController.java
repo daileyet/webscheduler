@@ -15,6 +15,7 @@ import com.openthinks.easyweb.annotation.Controller;
 import com.openthinks.easyweb.annotation.Jsonp;
 import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.annotation.ResponseReturn;
+import com.openthinks.easyweb.annotation.ResponseReturn.ResponseReturnType;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
 import com.openthinks.easyweb.utils.json.OperationJson;
@@ -48,7 +49,7 @@ public class TaskController {
 
 	@Mapping("/check/cron")
 	@Jsonp
-	@ResponseReturn(contentType = "text/javascript")
+	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
 	public String validateCron(WebAttributers was) {
 		String cronExpr = was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER_CRON_EXPR);
 		ProcessLogger.debug("validating cron expression:" + cronExpr);
