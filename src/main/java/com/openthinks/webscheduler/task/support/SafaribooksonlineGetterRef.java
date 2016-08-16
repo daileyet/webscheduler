@@ -25,8 +25,7 @@
 */
 package com.openthinks.webscheduler.task.support;
 
-import openthinks.others.safaribook.SafariBookConfigure;
-
+import com.openthinks.others.safaribook.SafariBookConfigure;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 
 /**

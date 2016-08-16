@@ -4,14 +4,13 @@ import java.io.IOException;
 
 import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.others.safaribook.SafariBookLaunch;
+import com.openthinks.others.webpages.exception.LaunchFailedException;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.task.TaskContext;
 import com.openthinks.webscheduler.task.TaskDefinitionDescriber;
 import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
-
-import openthinks.others.safaribook.SafariBookLaunch;
-import openthinks.others.webpages.exception.LaunchFailedException;
 
 public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 
@@ -22,6 +21,7 @@ public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 		TaskRunTimeData taskRunTimeData = getTaskRunTimeData(context).get();
 		try {
 			bookConfigure.readString(taskRunTimeData.getTaskRefContent());
+			ProcessLogger.debug(bookConfigure.toString());
 			SafariBookLaunch bookLaunch = new SafariBookLaunch(bookConfigure);
 			bookLaunch.start();
 		} catch (IOException e) {

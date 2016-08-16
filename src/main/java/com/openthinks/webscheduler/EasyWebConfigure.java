@@ -34,6 +34,7 @@ public class EasyWebConfigure implements Bootstrap {
 	@Override
 	public void initial() {
 		ProcessLogger.currentLevel = ProcessLogger.PLLevel.DEBUG;
+		//MapDBHelper.setUp(new File(System.getProperty("user.dir")), StaticDict.STORE_DB);
 		schedulerService = WebContexts.get().lookup(SchedulerService.class);
 		ProcessLogger.info("Start WebScheduler...");
 		try {
