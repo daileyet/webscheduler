@@ -36,6 +36,7 @@ import com.openthinks.libs.utilities.Checker;
 import com.openthinks.webscheduler.dao.ITaskDao;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.task.TaskState;
 
 /**
  * @author dailey.yet@outlook.com
@@ -83,9 +84,12 @@ public class TaskMapDBStore implements ITaskDao {
 
 	@Override
 	public boolean delete(String taskId) {
-		boolean result = taskMap_onDisk.remove(taskId) != null;
+		//		boolean result = taskMap_onDisk.remove(taskId) != null;
+		TaskRunTimeData trtd = get(taskId);
+		trtd.setTaskState(TaskState.INVALID);
+		taskMap_onDisk.put(taskId, trtd);
 		MapDBHelper.getDiskDB().commit();
-		return result;
+		return true;
 	}
 
 }

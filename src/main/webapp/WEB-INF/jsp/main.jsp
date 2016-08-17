@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="ew" uri="http://www.openthinks.com/easyweb"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,37 +26,19 @@
 				<h1 class="page-header">Dashboard</h1>
 
 				<div class="row placeholders">
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
+					<div class="col-xs-12 col-sm-6  placeholder">
+						<div style="max-width:400px;">
+							<canvas id="chart1" class="chart" width="200" height="200"  class="img-responsive" data-link="${ew:path('/chart1') }"></canvas>
+							<h4>Task Types</h4>
+							<span class="text-muted">Something else</span>
+						</div>
 					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
-					</div>
-					<div class="col-xs-6 col-sm-3 placeholder">
-						<img
-							src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Label</h4>
-						<span class="text-muted">Something else</span>
+					<div class="col-xs-12 col-sm-6 placeholder">
+						<div style="max-width:400px;">
+							<canvas  id="chart2" class="chart" width="200" height="200"  class="img-responsive" data-link="${ew:path('/chart2') }"></canvas>
+							<h4>Task States</h4>
+							<span class="text-muted">Something else</span>
+						</div>
 					</div>
 				</div>
 
@@ -63,5 +47,7 @@
 	</div>
 
 	<%@ include file="./template/body.script.jsp" %>
+	<script src="${ew:pathS('/static/Chart.js/Chart.bundle.min.js') }"></script>
+	<script src="${ew:pathS('/static/js/dashboard.js') }"></script>
 </body>
 </html>

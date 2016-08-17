@@ -8,6 +8,7 @@ import com.openthinks.webscheduler.dao.ITaskDefDao;
 import com.openthinks.webscheduler.dao.impl.mapdb.TaskDefMapDBStore;
 import com.openthinks.webscheduler.dao.impl.mapdb.TaskMapDBStore;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
 
 /**
@@ -22,6 +23,12 @@ public class TaskService {
 	public Collection<TaskRunTimeData> getValidTasks() {
 		return taskStore.getTasks((task) -> {
 			return task.isValid();
+		});
+	}
+
+	public Collection<TaskRunTimeData> getTasksByState(TaskState taskState) {
+		return taskStore.getTasks((task) -> {
+			return task.getTaskState() == taskState;
 		});
 	}
 
