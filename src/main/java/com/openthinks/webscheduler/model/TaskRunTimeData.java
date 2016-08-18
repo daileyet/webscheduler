@@ -75,7 +75,7 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 		try {
 			return getTaskClass().getSimpleName();
 		} catch (ClassNotFoundException e) {
-			String[] names = getTaskType().split(".");
+			String[] names = getTaskType().split("\\.");
 			return names[names.length - 1];
 		}
 	}
