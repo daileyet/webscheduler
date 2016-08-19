@@ -44,7 +44,8 @@ public class EchoTask implements SupportTaskDefinition {
 		Optional<TaskRunTimeData> optional = getTaskRunTimeData(context);
 		if (optional.isPresent()) {
 			TaskRunTimeData taskRunTimeData = optional.get();
-			if (taskRunTimeData.getTaskRefContent() == null || taskRunTimeData.getTaskRefContent().trim().length() == 0) {
+			if (taskRunTimeData.getTaskRefContent() == null
+					|| taskRunTimeData.getTaskRefContent().trim().length() == 0) {
 				for (int i = 0; i <= 100; i++) {
 					echo("Hello World(" + i + ")");
 					sleep();
@@ -57,7 +58,7 @@ public class EchoTask implements SupportTaskDefinition {
 					if ("exception".equalsIgnoreCase(propertyName)) {
 						Optional<String> optional2 = taskRunTimeData.getTaskRef().getProp(propertyName);
 						if (optional2.isPresent() && "true".equalsIgnoreCase(optional2.get())) {
-							throw new IllegalArgumentException("This is illegal parameter configure items.");
+							break;
 						}
 					}
 					echo(propertyName + "=" + taskRunTimeData.getTaskRef().getProp(propertyName));

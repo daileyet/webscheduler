@@ -56,10 +56,8 @@ public interface ITaskDefinition extends InterruptableJob {
 		try {
 			execute(taskContext);
 		} catch (Exception e) {
-			taskContext.syncTaskRuntimeData();
-			throw e;
+			throw new JobExecutionException(e);
 		}
-		taskContext.syncTaskRuntimeData();
 	}
 
 	/**

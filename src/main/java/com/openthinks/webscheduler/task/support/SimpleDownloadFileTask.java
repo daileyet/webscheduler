@@ -44,6 +44,7 @@ import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.task.TaskContext;
 import com.openthinks.webscheduler.task.TaskDefinitionDescriber;
+import com.openthinks.webscheduler.task.TaskInterruptException;
 import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
 
 /**
@@ -97,6 +98,7 @@ public class SimpleDownloadFileTask implements SupportTaskDefinition {
 			ProcessLogger.debug("Finish download!");
 		} catch (IOException e) {
 			ProcessLogger.error(this.getClass().getName(), e);
+			throw new TaskInterruptException(e);
 		} finally {
 			if (fos != null)
 				try {

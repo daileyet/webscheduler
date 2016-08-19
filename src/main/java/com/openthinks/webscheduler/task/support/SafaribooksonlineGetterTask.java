@@ -1,15 +1,12 @@
 package com.openthinks.webscheduler.task.support;
 
-import java.io.IOException;
-
 import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.others.safaribook.SafariBookLaunch;
-import com.openthinks.others.webpages.exception.LaunchFailedException;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
-import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.task.TaskContext;
 import com.openthinks.webscheduler.task.TaskDefinitionDescriber;
+import com.openthinks.webscheduler.task.TaskInterruptException;
 import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
 
 public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
@@ -24,15 +21,9 @@ public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 			ProcessLogger.debug(bookConfigure.toString());
 			SafariBookLaunch bookLaunch = new SafariBookLaunch(bookConfigure);
 			bookLaunch.start();
-		} catch (IOException e) {
-			taskRunTimeData.setTaskState(TaskState.INTERRUPT);
-			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
-		} catch (LaunchFailedException e) {
-			taskRunTimeData.setTaskState(TaskState.INTERRUPT);
-			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
 		} catch (Exception e) {
-			taskRunTimeData.setTaskState(TaskState.INTERRUPT);
 			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
+			throw new TaskInterruptException(e);
 		}
 
 	}
