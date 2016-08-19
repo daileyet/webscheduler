@@ -25,6 +25,7 @@
 */
 package com.openthinks.webscheduler.task;
 
+import com.openthinks.libs.utilities.InstanceUtilities;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 
 /**
@@ -32,7 +33,7 @@ import com.openthinks.webscheduler.model.task.ITaskRef;
  * @author dailey.yet@outlook.com
  *
  */
-public final class TaskRefDefinitionDescriber {
+public class TaskRefDefinitionDescriber {
 	private Class<? extends ITaskRef> taskRefClass;
 	private StringBuilder description;
 	private boolean required;
@@ -93,5 +94,19 @@ public final class TaskRefDefinitionDescriber {
 		description.append(itemDesc);
 		description.append("\r\n");
 		return this;
+	}
+
+	/**
+	 * instance {@link ITaskRef} by {@link #getTaskRefClass()}
+	 * @return ITaskRef or null when instance error
+	 */
+	public <T extends ITaskRef> T createTaskRef() {
+		T taskRef;
+		try {
+			taskRef = InstanceUtilities.create(getTaskRefClass(), null);
+		} catch (Exception e) {
+			taskRef = null;
+		}
+		return taskRef;
 	}
 }

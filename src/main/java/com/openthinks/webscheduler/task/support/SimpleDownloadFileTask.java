@@ -39,6 +39,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.help.StaticUtils;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
@@ -46,6 +47,7 @@ import com.openthinks.webscheduler.task.TaskContext;
 import com.openthinks.webscheduler.task.TaskDefinitionDescriber;
 import com.openthinks.webscheduler.task.TaskInterruptException;
 import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
+import com.openthinks.webscheduler.task.TaskRefProtected;
 
 /**
  * @author dailey.yet@outlook.com
@@ -57,10 +59,13 @@ public class SimpleDownloadFileTask implements SupportTaskDefinition {
 	public void execute(TaskContext context) {
 		ProcessLogger.debug("Start download...");
 		TaskRunTimeData taskRunTimeData = getTaskRunTimeData(context).get();
-		ITaskRef taskRef = new DefaultTaskRef();
+		ITaskRef taskRef = getTaskRefDescriber().createTaskRef();
 		FileOutputStream fos = null;
 		try {
 			taskRef.readString(taskRunTimeData.getTaskRefContent());
+			ProcessLogger.debug("Before protect:" + taskRef.toString());
+			TaskRefProtected.valueOf(getClass()).protect(taskRef);
+			ProcessLogger.debug("After protect:" + taskRef.toString());
 			checkTaskRef(taskRef);
 			Optional<String> optUrl = taskRef.getProp("download-url");
 			//"https://github.com/chartjs/Chart.js/releases/download/v2.2.1/Chart.bundle.js"
@@ -92,6 +97,7 @@ public class SimpleDownloadFileTask implements SupportTaskDefinition {
 			ReadableByteChannel rbc = Channels.newChannel(urlConnection.getInputStream());
 			//"Chart.bundle.js"
 			File file = new File(optSavedir.get(), optFilename.get());
+			StaticUtils.makeFileExist(file.getParentFile());
 			fos = new FileOutputStream(file);
 			ProcessLogger.debug("Start save...");
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);

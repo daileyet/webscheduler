@@ -31,6 +31,7 @@ import java.util.Optional;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.task.TaskContext;
+import com.openthinks.webscheduler.task.TaskRefProtected;
 
 /**
  * @author dailey.yet@outlook.com
@@ -52,6 +53,7 @@ public class EchoTask implements SupportTaskDefinition {
 				}
 			} else {
 				taskRunTimeData.preparedTaskRef();
+				TaskRefProtected.valueOf(getClass()).protect(taskRunTimeData.getTaskRef());
 				Enumeration<?> enumeration = taskRunTimeData.getTaskRef().propertyNames();
 				while (enumeration.hasMoreElements()) {
 					String propertyName = (String) enumeration.nextElement();

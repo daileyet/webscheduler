@@ -135,4 +135,11 @@ public final class StaticUtils {
 		return TriggerKey.triggerKey(name, group);
 	}
 
+	public static String getUnChangeRefsDir() {
+		File webInfDir = new File(WebUtils.getWebClassDir()).getParentFile();
+		File refsDir = new File(webInfDir, "conf/unchange-refs");
+		makeFileExist(refsDir);
+		return refsDir.getAbsolutePath();
+	}
+
 }

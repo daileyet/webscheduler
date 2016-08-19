@@ -8,6 +8,7 @@ import com.openthinks.webscheduler.task.TaskContext;
 import com.openthinks.webscheduler.task.TaskDefinitionDescriber;
 import com.openthinks.webscheduler.task.TaskInterruptException;
 import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
+import com.openthinks.webscheduler.task.TaskRefProtected;
 
 public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 
@@ -18,6 +19,7 @@ public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 		TaskRunTimeData taskRunTimeData = getTaskRunTimeData(context).get();
 		try {
 			bookConfigure.readString(taskRunTimeData.getTaskRefContent());
+			TaskRefProtected.valueOf(getClass()).protect(bookConfigure);
 			ProcessLogger.debug(bookConfigure.toString());
 			SafariBookLaunch bookLaunch = new SafariBookLaunch(bookConfigure);
 			bookLaunch.start();

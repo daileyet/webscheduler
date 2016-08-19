@@ -54,11 +54,23 @@ public class DefaultTaskRef extends Properties implements ITaskRef {
 	}
 
 	public static final TaskRefDefinitionDescriber getTaskRefDescriber() {
-		return new TaskRefDefinitionDescriber(DefaultTaskRef.class);
+		return new TaskRefDefinitionDescriber(DefaultTaskRef.class) {
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T extends ITaskRef> T createTaskRef() {
+				return (T) new DefaultTaskRef();
+			}
+		};
 	}
 
 	public static final TaskRefDefinitionDescriber getTaskRefDescriber(String description) {
-		return new TaskRefDefinitionDescriber(DefaultTaskRef.class, description);
+		return new TaskRefDefinitionDescriber(DefaultTaskRef.class, description) {
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T extends ITaskRef> T createTaskRef() {
+				return (T) new DefaultTaskRef();
+			}
+		};
 	}
 
 }
