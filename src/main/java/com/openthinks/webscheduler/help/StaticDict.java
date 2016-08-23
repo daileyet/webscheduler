@@ -62,6 +62,8 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_TASK_TRIGGER_STARTDATE = "startdate";
 	public static final String PAGE_PARAM_TASK_TRIGGER_CRON_EXPR = "cronexpr";
 
+	public static final String SERVLET_INIT_PARAM_WEBCONFIGUREPATH = "webConfigurePath";
+
 	public static final String STORE_DB = "webscheduler.odb";
 
 	public static final String CUSTOM_TASK_DEF_PACKAGE = "com.openthinks.webscheduler.task.custom";
@@ -78,5 +80,9 @@ public interface StaticDict {
 
 	public static final String TRIGGER_SUFFIX = "-Trigger";
 	public static final String DEFAULT_TASK_GROUP_NAME = "default_group";
+	public static final String CLASS_PATH_PREFIX = "classpath:";
+	public static final String FILE_PREFIX = "file:";
+	public static final String CONF_SECURITY_FILE = "security.file";
+	public static final String CONF_REFS_UNCHANGE_PATH = "refs.unchange.path";
 
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<web-security>
+	<!-- Role definitions -->
+	<roles>
+		<role id="d18480a9cda14dfa85fb21a7a5757efc">
+			<role-name>admin</role-name>
+			<role-desc>Administrator role: manager user; include contributor role</role-desc>
+		</role>
+		<role id="16a30fe5974d4bd09a0ae5ffc0985a2b">
+			<role-name>contributor</role-name>
+			<role-desc>Contributor role: manager task and custom definition; include viewer role</role-desc>
+		</role>
+		<role id="740fda352c2c43d4a9a7818ca2407b30">
+			<role-name>viewer</role-name>
+			<role-desc>Viewer role: view dashboard; view task and custom definition</role-desc>
+		</role>
+	</roles>
+	<!-- User definitions -->
+	<users>
+		<user id="ffcef8f4ec7c4bfb9934e14b130de58b">
+			<user-name>Admin</user-name>
+			<user-email>dailey.yet@outlook.com</user-email>
+			<user-pass>123456</user-pass>
+			<user-roles>
+				<user-role name="admin"/>
+				<user-role name="contributor"/>
+				<user-role id="740fda352c2c43d4a9a7818ca2407b30"/>
+			</user-roles>
+		</user>
+		<user id="d15b4cec933a42d3aef7bca21f4b3303">
+			<user-name>Dailey</user-name>
+			<user-email>dailey.dai@oracle.com</user-email>
+			<user-pass>123456</user-pass>
+			<user-roles>
+				<user-role name="contributor"/>
+			</user-roles>
+		</user>
+		<user id="d00163f85a124cc99c1f2cea752dafdf">
+			<user-name>Pi</user-name>
+			<user-email>dailey.yet@gmail.com</user-email>
+			<user-pass>123456</user-pass>
+			<user-roles>
+				<user-role id="740fda352c2c43d4a9a7818ca2407b30"/>
+			</user-roles>
+		</user>
+	</users>
+</web-security>
