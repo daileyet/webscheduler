@@ -1,7 +1,5 @@
 package com.openthinks.webscheduler;
 
-import java.io.File;
-
 import org.quartz.SchedulerException;
 
 import com.openthinks.easyweb.annotation.configure.EasyConfigure;
@@ -12,7 +10,7 @@ import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.dao.impl.mapdb.MapDBHelper;
-import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.help.confs.ConfigureHelper;
 import com.openthinks.webscheduler.service.SchedulerService;
 
 @EasyConfigure
@@ -37,9 +35,7 @@ public class EasyWebConfigure implements Bootstrap {
 	@Override
 	public void initial() {
 		ProcessLogger.currentLevel = ProcessLogger.PLLevel.DEBUG;
-		MapDBHelper.setUp(new File(System.getProperty("user.dir")), StaticDict.STORE_DB);
-		ProcessLogger
-				.debug("MapDB file:" + new File(System.getProperty("user.dir"), StaticDict.STORE_DB).getAbsolutePath());
+		ConfigureHelper.getConfigure().config();
 		schedulerService = WebContexts.get().lookup(SchedulerService.class);
 		ProcessLogger.info("Start WebScheduler...");
 		try {

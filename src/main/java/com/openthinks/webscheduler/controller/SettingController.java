@@ -16,24 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: ConfigObject.java 
-* @Package com.openthinks.webscheduler.help.confs 
+* @Title: SettingController.java 
+* @Package com.openthinks.webscheduler.controller 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Aug 23, 2016
+* @date Aug 24, 2016
 * @version V1.0   
 */
-package com.openthinks.webscheduler.help.confs;
+package com.openthinks.webscheduler.controller;
+
+import com.openthinks.easyweb.annotation.Controller;
+import com.openthinks.easyweb.annotation.Mapping;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public interface ConfigObject {
+@Controller("/setting")
+public class SettingController {
 
-	public void config();
-
-	public default ConfigObjects children() {
-		return new ConfigObjects();
+	@Mapping("/index")
+	public String index() {
+		return "WEB-INF/jsp/setting/index.jsp";
 	}
+
 }

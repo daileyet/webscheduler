@@ -47,6 +47,8 @@ public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 		describer.push("proxy-port=80");
 		describer.push("#[required]download save directory");
 		describer.push("save-dir=to/path/save/dir");
+		describer.push("#[required]download book folder name");
+		describer.push("safaribook-name=book_folder_name");
 		describer.push("#[required]identity the authorized for the download pages");
 		describer.push("need-login=true");
 		describer.push("#-------------------------------------------------");

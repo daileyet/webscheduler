@@ -47,8 +47,8 @@ import com.openthinks.webscheduler.task.support.SimpleDownloadFileTask;
  *
  */
 public final class TaskRefProtected {
-
 	private static Map<Class<? extends ITaskDefinition>, TaskRefProtected> protectedCache = new ConcurrentHashMap<>();
+	private static String unChangeRefsDir = null;
 
 	public static TaskRefProtected valueOf(Class<? extends ITaskDefinition> taskDefClass) {
 		TaskRefProtected taskRefProtected = protectedCache.get(taskDefClass);
@@ -61,10 +61,18 @@ public final class TaskRefProtected {
 		return taskRefProtected;
 	}
 
+	public static void setUnChangeRefsDir(String unChangeRefsDir) {
+		TaskRefProtected.unChangeRefsDir = unChangeRefsDir;
+	}
+
 	private void initialize() {
 		if (taskDefClass == null)
 			return;
-		File protecteRefFile = new File(StaticUtils.getUnChangeRefsDir(), taskDefClass.getName());
+		//TODO get from MapDB firstly
+
+		// if not found, then try to load from local configure file
+		String dir = (unChangeRefsDir == null ? StaticUtils.getUnChangeRefsDefaultDir(false) : unChangeRefsDir);
+		File protecteRefFile = new File(dir, taskDefClass.getName());
 		if (protecteRefFile.exists() && protecteRefFile.isFile()) {
 			taskRefUnChange = new DefaultTaskRef();
 			try {

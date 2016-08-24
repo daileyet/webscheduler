@@ -16,44 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: SecurityConfig.java 
+* @Title: MapDBConfig.java 
 * @Package com.openthinks.webscheduler.help.confs 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Aug 23, 2016
+* @date Aug 24, 2016
 * @version V1.0   
 */
 package com.openthinks.webscheduler.help.confs;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import com.openthinks.easyweb.WebUtils;
-import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.dao.impl.mapdb.MapDBHelper;
 import com.openthinks.webscheduler.exception.FailedConfigPath;
 import com.openthinks.webscheduler.exception.UnSupportConfigPath;
 import com.openthinks.webscheduler.help.StaticDict;
-import com.openthinks.webscheduler.model.security.WebSecurity;
-import com.openthinks.webscheduler.service.WebSecurityService;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public class SecurityConfig extends AbstractConfigObject {
-	private WebSecurity webSecurity;
+public class MapDBConfig extends AbstractConfigObject {
 
-	public SecurityConfig(String configPath, ConfigObject parent) {
+	public MapDBConfig(String configPath, ConfigObject parent) {
 		super(configPath, parent);
 	}
 
-	public SecurityConfig(String configPath) {
+	public MapDBConfig(String configPath) {
 		super(configPath);
 	}
 
@@ -63,39 +54,25 @@ public class SecurityConfig extends AbstractConfigObject {
 	@Override
 	public void config() {
 		ProcessLogger.debug(getClass() + " start config...");
+		File dbFile = null;
 		if (configPath.startsWith(StaticDict.CLASS_PATH_PREFIX)) {//classpath:/conf/security.xml
 			String classpath = configPath.substring(StaticDict.CLASS_PATH_PREFIX.length());
-			InputStream in = SecurityConfig.class.getResourceAsStream(classpath);
-			try {
-				unmarshal(in);
-			} catch (JAXBException e) {
-				throw new FailedConfigPath(configPath, e);
-			}
+			dbFile = new File(WebUtils.getWebClassDir(), classpath);
 		} else if (configPath.startsWith(StaticDict.FILE_PREFIX)) {//file:R:/MyGit/webscheduler/target/classes/conf/security.xml
 			String filePath = configPath.substring(StaticDict.FILE_PREFIX.length());
 			File file = new File(filePath), absoulteFile = file, relativeFile = null;
-			if (!absoulteFile.exists()) {
+			if (!absoulteFile.getParentFile().exists()) {
 				relativeFile = new File(WebUtils.getWebClassDir(), filePath);
 				file = relativeFile;
 			}
-			if (file == null || !file.exists()) {
-				throw new FailedConfigPath(configPath);
-			}
-			try {
-				unmarshal(new FileInputStream(file));
-			} catch (Exception e) {
-				throw new FailedConfigPath(configPath, e);
-			}
+			dbFile = file;
 		} else {
 			throw new UnSupportConfigPath(configPath);
 		}
-	}
-
-	private void unmarshal(InputStream in) throws JAXBException {
-		JAXBContext jaxbContext = JAXBContext.newInstance(WebSecurity.class);
-		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-		this.webSecurity = (WebSecurity) unmarshaller.unmarshal(in);
-		WebContexts.get().lookup(WebSecurityService.class).init(this.webSecurity);
+		if (dbFile == null || !dbFile.isFile()) {
+			throw new FailedConfigPath(configPath);
+		}
+		MapDBHelper.setUp(dbFile);
 	}
 
 }

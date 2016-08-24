@@ -25,6 +25,15 @@
 */
 package com.openthinks.webscheduler.help.confs;
 
+import java.io.File;
+
+import com.openthinks.easyweb.WebUtils;
+import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.exception.FailedConfigPath;
+import com.openthinks.webscheduler.exception.UnSupportConfigPath;
+import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.task.TaskRefProtected;
+
 /**
  * @author dailey.yet@outlook.com
  *
@@ -44,16 +53,32 @@ public class TaskRefProtectedConfig extends AbstractConfigObject {
 	 */
 	@Override
 	public void config() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see com.openthinks.webscheduler.help.confs.ConfigObject#children()
-	 */
-	@Override
-	public ConfigObjects children() {
-		return null;
+		ProcessLogger.debug(getClass() + " start config...");
+		if (configPath == null)
+			return;
+		File unChangeRefDir = null;
+		if (configPath.startsWith(StaticDict.CLASS_PATH_PREFIX)) {//classpath:/conf/unchange-refs/
+			String classpath = configPath.substring(StaticDict.CLASS_PATH_PREFIX.length());
+			unChangeRefDir = new File(WebUtils.getWebClassDir(), classpath);
+			if (!unChangeRefDir.exists()) {
+				throw new FailedConfigPath(configPath);
+			}
+		} else if (configPath.startsWith(StaticDict.FILE_PREFIX)) {//file:R:/MyGit/webscheduler/target/classes/conf/unchange-refs/
+			String filePath = configPath.substring(StaticDict.FILE_PREFIX.length());
+			File file = new File(filePath), absoulteFile = file, relativeFile = null;
+			if (!absoulteFile.exists()) {
+				relativeFile = new File(WebUtils.getWebClassDir(), filePath);
+				file = relativeFile;
+			}
+			if (file == null || !file.exists()) {
+				throw new FailedConfigPath(configPath);
+			}
+			unChangeRefDir = file;
+		} else {
+			throw new UnSupportConfigPath(configPath);
+		}
+		if (unChangeRefDir != null)
+			TaskRefProtected.setUnChangeRefsDir(unChangeRefDir.getAbsolutePath());
 	}
 
 }

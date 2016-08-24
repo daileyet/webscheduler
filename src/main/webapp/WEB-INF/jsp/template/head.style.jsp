@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="wsfn" uri="http://www.openthinks.com/webscheduler/fns"%>
 <link rel="icon" href="${pageContext.request.contextPath}/static/favicon.ico">
 
 <link rel="stylesheet"
@@ -16,7 +18,10 @@
 	rel="stylesheet">
 <link href="${pageContext.request.contextPath}/static/css/dashboard.css"
 	rel="stylesheet">
-
+<c:if test="${not wsfn:isLogin(pageContext) }">
+	<link href="${pageContext.request.contextPath}/static/css/login.modal.css"
+		rel="stylesheet">
+</c:if>
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>

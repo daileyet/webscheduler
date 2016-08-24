@@ -9,6 +9,12 @@
     <tlib-version>1.0</tlib-version>
     <short-name>functions</short-name>
 	<uri>http://www.openthinks.com/webscheduler/fns</uri>
+	
+	<function>
+		<name>isLogin</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>boolean isLogin(javax.servlet.jsp.PageContext)</function-signature>
+	</function>
 
 	<function>
 		<name>isCompleteWith</name>

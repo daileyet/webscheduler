@@ -25,6 +25,8 @@
 */
 package com.openthinks.webscheduler.help;
 
+import javax.servlet.jsp.PageContext;
+
 import com.openthinks.libs.utilities.Checker;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.ExecutionResult;
@@ -52,6 +54,11 @@ public final class StaticChecker {
 		if (!is)
 			return false;
 		return true;
+	}
+
+	public static boolean isLogin(PageContext pageContext) {
+		return (pageContext != null && pageContext.getSession() != null
+				&& pageContext.getSession().getAttribute(StaticDict.SESSION_ATTR_LOGIN_INFO) != null);
 	}
 
 	public static boolean isCompleteWith(TaskRunTimeData taskRunTimeData, boolean isSuccess) {

@@ -27,6 +27,7 @@ package com.openthinks.webscheduler.model.security;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -61,6 +62,24 @@ public class Roles {
 			return this.roles.add(role);
 		}
 		return false;
+	}
+
+	public Role findById(String roleId) {
+		List<Role> result = roles.stream().filter((role) -> {
+			if (role.getId().equals(roleId))
+				return true;
+			return false;
+		}).collect(Collectors.toList());
+		return result.isEmpty() ? null : result.get(0);
+	}
+
+	public Role findByName(String roleName) {
+		List<Role> result = roles.stream().filter((role) -> {
+			if (role.getName() != null && role.getName().equals(roleName))
+				return true;
+			return false;
+		}).collect(Collectors.toList());
+		return result.isEmpty() ? null : result.get(0);
 	}
 
 }

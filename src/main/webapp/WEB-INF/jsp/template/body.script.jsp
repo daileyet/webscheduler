@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="wsfn" uri="http://www.openthinks.com/webscheduler/fns"%>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script
 	src="${pageContext.request.contextPath}/static/jquery/1.11.3/jquery.min.js"></script>
@@ -8,3 +10,8 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script
 	src="${pageContext.request.contextPath}/static/js/ie10-viewport-bug-workaround.js"></script>
+	
+<c:if test="${not wsfn:isLogin(pageContext) }">	
+	<script
+		src="${pageContext.request.contextPath}/static/js/login.modal.js"></script>
+</c:if>

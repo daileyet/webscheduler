@@ -1,4 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ew" uri="http://www.openthinks.com/easyweb"%>
+<%@ taglib prefix="wsfn" uri="http://www.openthinks.com/webscheduler/fns"%>
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -14,13 +16,19 @@
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="${ew:path('/index')}">Dashboard</a></li>
-				<li><a href="#">Settings</a></li>
-				<li><a href="#">Profile</a></li>
+				<c:if test="${not wsfn:isLogin(pageContext) }">
+					<li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
+				</c:if>
+				<c:if test="${wsfn:isLogin(pageContext) }">
+					<li><a href="${ew:path('/setting/index')}">Settings</a></li>
+					<li><a href="#">Profile</a></li>
+				</c:if>
 				<li><a href="${ew:path('/help')}">Help</a></li>
 			</ul>
-			<form class="navbar-form navbar-right">
+			<!-- <form class="navbar-form navbar-right">
 				<input type="text" class="form-control" placeholder="Search...">
-			</form>
+			</form> -->
 		</div>
 	</div>
 </nav>
+<jsp:include page="./login.modal.jsp"></jsp:include>

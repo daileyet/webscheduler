@@ -2,6 +2,7 @@ package com.openthinks.webscheduler.model.security;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -35,5 +36,23 @@ public class Users {
 		if (this.users != null)
 			return this.users.add(user);
 		return false;
+	}
+
+	public User findById(String userId) {
+		List<User> result = users.stream().filter((user) -> {
+			if (user.getId().equals(userId))
+				return true;
+			return false;
+		}).collect(Collectors.toList());
+		return result.isEmpty() ? null : result.get(0);
+	}
+
+	public User findByName(String userName) {
+		List<User> result = users.stream().filter((user) -> {
+			if (user.getName() != null && user.getName().equals(userName))
+				return true;
+			return false;
+		}).collect(Collectors.toList());
+		return result.isEmpty() ? null : result.get(0);
 	}
 }

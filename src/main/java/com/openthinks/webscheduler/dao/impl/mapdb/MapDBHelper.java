@@ -46,6 +46,10 @@ public final class MapDBHelper {
 		storeDBPath = dbFile.getAbsolutePath();
 	}
 
+	public static final void setUp(File dbFile) {
+		storeDBPath = dbFile.getAbsolutePath();
+	}
+
 	public static final void initialize() {
 		lock.lock();
 		try {

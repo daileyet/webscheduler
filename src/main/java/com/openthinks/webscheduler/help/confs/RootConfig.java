@@ -33,6 +33,7 @@ import java.util.Properties;
 
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.context.WebContexts;
+import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.exception.FailedConfigPath;
 import com.openthinks.webscheduler.exception.UnSupportConfigPath;
 import com.openthinks.webscheduler.help.StaticDict;
@@ -52,6 +53,7 @@ public class RootConfig implements ConfigObject {
 
 	@Override
 	public void config() {
+		ProcessLogger.debug(getClass() + " start config...");
 		String webConfigurePath = WebContexts.getServletContext()
 				.getInitParameter(StaticDict.SERVLET_INIT_PARAM_WEBCONFIGUREPATH);
 		if (webConfigurePath.startsWith(StaticDict.CLASS_PATH_PREFIX)) {//classpath:/ws-conf.properties
@@ -81,16 +83,28 @@ public class RootConfig implements ConfigObject {
 			throw new UnSupportConfigPath(webConfigurePath);
 		}
 		this.initChildren();
+		this.configChildren();
+	}
+
+	private void configChildren() {
+		this.children().forEach((configObj) -> {
+			configObj.config();
+		});
+
 	}
 
 	private void initChildren() {
 		this.children.clear();
+		String mapdbFile = this.properties.getProperty(StaticDict.CONF_MAPDB_FILE);
+		MapDBConfig mapdbConfig = new MapDBConfig(mapdbFile, this);
+		children.add(mapdbConfig);
 		String securityFile = this.properties.getProperty(StaticDict.CONF_SECURITY_FILE);
 		SecurityConfig securityConfig = new SecurityConfig(securityFile, this);
 		children.add(securityConfig);
 		String unchangeRefPath = this.properties.getProperty(StaticDict.CONF_REFS_UNCHANGE_PATH);
 		TaskRefProtectedConfig protectedConfig = new TaskRefProtectedConfig(unchangeRefPath, this);
 		children.add(protectedConfig);
+
 	}
 
 	@Override

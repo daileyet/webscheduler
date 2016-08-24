@@ -16,24 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-* @Title: ConfigObject.java 
+* @Title: ConfigureHelper.java 
 * @Package com.openthinks.webscheduler.help.confs 
 * @Description: TODO
 * @author dailey.yet@outlook.com  
-* @date Aug 23, 2016
+* @date Aug 24, 2016
 * @version V1.0   
 */
 package com.openthinks.webscheduler.help.confs;
+
+import com.openthinks.easyweb.context.WebContexts;
 
 /**
  * @author dailey.yet@outlook.com
  *
  */
-public interface ConfigObject {
+public final class ConfigureHelper {
 
-	public void config();
-
-	public default ConfigObjects children() {
-		return new ConfigObjects();
+	public static final ConfigObject getConfigure() {
+		return WebContexts.get().lookup(RootConfig.class);
 	}
+
 }

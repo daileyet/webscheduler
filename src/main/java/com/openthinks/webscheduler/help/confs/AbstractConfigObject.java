@@ -30,8 +30,8 @@ package com.openthinks.webscheduler.help.confs;
  *
  */
 public abstract class AbstractConfigObject implements ConfigObject {
-	private ConfigObject parent;
-	private String configPath;
+	protected ConfigObject parent;
+	protected String configPath;
 
 	public AbstractConfigObject(String configPath, ConfigObject parent) {
 		this.configPath = configPath;
@@ -41,4 +41,21 @@ public abstract class AbstractConfigObject implements ConfigObject {
 	public AbstractConfigObject(String configPath) {
 		this(configPath, null);
 	}
+
+	public ConfigObject getParent() {
+		return parent;
+	}
+
+	public void setParent(ConfigObject parent) {
+		this.parent = parent;
+	}
+
+	public String getConfigPath() {
+		return configPath;
+	}
+
+	public void setConfigPath(String configPath) {
+		this.configPath = configPath;
+	}
+
 }
