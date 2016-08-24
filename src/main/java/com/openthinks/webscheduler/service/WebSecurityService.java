@@ -59,8 +59,9 @@ public class WebSecurityService {
 	public Optional<User> validateUser(String userName, String userPass) {
 		User user = getUsers().findByName(userName);
 		if (user != null && user.getPass().equals(userPass)) {
-			user.setPass("");
-			return Optional.of(user);
+			User loginUserInfo = user.clone();//fix second login failed issue
+			loginUserInfo.setPass(null);
+			return Optional.of(loginUserInfo);
 		}
 		return Optional.empty();
 	}

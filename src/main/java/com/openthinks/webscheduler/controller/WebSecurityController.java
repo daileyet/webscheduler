@@ -27,12 +27,14 @@ package com.openthinks.webscheduler.controller;
 
 import java.util.Optional;
 
+import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
 import com.openthinks.easyweb.annotation.Jsonp;
 import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.annotation.ResponseReturn;
 import com.openthinks.easyweb.annotation.ResponseReturn.ResponseReturnType;
+import com.openthinks.easyweb.annotation.process.objects.WebUnit;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.utils.json.OperationJson;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
@@ -70,7 +72,7 @@ public class WebSecurityController {
 	public String doLogout(WebAttributers was) {
 		was.getSession().removeAttribute(StaticDict.SESSION_ATTR_LOGIN_INFO);
 		was.getSession().invalidate();
-		return "WEB-INF/jsp/main.jsp";
+		return WebUtils.redirect("/index");
 	}
 
 }

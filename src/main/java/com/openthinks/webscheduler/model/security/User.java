@@ -112,5 +112,16 @@ public class User {
 	public void setRoleKeys(RoleKeys roleKeys) {
 		this.roleKeys = roleKeys;
 	}
+	
+	public User clone(){
+		User clone =new User();
+		clone.id=id;
+		clone.email=email;
+		clone.name=name;
+		clone.roleKeys=roleKeys;
+		clone.roles=roles;
+		clone.pass=pass;
+		return clone;
+	}
 
 }
