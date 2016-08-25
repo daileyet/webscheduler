@@ -34,7 +34,6 @@ import com.openthinks.easyweb.annotation.Jsonp;
 import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.annotation.ResponseReturn;
 import com.openthinks.easyweb.annotation.ResponseReturn.ResponseReturnType;
-import com.openthinks.easyweb.annotation.process.objects.WebUnit;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.utils.json.OperationJson;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
