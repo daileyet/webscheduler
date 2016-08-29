@@ -25,6 +25,7 @@
 */
 package com.openthinks.webscheduler.model.security;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,6 +35,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang3.SerializationUtils;
+
 /**
  * User definition
  * @author dailey.yet@outlook.com
@@ -41,7 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class User {
+public class User implements Serializable {
+	private static final long serialVersionUID = -363092122443174954L;
 	@XmlAttribute
 	private String id;
 	@XmlElement(name = "user-name")
@@ -112,16 +116,10 @@ public class User {
 	public void setRoleKeys(RoleKeys roleKeys) {
 		this.roleKeys = roleKeys;
 	}
-	
-	public User clone(){
-		User clone =new User();
-		clone.id=id;
-		clone.email=email;
-		clone.name=name;
-		clone.roleKeys=roleKeys;
-		clone.roles=roles;
-		clone.pass=pass;
-		return clone;
+
+	@Override
+	public User clone() {
+		return SerializationUtils.clone(this);
 	}
 
 }

@@ -60,6 +60,10 @@ public final class StaticUtils {
 		return DATE_FORMAT.format(date);
 	}
 
+	public static String formatNow() {
+		return formatDate(new Date());
+	}
+
 	public static Date parseDate(String dateStr) {
 		return parseDate(dateStr, StaticDict.DEFAULT_DATE_FORMAT_STYLE);
 	}

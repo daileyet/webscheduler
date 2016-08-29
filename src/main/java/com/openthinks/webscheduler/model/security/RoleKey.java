@@ -1,5 +1,7 @@
 package com.openthinks.webscheduler.model.security;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -12,7 +14,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "role")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RoleKey {
+public class RoleKey implements Serializable {
+	private static final long serialVersionUID = -2158189478671124523L;
 	@XmlAttribute
 	private String id;
 	@XmlAttribute

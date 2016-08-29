@@ -24,7 +24,7 @@ public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 			SafariBookLaunch bookLaunch = new SafariBookLaunch(bookConfigure);
 			bookLaunch.start();
 		} catch (Exception e) {
-			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
+			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e);
 			throw new TaskInterruptException(e);
 		}
 

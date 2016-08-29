@@ -67,10 +67,18 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 		this.taskName = taskName;
 	}
 
+	/**
+	 * Task definition class full name; like com.openthinks.webscheduler.task.support.EchoTask
+	 * @return String
+	 */
 	public String getTaskType() {
 		return taskType;
 	}
 
+	/**
+	 * Task definition class simple name; like EchoTask
+	 * @return String
+	 */
 	public String getTaskTypeShort() {
 		try {
 			return getTaskClass().getSimpleName();
