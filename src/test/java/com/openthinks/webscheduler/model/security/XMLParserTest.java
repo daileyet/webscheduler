@@ -9,6 +9,8 @@ import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
 
+import com.openthinks.webscheduler.help.StaticUtils;
+
 public class XMLParserTest {
 
 	@Test
@@ -32,6 +34,11 @@ public class XMLParserTest {
 		user.setName("uname");
 		user.setPass("upass");
 		user.setRoles(roles.getRoles());
+
+		RememberMeCookie cookie = new RememberMeCookie();
+		cookie.setToken("abcd");
+		cookie.setExpireTime(StaticUtils.formatNow());
+		user.setCookie(cookie);
 		users.add(user);
 
 		WebSecurity ws = new WebSecurity();
@@ -43,7 +50,7 @@ public class XMLParserTest {
 		jaxbMarshaller.marshal(ws, System.out);
 	}
 
-	@Test
+	//@Test
 	public void testUnMarshaller() throws JAXBException {
 		JAXBContext jaxbContext = JAXBContext.newInstance(WebSecurity.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();

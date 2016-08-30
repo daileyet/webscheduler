@@ -63,6 +63,10 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_TASK_TRIGGER_CRON_EXPR = "cronexpr";
 	public static final String PAGE_PARAM_LOGIN_NAME = "login_username";
 	public static final String PAGE_PARAM_LOGIN_PASS = "login_password";
+	public static final String PAGE_PARAM_LOGIN_REMEMBER = "login_remember";
+	public static final String PAGE_PARAM_LOGIN_REMEMBER_CHECKED_VAL = "CHECKED";
+	public static final String COOKIE_REMEMBER_ME = "quick_login";
+	public static final int COOKIE_REMEMBER_ME_EXPIRE_TIME = 7 * 24 * 60 * 60;
 
 	public static final String SERVLET_INIT_PARAM_WEBCONFIGUREPATH = "webConfigurePath";
 	public static final String SESSION_ATTR_LOGIN_INFO = "Session-User-^*&)((_+)$%#><?|}|$$%^~~!~@";

@@ -2,6 +2,7 @@ package com.openthinks.webscheduler.model.security;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.openthinks.webscheduler.help.StaticUtils;
 
 /**
  * User definition set
@@ -53,6 +56,26 @@ public class Users implements Serializable {
 		List<User> result = users.stream().filter((user) -> {
 			if (user.getName() != null && user.getName().equals(userName))
 				return true;
+			return false;
+		}).collect(Collectors.toList());
+		return result.isEmpty() ? null : result.get(0);
+	}
+
+	public User findByCookie(String cookieValue) {
+		List<User> result = users.stream().filter((user) -> {
+			RememberMeCookie rememberCookie = user.getCookie();
+			if (rememberCookie != null && rememberCookie.getToken().equals(cookieValue)) {
+				String expireTime = rememberCookie.getExpireTime();
+				if (expireTime != null) {
+					try {
+						if (StaticUtils.parseDate(expireTime).before(new Date()))//validate expire time
+							return false;
+					} catch (Exception e) {
+						rememberCookie.setExpireTime(StaticUtils.formatNow());
+					}
+				}
+				return true;
+			}
 			return false;
 		}).collect(Collectors.toList());
 		return result.isEmpty() ? null : result.get(0);

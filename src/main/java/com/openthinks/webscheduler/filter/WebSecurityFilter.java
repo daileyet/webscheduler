@@ -25,11 +25,16 @@
 */
 package com.openthinks.webscheduler.filter;
 
+import java.util.Optional;
+
 import com.openthinks.easyweb.WebUtils;
+import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Filter;
 import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.model.security.User;
+import com.openthinks.webscheduler.service.WebSecurityService;
 
 /**
  * @author dailey.yet@outlook.com
@@ -37,6 +42,8 @@ import com.openthinks.webscheduler.help.StaticDict;
  */
 @Filter
 public class WebSecurityFilter {
+	@AutoComponent
+	WebSecurityService securityService;
 
 	@Mapping("/task/")
 	public String auth1(WebAttributers was) {
@@ -49,7 +56,13 @@ public class WebSecurityFilter {
 	}
 
 	protected String _auth(WebAttributers was) {
+
 		if (was.getSession(StaticDict.SESSION_ATTR_LOGIN_INFO) == null) {
+			Optional<User> userOption = securityService.validateUserByCookie(was);
+			if (userOption.isPresent()) {
+				was.getSession().setAttribute(StaticDict.SESSION_ATTR_LOGIN_INFO, userOption.get());
+				return WebUtils.filterPass();
+			}
 			return WebUtils.redirect("/index");
 		}
 		return WebUtils.filterPass();

@@ -27,6 +27,8 @@ package com.openthinks.webscheduler.controller;
 
 import java.util.Optional;
 
+import javax.servlet.http.Cookie;
+
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
@@ -38,6 +40,7 @@ import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.utils.json.OperationJson;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.model.security.RememberMeCookie;
 import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.service.WebSecurityService;
 
@@ -61,10 +64,32 @@ public class WebSecurityController {
 		if (userOption.isPresent()) {
 			was.getSession().setAttribute(StaticDict.SESSION_ATTR_LOGIN_INFO, userOption.get());
 			ProcessLogger.debug("login success");
+			checkRememberMe(was);
 			return OperationJson.build().sucess().toString();
 		}
 		ProcessLogger.debug("login failed");
 		return OperationJson.build().error().toString();
+	}
+
+	/**
+	 * check if client chose the remember me option
+	 * @param was WebAttributers
+	 */
+	private void checkRememberMe(WebAttributers was) {
+		String remember = was.get(StaticDict.PAGE_PARAM_LOGIN_REMEMBER);
+		String userName = was.get(StaticDict.PAGE_PARAM_LOGIN_NAME);
+		if (remember == null || !StaticDict.PAGE_PARAM_LOGIN_REMEMBER_CHECKED_VAL.equals(remember)) {
+			User user = securityService.getUsers().findByName(userName);
+			if (user.getCookie() != null)
+				user.setCookie(null);
+			return;
+		} //ignore remember me function
+
+		//start remember me function
+		Cookie cookie = securityService.createRememberMeCookie();
+		was.getResponse().addCookie(cookie);
+		User user = securityService.getUsers().findByName(userName);
+		user.setCookie(RememberMeCookie.valueOf(cookie));
 	}
 
 	@Mapping("/logout")

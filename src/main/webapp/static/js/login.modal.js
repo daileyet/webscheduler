@@ -24,9 +24,11 @@ $(function() {
             case "login-form":
                 var $lg_username=$('#login_username').val();
                 var $lg_password=$('#login_password').val();
+                var $lg_remember=$('#login_remember');
                 doAjaxLogin({
                 	'login_username':$lg_username,
-                	'login_password':$lg_password
+                	'login_password':$lg_password,
+                	'login_remember':$lg_remember.prop('checked')?'CHECKED':''
                 });
                 return false;
                 break;

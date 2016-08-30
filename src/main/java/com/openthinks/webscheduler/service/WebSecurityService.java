@@ -27,8 +27,15 @@ package com.openthinks.webscheduler.service;
 
 import java.util.Optional;
 
+import javax.servlet.http.Cookie;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
+import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.libs.utilities.Checker;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.help.StaticUtils;
 import com.openthinks.webscheduler.model.security.Roles;
 import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.model.security.Users;
@@ -58,11 +65,41 @@ public class WebSecurityService {
 
 	public Optional<User> validateUser(String userName, String userPass) {
 		User user = getUsers().findByName(userName);
-		if (user != null && user.getPass().equals(userPass)) {
+		if (user != null && userPass != null) {
+			String encryptPass = DigestUtils.md5Hex(userPass);
+			if (user.getPass().equals(encryptPass)) {
+				User loginUserInfo = user.clone();//fix second login failed issue
+				loginUserInfo.setPass(null);
+				return Optional.of(loginUserInfo);
+			}
+		}
+		return Optional.empty();
+	}
+
+	public Optional<User> validateUserByCookie(WebAttributers was) {
+		Cookie[] cookies = was.getRequest().getCookies();
+		if (cookies == null)
+			return Optional.empty();
+		Cookie rememberCookie = null;
+		for (Cookie cookie : cookies) {
+			if (StaticDict.COOKIE_REMEMBER_ME.equals(cookie.getName()) && cookie.getValue() != null) {
+				rememberCookie = cookie;
+				break;
+			}
+		}
+		if (rememberCookie != null) {
+			User user = getUsers().findByCookie(rememberCookie.getValue());
 			User loginUserInfo = user.clone();//fix second login failed issue
 			loginUserInfo.setPass(null);
 			return Optional.of(loginUserInfo);
 		}
 		return Optional.empty();
+	}
+
+	public Cookie createRememberMeCookie() {
+		Cookie cookie = new Cookie(StaticDict.COOKIE_REMEMBER_ME, DigestUtils.sha1Hex(StaticUtils.UUID()));
+		cookie.setMaxAge(StaticDict.COOKIE_REMEMBER_ME_EXPIRE_TIME);
+		cookie.setPath(StaticUtils.getRootContext());
+		return cookie;
 	}
 }

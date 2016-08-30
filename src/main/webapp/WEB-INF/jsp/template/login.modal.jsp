@@ -33,8 +33,7 @@
 						<input id="login_password" name="login_password" class="form-control" type="password"
 							placeholder="Password" required>
 						<div class="checkbox">
-							<label> <input type="checkbox"> Remember me
-							</label>
+							<label> <input type="checkbox" id="login_remember" name="login_remember" > Remember me</label>
 						</div>
 					</div>
 					<div class="modal-footer">

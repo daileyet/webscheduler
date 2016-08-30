@@ -38,6 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.quartz.TriggerKey;
 
 import com.openthinks.easyweb.WebUtils;
+import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
@@ -85,6 +86,15 @@ public final class StaticUtils {
 			ProcessLogger.warn(e);
 		}
 		return null;
+	}
+
+	public static String getRootContext() {
+		try {
+			return WebContexts.getServletContext().getContextPath();
+		} catch (Exception e) {
+			ProcessLogger.error(e);
+		}
+		return "/";
 	}
 
 	public static String getDefaultCustomTaskSourceDir() {
@@ -145,6 +155,10 @@ public final class StaticUtils {
 		if (makeDirIfNotExist)
 			makeFileExist(refsDir);
 		return refsDir.getAbsolutePath();
+	}
+
+	public static String UUID() {
+		return java.util.UUID.randomUUID().toString();
 	}
 
 }

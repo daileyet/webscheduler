@@ -58,6 +58,8 @@ public class User implements Serializable {
 	private List<Role> roles;
 	@XmlElement(name = "user-roles")
 	private RoleKeys roleKeys;
+	@XmlElement(name = "user-cookie")
+	private RememberMeCookie cookie;
 
 	public String getId() {
 		return id;
@@ -115,6 +117,14 @@ public class User implements Serializable {
 
 	public void setRoleKeys(RoleKeys roleKeys) {
 		this.roleKeys = roleKeys;
+	}
+
+	public RememberMeCookie getCookie() {
+		return cookie;
+	}
+
+	public void setCookie(RememberMeCookie cookie) {
+		this.cookie = cookie;
 	}
 
 	@Override
