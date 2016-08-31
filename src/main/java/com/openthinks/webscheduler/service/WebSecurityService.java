@@ -89,9 +89,11 @@ public class WebSecurityService {
 		}
 		if (rememberCookie != null) {
 			User user = getUsers().findByCookie(rememberCookie.getValue());
-			User loginUserInfo = user.clone();//fix second login failed issue
-			loginUserInfo.setPass(null);
-			return Optional.of(loginUserInfo);
+			if (user != null) {
+				User loginUserInfo = user.clone();//fix second login failed issue
+				loginUserInfo.setPass(null);
+				return Optional.of(loginUserInfo);
+			}
 		}
 		return Optional.empty();
 	}

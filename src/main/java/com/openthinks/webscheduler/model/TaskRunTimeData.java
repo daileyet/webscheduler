@@ -2,6 +2,7 @@ package com.openthinks.webscheduler.model;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.openthinks.webscheduler.help.StaticDict;
@@ -28,7 +29,6 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 	private String taskType;
 	private String groupName;
 
-	@Deprecated
 	private ITaskRef taskRef;
 	private String taskRefContent;
 
@@ -186,15 +186,48 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 
 	/**
 	 * convert the task reference from text to {@link ITaskRef} 
+	 * @see DefaultTaskRef
 	 */
 	public void preparedTaskRef() {
-		if (this.taskRef != null) {
-			try {
-				this.taskRef.readString(getTaskRefContent());
-			} catch (IOException e) {
-				//ignore
-			}
+		if (!this.hasTaskRef()) {
+			this.taskRef = new DefaultTaskRef();
 		}
+		try {
+			this.taskRef.readString(getTaskRefContent());
+		} catch (IOException e) {
+			//ignore
+		}
+	}
+
+	/**
+	 * when {@link #getTaskRef()} return null, use the given @param taskRef
+	 * @param taskRef ITaskRef
+	 */
+	public void preparedTaskRef(ITaskRef taskRef) {
+		if (taskRef != null) {
+			if (!this.hasTaskRef()) {
+				try {
+					taskRef.readString(this.getTaskRefContent());
+					setTaskRef(taskRef);
+				} catch (IOException e) {
+					//ignore
+				}
+			} else {
+				this.preparedTaskRef();
+			}
+
+		}
+	}
+
+	public boolean hasTaskRef() {
+		return this.taskRef != null;
+	}
+
+	public Optional<String> getRefProp(String propertyName) {
+		if (this.taskRef != null) {
+			return this.taskRef.getProp(propertyName);
+		}
+		return Optional.empty();
 	}
 
 	@Override

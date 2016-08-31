@@ -25,7 +25,6 @@
 */
 package com.openthinks.webscheduler.task.support;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import com.openthinks.easyweb.context.WebContexts;
@@ -56,42 +55,52 @@ public class GroupTask implements SupportTaskDefinition {
 		TaskRunTimeData taskRunTimeData = getTaskRunTimeData(context).get();
 		ITaskRef taskRef = getTaskRefDescriber().createTaskRef();
 		try {
-			taskRef.readString(taskRunTimeData.getTaskRefContent());
+			taskRunTimeData.preparedTaskRef(taskRef);
 			Optional<String> ops = taskRef.getProp("task-ids");
 			if (ops.isPresent()) {
 				String taskIds = ops.get();
 				String[] ids = taskIds.split(";");
-				for (String id : ids) {
-					String _id = id.trim();
-					TaskRunTimeData trtd = null;
-					StringBuffer sb = new StringBuffer();
-					try {
-						trtd = taskService.getTask(_id);
-						ITaskDefinition taskInstance = InstanceUtilities.create(ITaskDefinition.class,
-								InstanceWrapper.build(trtd.getTaskClass()));
-						TaskContext cloneCtx = context.clone();
-						cloneCtx.setTaskRuntimeData(trtd);
-						taskInstance.execute(cloneCtx);
-						sb.append(StaticUtils.formatNow() + ": Success to execute task[id='" + _id + "',type='"
-								+ trtd.getTaskType() + "'].");
-					} catch (Exception e) {
-						ProcessLogger.warn(CommonUtilities.getCurrentInvokerMethod(), e);
-						if (trtd != null) {
-							sb.append(StaticUtils.formatNow() + ": Failed to execute task[id='" + _id + "',type='"
-									+ trtd.getTaskType() + "']; ");
-						} else {
-							sb.append(StaticUtils.formatNow() + ": Failed to execute task[id='" + _id + "']; ");
-						}
-						sb.append("error message: " + e.getMessage());
-					} finally {
-						taskRunTimeData.getLastTaskResult().track(sb.toString());
-					}
+				for (String id : ids) {//execute each task 
+					TaskContext subtaskCtx = context.clone();
+					String subResult = executeSubTask(subtaskCtx, id);
+					taskRunTimeData.getLastTaskResult().track(subResult);
+					context.syncTaskRuntimeData();
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e);
 			throw new TaskInterruptException(e);
 		}
+	}
+
+	/**
+	 * execute task by task id
+	 * @param subContext TaskContext
+	 * @param id String
+	 */
+	protected String executeSubTask(TaskContext subTaskCtx, String id) {
+		String _id = id.trim();
+		TaskRunTimeData trtd = null;
+		StringBuffer sb = new StringBuffer();
+		try {
+			trtd = taskService.getTask(_id);
+			ITaskDefinition taskInstance = InstanceUtilities.create(ITaskDefinition.class,
+					InstanceWrapper.build(trtd.getTaskClass()));
+			subTaskCtx.setTaskRuntimeData(trtd);
+			taskInstance.execute(subTaskCtx);
+			sb.append(StaticUtils.formatNow() + ": Success to execute task[id='" + _id + "',type='" + trtd.getTaskType()
+					+ "'].");
+		} catch (Exception e) {
+			ProcessLogger.warn(CommonUtilities.getCurrentInvokerMethod(), e);
+			if (trtd != null) {
+				sb.append(StaticUtils.formatNow() + ": Failed to execute task[id='" + _id + "',type='"
+						+ trtd.getTaskType() + "']; ");
+			} else {
+				sb.append(StaticUtils.formatNow() + ": Failed to execute task[id='" + _id + "']; ");
+			}
+			sb.append("error message: " + e.getMessage());
+		}
+		return sb.toString();
 	}
 
 	@Override
