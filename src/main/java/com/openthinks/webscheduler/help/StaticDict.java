@@ -87,10 +87,15 @@ public interface StaticDict {
 
 	public static final String TRIGGER_SUFFIX = "-Trigger";
 	public static final String DEFAULT_TASK_GROUP_NAME = "default_group";
+
+	//configure constant
 	public static final String CLASS_PATH_PREFIX = "classpath:";
 	public static final String FILE_PREFIX = "file:";
 	public static final String CONF_SECURITY_FILE = "security.file";
 	public static final String CONF_REFS_UNCHANGE_PATH = "refs.unchange.path";
 	public static final String CONF_MAPDB_FILE = "mapdb.file";
+	public static final String CONF_NAMESPACE = "namespace";
+	public static final String CONF_EASYWEBCLASSDIR = "easyweb.class.dir";
+	public static final String CONF_LOGGER_LEVEL = "logger.level";
 
 }

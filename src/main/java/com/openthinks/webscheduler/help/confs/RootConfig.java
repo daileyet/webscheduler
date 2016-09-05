@@ -95,16 +95,37 @@ public class RootConfig implements ConfigObject {
 
 	private void initChildren() {
 		this.children.clear();
-		String mapdbFile = this.properties.getProperty(StaticDict.CONF_MAPDB_FILE);
+		String namespace = this.properties.getProperty(StaticDict.CONF_NAMESPACE);
+		String loglevel = getProperty4Namespace(StaticDict.CONF_LOGGER_LEVEL, namespace);
+		LoggerLevelConfig loggerConfig = new LoggerLevelConfig(loglevel);
+		children.add(loggerConfig);
+		String easywebClassDir = getProperty4Namespace(StaticDict.CONF_EASYWEBCLASSDIR, namespace);
+		EasyWebClassDirConfig webClassConfig = new EasyWebClassDirConfig(easywebClassDir, this);
+		children.add(webClassConfig);
+		//mapDB configure
+		String mapdbFile = getProperty4Namespace(StaticDict.CONF_MAPDB_FILE, namespace);
 		MapDBConfig mapdbConfig = new MapDBConfig(mapdbFile, this);
 		children.add(mapdbConfig);
-		String securityFile = this.properties.getProperty(StaticDict.CONF_SECURITY_FILE);
+		//security configure
+		String securityFile = getProperty4Namespace(StaticDict.CONF_SECURITY_FILE, namespace);
 		SecurityConfig securityConfig = new SecurityConfig(securityFile, this);
 		children.add(securityConfig);
-		String unchangeRefPath = this.properties.getProperty(StaticDict.CONF_REFS_UNCHANGE_PATH);
+		//task reference protected configure
+		String unchangeRefPath = getProperty4Namespace(StaticDict.CONF_REFS_UNCHANGE_PATH, namespace);
 		TaskRefProtectedConfig protectedConfig = new TaskRefProtectedConfig(unchangeRefPath, this);
 		children.add(protectedConfig);
 
+	}
+
+	protected String getProperty4Namespace(final String propertyName, final String namespace) {
+		String propertyValue = null;
+		if (namespace != null && namespace.trim().length() > 0) {
+			propertyValue = this.properties.getProperty(namespace + "." + propertyName);
+		}
+		if (propertyValue == null) {
+			propertyValue = this.properties.getProperty(propertyName);
+		}
+		return propertyValue;
 	}
 
 	@Override

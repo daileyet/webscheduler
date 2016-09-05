@@ -30,6 +30,7 @@ public class ConfigObjects implements Iterable<ConfigObject> {
 
 	public void clear() {
 		configObjects.clear();
+
 	}
 
 }

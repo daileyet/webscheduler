@@ -34,7 +34,6 @@ public class EasyWebConfigure implements Bootstrap {
 
 	@Override
 	public void initial() {
-		ProcessLogger.currentLevel = ProcessLogger.PLLevel.DEBUG;
 		ConfigureHelper.getConfigure().config();
 		schedulerService = WebContexts.get().lookup(SchedulerService.class);
 		ProcessLogger.info("Start WebScheduler...");
