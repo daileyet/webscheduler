@@ -90,6 +90,7 @@ public class WebSecurityController {
 		was.getResponse().addCookie(cookie);
 		User user = securityService.getUsers().findByName(userName);
 		user.setCookie(RememberMeCookie.valueOf(cookie));
+		securityService.saveToDisk();
 	}
 
 	@Mapping("/logout")

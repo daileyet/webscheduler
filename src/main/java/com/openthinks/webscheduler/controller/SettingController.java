@@ -40,4 +40,9 @@ public class SettingController {
 		return "WEB-INF/jsp/setting/index.jsp";
 	}
 
+	@Mapping("/role")
+	public String role() {
+		return "WEB-INF/jsp/setting/role.jsp";
+	}
+
 }

@@ -25,9 +25,13 @@
 */
 package com.openthinks.webscheduler.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Optional;
 
 import javax.servlet.http.Cookie;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -36,6 +40,7 @@ import com.openthinks.libs.utilities.Checker;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.help.confs.SecurityConfig;
 import com.openthinks.webscheduler.model.security.Roles;
 import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.model.security.Users;
@@ -47,10 +52,20 @@ import com.openthinks.webscheduler.model.security.WebSecurity;
  */
 public class WebSecurityService {
 	private WebSecurity webSecurity;
+	private SecurityConfig securityConfig;
 
-	public void init(WebSecurity webSecurity) {
+	public void init(SecurityConfig securityConfig) {
 		ProcessLogger.debug(getClass() + " start init...");
-		this.webSecurity = webSecurity;
+		this.securityConfig = securityConfig;
+		this.webSecurity = getWebSecurity();
+	}
+
+	public WebSecurity getWebSecurity() {
+		if (this.securityConfig != null) {
+			return this.securityConfig.getWebSecurity();
+		} else {
+			return new WebSecurity();
+		}
 	}
 
 	public Roles getRoles() {
@@ -103,5 +118,24 @@ public class WebSecurityService {
 		cookie.setMaxAge(StaticDict.COOKIE_REMEMBER_ME_EXPIRE_TIME);
 		cookie.setPath(StaticUtils.getRootContext());
 		return cookie;
+	}
+
+	/**
+	 * save changes to disk file
+	 */
+	public void saveToDisk() {
+		Checker.require(this.securityConfig).notNull();
+		Checker.require(this.webSecurity).notNull();
+		File file = this.securityConfig.getConfigFile();
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+			JAXBContext jaxbContext = JAXBContext.newInstance(WebSecurity.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			jaxbMarshaller.marshal(this.webSecurity, fos);
+			fos.close();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

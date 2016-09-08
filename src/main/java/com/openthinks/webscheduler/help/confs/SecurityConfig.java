@@ -63,14 +63,20 @@ public class SecurityConfig extends AbstractConfigObject {
 	@Override
 	public void config() {
 		ProcessLogger.debug(getClass() + " start config...");
+		try {
+			InputStream in = new FileInputStream(getConfigFile());
+			unmarshal(in);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	public File getConfigFile() {
+		File configFile = null;
 		if (configPath.startsWith(StaticDict.CLASS_PATH_PREFIX)) {//classpath:/conf/security.xml
 			String classpath = configPath.substring(StaticDict.CLASS_PATH_PREFIX.length());
-			InputStream in = SecurityConfig.class.getResourceAsStream(classpath);
-			try {
-				unmarshal(in);
-			} catch (JAXBException e) {
-				throw new FailedConfigPath(configPath, e);
-			}
+			configFile = new File(WebUtils.getWebClassDir(), classpath);
 		} else if (configPath.startsWith(StaticDict.FILE_PREFIX)) {//file:R:/MyGit/webscheduler/target/classes/conf/security.xml
 			String filePath = configPath.substring(StaticDict.FILE_PREFIX.length());
 			File file = new File(filePath), absoulteFile = file, relativeFile = null;
@@ -81,21 +87,23 @@ public class SecurityConfig extends AbstractConfigObject {
 			if (file == null || !file.exists()) {
 				throw new FailedConfigPath(configPath);
 			}
-			try {
-				unmarshal(new FileInputStream(file));
-			} catch (Exception e) {
-				throw new FailedConfigPath(configPath, e);
-			}
+			configFile = file;
 		} else {
 			throw new UnSupportConfigPath(configPath);
 		}
+		return configFile;
+	}
+
+	public WebSecurity getWebSecurity() {
+		return webSecurity;
 	}
 
 	private void unmarshal(InputStream in) throws JAXBException {
+
 		JAXBContext jaxbContext = JAXBContext.newInstance(WebSecurity.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		this.webSecurity = (WebSecurity) unmarshaller.unmarshal(in);
-		WebContexts.get().lookup(WebSecurityService.class).init(this.webSecurity);
+		WebContexts.get().lookup(WebSecurityService.class).init(this);
 	}
 
 }

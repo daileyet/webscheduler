@@ -35,7 +35,7 @@
 							<span class="text-muted">Manager users</span>
 						</div>
 					</a>
-					<a href="#">
+					<a href="${ew:path('/setting/role') }">
 					<div class="col-xs-6 col-sm-6 placeholder">
 						<img src="${ew:pathS('/static/img/role_512.png')}"
 							width="200" height="200" class="img-responsive"
@@ -70,7 +70,5 @@
 	</div>
 
 	<%@ include file="../template/body.script.jsp"%>
-	<script type="text/javascript"
-		src="${ew:pathS('/static/js/task.index.js')}"></script>
 </body>
 </html>
