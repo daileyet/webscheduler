@@ -40,7 +40,8 @@ public interface StaticDict {
 	public static final String PAGE_ATTRIBUTE_ERROR_PRE = "error_";
 	public static final String PAGE_ATTRIBUTE_ACTIVESIDEBAR = "activeSidebar";
 	public static final String PAGE_ATTRIBUTE_TASK_TRIGGERS = "triggers";
-
+	public static final String PAGE_ATTRIBUTE_ROLE_LIST = "roles";
+	
 	public static final String PAGE_ATTRIBUTE_ERROR_1 = "error_1";
 	public static final String PAGE_ATTRIBUTE_ERROR_2 = "error_2";
 	public static final String PAGE_ATTRIBUTE_ERROR_3 = "error_3";
@@ -97,5 +98,6 @@ public interface StaticDict {
 	public static final String CONF_NAMESPACE = "namespace";
 	public static final String CONF_EASYWEBCLASSDIR = "easyweb.class.dir";
 	public static final String CONF_LOGGER_LEVEL = "logger.level";
+	
 
 }

@@ -24,15 +24,36 @@
 			</jsp:include>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Roles</h1>
-
-				<div class="row placeholders">
+	
+				<div class="row ">
+					<div class="table-responsive">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Name</th>
+									<th>Desc</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="role" items="${roles }" varStatus="status">
+									<tr data-id="${role.id }">
+										<td data-title="roleseq">${status.index+1 }</td>
+										<td>${role.name }</td>
+										<td>${role.desc}</td>
+										<td>&nbsp;&nbsp;</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div> 				
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<%@ include file="../template/body.script.jsp"%>
-	<script type="text/javascript"
-		src="${ew:pathS('/static/js/task.index.js')}"></script>
+
 </body>
 </html>

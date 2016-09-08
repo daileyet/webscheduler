@@ -60,7 +60,7 @@ public class WebSecurityService {
 		this.webSecurity = getWebSecurity();
 	}
 
-	public WebSecurity getWebSecurity() {
+	protected WebSecurity getWebSecurity() {
 		if (this.securityConfig != null) {
 			return this.securityConfig.getWebSecurity();
 		} else {

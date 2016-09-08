@@ -25,8 +25,15 @@
 */
 package com.openthinks.webscheduler.controller;
 
+import java.util.List;
+
+import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
 import com.openthinks.easyweb.annotation.Mapping;
+import com.openthinks.easyweb.context.handler.WebAttributers;
+import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.model.security.Role;
+import com.openthinks.webscheduler.service.WebSecurityService;
 
 /**
  * @author dailey.yet@outlook.com
@@ -34,14 +41,18 @@ import com.openthinks.easyweb.annotation.Mapping;
  */
 @Controller("/setting")
 public class SettingController {
-
+	@AutoComponent
+	WebSecurityService securityService;
+	
 	@Mapping("/index")
 	public String index() {
 		return "WEB-INF/jsp/setting/index.jsp";
 	}
 
 	@Mapping("/role")
-	public String role() {
+	public String role(WebAttributers was) {
+		List<Role> roles =securityService.getRoles().getRoles();
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_ROLE_LIST, roles);
 		return "WEB-INF/jsp/setting/role.jsp";
 	}
 

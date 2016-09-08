@@ -25,7 +25,7 @@ public class WebSecurity implements Serializable {
 		return roles;
 	}
 
-	public void setRoles(Roles roles) {
+	protected void setRoles(Roles roles) {
 		this.roles = roles;
 	}
 
@@ -33,7 +33,7 @@ public class WebSecurity implements Serializable {
 		return users;
 	}
 
-	public void setUsers(Users users) {
+	protected void setUsers(Users users) {
 		this.users = users;
 	}
 

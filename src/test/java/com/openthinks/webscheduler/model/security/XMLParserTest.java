@@ -50,7 +50,7 @@ public class XMLParserTest {
 		jaxbMarshaller.marshal(ws, System.out);
 	}
 
-	//@Test
+	@Test
 	public void testUnMarshaller() throws JAXBException {
 		JAXBContext jaxbContext = JAXBContext.newInstance(WebSecurity.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
