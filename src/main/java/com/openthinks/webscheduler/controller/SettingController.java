@@ -33,6 +33,7 @@ import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.model.security.Role;
+import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.service.WebSecurityService;
 
 /**
@@ -43,7 +44,7 @@ import com.openthinks.webscheduler.service.WebSecurityService;
 public class SettingController {
 	@AutoComponent
 	WebSecurityService securityService;
-	
+
 	@Mapping("/index")
 	public String index() {
 		return "WEB-INF/jsp/setting/index.jsp";
@@ -51,9 +52,16 @@ public class SettingController {
 
 	@Mapping("/role")
 	public String role(WebAttributers was) {
-		List<Role> roles =securityService.getRoles().getRoles();
+		List<Role> roles = securityService.getRoles().getRoles();
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_ROLE_LIST, roles);
-		return "WEB-INF/jsp/setting/role.jsp";
+		return "WEB-INF/jsp/setting/role/index.jsp";
+	}
+
+	@Mapping("/user")
+	public String user(WebAttributers was) {
+		List<User> users = securityService.getUsers().getUsers();
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_USER_LIST, users);
+		return "WEB-INF/jsp/setting/user/index.jsp";
 	}
 
 }

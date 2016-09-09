@@ -12,19 +12,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="dailey.yet@outlook.com">
-<title>Setting - Home</title>
-<%@ include file="../template/head.style.jsp"%>
+<title>Setting - Role</title>
+<%@ include file="../../template/head.style.jsp"%>
 </head>
 <body>
-	<jsp:include page="../template/navbar.jsp" />
+	<jsp:include page="../../template/navbar.jsp" />
 	<div class="container-fluid">
 		<div class="row">
-			<jsp:include page="../template/sidebar.jsp">
+			<jsp:include page="../../template/sidebar.jsp">
 				<jsp:param name="active" value="settings" />
 			</jsp:include>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h1 class="page-header">Roles</h1>
-	
+				<h1 class="page-header">Setting <small>Roles</small></h1>
+				<div class="row placeholders">
+						<div class="col-xs-12 col-sm-12 placeholder2">
+							<a href="${ew:path('/setting/role/to/add') }" class="no-underline">
+								<img src="${ew:pathS('/static/img/groupadd_512.png')}"
+									  width="150" height="150" class="img-responsive"
+									alt="Generic placeholder thumbnail">
+								<h4>New</h4>
+								<span class="text-muted">Create a role</span>
+							</a>
+						</div>
+				</div>
 				<div class="row ">
 					<div class="table-responsive">
 						<table class="table table-striped">
@@ -40,9 +50,10 @@
 								<c:forEach var="role" items="${roles }" varStatus="status">
 									<tr data-id="${role.id }">
 										<td data-title="roleseq">${status.index+1 }</td>
-										<td>${role.name }</td>
+										<td>${role.name}</td>
 										<td>${role.desc}</td>
-										<td>&nbsp;&nbsp;</td>
+										<td><a href="${ew:path('/setting/role/to/edit') }?roleid=${role.id }" >
+													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> </td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -53,7 +64,7 @@
 		</div>
 	</div>
 
-	<%@ include file="../template/body.script.jsp"%>
+	<%@ include file="../../template/body.script.jsp"%>
 
 </body>
 </html>

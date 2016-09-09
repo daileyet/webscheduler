@@ -23,47 +23,47 @@
 				<jsp:param name="active" value="settings" />
 			</jsp:include>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h1 class="page-header">Setting Home</h1>
+				<h1 class="page-header">Setting <small>Home</small></h1>
 
 				<div class="row placeholders">
-					<a href="#">
 						<div class="col-xs-6 col-sm-6 placeholder">
-							<img src="${ew:pathS('/static/img/user_512.png')}"
+							<a href="${ew:path('/setting/user') }" class="no-underline">
+								<img src="${ew:pathS('/static/img/user_512.png')}"
+									width="200" height="200" class="img-responsive"
+									alt="Generic placeholder thumbnail">
+								<h4>Users</h4>
+								<span class="text-muted">Manager users</span>
+							</a>
+						</div>
+					<div class="col-xs-6 col-sm-6 placeholder">
+						<a href="${ew:path('/setting/role') }" class="no-underline">
+							<img src="${ew:pathS('/static/img/role_512.png')}"
 								width="200" height="200" class="img-responsive"
 								alt="Generic placeholder thumbnail">
-							<h4>Users</h4>
-							<span class="text-muted">Manager users</span>
-						</div>
-					</a>
-					<a href="${ew:path('/setting/role') }">
-					<div class="col-xs-6 col-sm-6 placeholder">
-						<img src="${ew:pathS('/static/img/role_512.png')}"
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Roles</h4>
-						<span class="text-muted">Manager roles</span>
+							<h4>Roles</h4>
+							<span class="text-muted">Manager roles</span>
+						</a>
 					</div>
-					</a>
 				</div>
 				<div class="row placeholders">
-					<a href="#">
-						<div class="col-xs-6 col-sm-6 placeholder">
-							<img src="${ew:pathS('/static/img/protection_512.png')}"
+					<div class="col-xs-6 col-sm-6 placeholder">
+							<a href="#" class="no-underline">
+								<img src="${ew:pathS('/static/img/protection_512.png')}"
+									width="200" height="200" class="img-responsive"
+									alt="Generic placeholder thumbnail">
+								<h4>Protection</h4>
+								<span class="text-muted">Protect task configuration</span>
+							</a>
+					</div>
+					<div class="col-xs-6 col-sm-6 placeholder">
+						<a href="#" class="no-underline">
+							<img src="${ew:pathS('/static/img/misc_512.png')}"
 								width="200" height="200" class="img-responsive"
 								alt="Generic placeholder thumbnail">
-							<h4>Protection</h4>
-							<span class="text-muted">Protect task configuration</span>
-						</div>
-					</a>
-					<a href="#">
-					<div class="col-xs-6 col-sm-6 placeholder">
-						<img src="${ew:pathS('/static/img/misc_512.png')}"
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Misc.</h4>
-						<span class="text-muted">Other settings</span>
+							<h4>Misc.</h4>
+							<span class="text-muted">Other settings</span>
+						</a>
 					</div>
-					</a>
 				</div>
 			</div>
 		</div>

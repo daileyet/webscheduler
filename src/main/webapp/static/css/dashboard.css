@@ -104,6 +104,18 @@ body {
   border-radius: 50%;
 }
 
+.placeholder2 {
+  margin-bottom: 20px;
+}
+.placeholder2 img {
+  display: inline-block;
+  /* border-radius: 50%; */
+}
+
+.no-underline{
+	text-decoration: none !important;;
+}
+
 @media (min-width: 1200px)
 .bs-docs-sidebar.affix, .bs-docs-sidebar.affix-bottom {
     width: 263px;

@@ -23,27 +23,27 @@
 				<jsp:param name="active" value="tasks" />
 			</jsp:include>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h1 class="page-header">Task Home</h1>
+				<h1 class="page-header">Task <small>Home</small></h1>
 
 				<div class="row placeholders">
-					<a href="${ew:path('/task/to/add') }">
 						<div class="col-xs-6 col-sm-6 placeholder">
-							<img src="${ew:pathS('/static/img/createtask_512.png')}"
+							<a href="${ew:path('/task/to/add') }" class="no-underline">
+								<img src="${ew:pathS('/static/img/createtask_512.png')}"
+									width="200" height="200" class="img-responsive"
+									alt="Generic placeholder thumbnail">
+								<h4>New</h4>
+								<span class="text-muted">Create a task</span>
+							</a>
+						</div>
+					<div class="col-xs-6 col-sm-6 placeholder">
+						<a href="${ew:path('/task/def/index') }" class="no-underline">
+							<img src="${ew:pathS('/static/img/definetask_512.png')}"
 								width="200" height="200" class="img-responsive"
 								alt="Generic placeholder thumbnail">
-							<h4>New</h4>
-							<span class="text-muted">Create a task</span>
-						</div>
-					</a>
-					<a href="${ew:path('/task/def/index') }">
-					<div class="col-xs-6 col-sm-6 placeholder">
-						<img src="${ew:pathS('/static/img/definetask_512.png')}"
-							width="200" height="200" class="img-responsive"
-							alt="Generic placeholder thumbnail">
-						<h4>Define</h4>
-						<span class="text-muted">Customize task definition</span>
+							<h4>Define</h4>
+							<span class="text-muted">Customize task definition</span>
+						</a>
 					</div>
-					</a>
 				</div>
 
 				<!-- <h2 class="sub-header">Task List</h2> -->

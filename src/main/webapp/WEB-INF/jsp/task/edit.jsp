@@ -27,7 +27,7 @@
 				<jsp:param name="active" value="tasks" />
 			</jsp:include>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h1 class="page-header">Edit Task</h1>
+				<h1 class="page-header">Task <small>Edit</small></h1>
 				<form action="${ew:path('/task/edit')}" method="post"
 					class="form-horizontal">
 					<div class="form-group">
