@@ -69,7 +69,7 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_LOGIN_PASS = "login_password";
 	public static final String PAGE_PARAM_LOGIN_REMEMBER = "login_remember";
 	public static final String PAGE_PARAM_LOGIN_REMEMBER_CHECKED_VAL = "CHECKED";
-
+	public static final String PAGE_PARAM_TASK_REF_PROTECTED_CONTENT = "protectedref";
 	public static final String PAGE_PARAM_TASK_REF_PROTECTED_ID = "trpid";
 
 	public static final String COOKIE_REMEMBER_ME = "quick_login";
@@ -104,5 +104,6 @@ public interface StaticDict {
 	public static final String CONF_NAMESPACE = "namespace";
 	public static final String CONF_EASYWEBCLASSDIR = "easyweb.class.dir";
 	public static final String CONF_LOGGER_LEVEL = "logger.level";
+	
 
 }

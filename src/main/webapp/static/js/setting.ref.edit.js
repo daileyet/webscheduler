@@ -20,13 +20,18 @@
 					this.$infotxtarea = $(ctx.VIEW.Txtarea_Allref);
 					var infoeditor = CodeMirror.fromTextArea(this.$infotxtarea[0], {
 					    lineWrapping: true,
-					    lineNumbers: false,
+					    lineNumbers: true,
 					    readOnly:true,
-					    autofocus:true
+					    autofocus:false
 					  });
 					this.cm  = infoeditor;
-					
-					
+				},
+				getContent:function(){
+					if(this.cm){
+						return this.cm.doc.getValue();
+					}else{
+						return this.$infotxtarea.val();
+					}
 				}
 			},
 			refEditor : {
@@ -85,6 +90,10 @@
 				var _this = this;
 				$(ctx.VIEW.Dialog_Info).on('show.bs.modal', function(e) {
 					ctx.VIEW.components.infoEditor.init();
+					setTimeout(function(){
+						var sRef=ctx.VIEW.components.infoEditor.getContent();
+						ctx.VIEW.components.infoEditor.cm.refresh();
+					},200);
 		        });
 			}
 			

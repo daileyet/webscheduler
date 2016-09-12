@@ -25,10 +25,12 @@
 */
 package com.openthinks.webscheduler.controller;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
 import com.openthinks.easyweb.annotation.Mapping;
@@ -74,10 +76,9 @@ public class SettingController {
 
 	@Mapping("/ref")
 	public String taskRef(WebAttributers was) {
-		Iterator<Class<?>> it = TaskTypes.getAllTasks().iterator();
-		while (it.hasNext()) {
-			@SuppressWarnings("unchecked")
-			Class<? extends ITaskDefinition> defClazz = (Class<? extends ITaskDefinition>) it.next();
+		List<Class<? extends ITaskDefinition>> taskDefs = TaskTypes.getSupportTasks();
+		taskDefs.addAll(TaskTypes.getCustomTasks());
+		for(Class<? extends ITaskDefinition> defClazz:taskDefs) {
 			TaskRefProtected.valueOf(defClazz);
 		}
 		Collection<TaskRefProtected> trps = TaskRefProtected.getAllProtectedRefs();
@@ -105,6 +106,35 @@ public class SettingController {
 		}
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_PROTECTED_REF, trp);
 		return "WEB-INF/jsp/setting/ref/edit.jsp";
+	}
+	
+	@Mapping("/ref/edit")
+	public String editTaskRef(WebAttributers was){
+		String protectedClassName = was.get(StaticDict.PAGE_PARAM_TASK_REF_PROTECTED_ID);
+		String protectedRef = was.get(StaticDict.PAGE_PARAM_TASK_REF_PROTECTED_CONTENT);
+		TaskRefProtected trp = null;
+		boolean isSuccess = false;
+		PageMap pm = newPageMap();
+		try{
+			trp = TaskRefProtected.valueOf(protectedClassName);
+			trp.getTaskRefUnChange().readString(protectedRef);
+			isSuccess = true;
+		}catch (ClassNotFoundException e) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_PRE + "Param",
+					"Couldn't found this protected task class type.", WebScope.REQUEST);
+		}catch(IOException e){
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_PRE + "Param",
+					"Couldn't load this new protected refs.", WebScope.REQUEST);
+		}
+		catch (Exception e) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_PRE + "Param",
+					"Protected task class name could not be null or not a task class type.", WebScope.REQUEST);
+		}
+		if (!isSuccess) {
+			return StaticUtils.errorPage(was, pm);
+		}
+		pm.push("title", "Setting - Editing REFs").push("redirectUrl", WebUtils.path("/setting/ref"));
+		return StaticUtils.intermediatePage(was, pm);
 	}
 
 	private PageMap newPageMap() {

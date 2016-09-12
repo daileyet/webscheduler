@@ -33,8 +33,8 @@
 					<div class="form-group">
 						<label for="protectedname" class="col-sm-2 control-label">Protected task name</label>
 						<div class="col-sm-10">
-							<input type="hidden" class="form-control" id="protectedname"
-								name="protectedname"  value="${trp.taskDefClass.name }">
+							<input type="hidden" class="form-control" id="trpid"
+								name="trpid"  value="${trp.taskDefClass.name }">
 							<p class="form-control-static">${trp.taskDefClass.name}
 								<a href="#" title="show all REFs" data-toggle="modal" data-target="#allref-info">
 									<i class="fa fa-lightbulb-o" aria-hidden="true" ></i>
