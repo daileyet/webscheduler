@@ -27,9 +27,16 @@
 				<div class="row placeholders">
 						<div class="col-xs-12 col-sm-12 placeholder2" >
 							<a href="${ew:path('/setting/ref/sync') }" class="no-underline" >
-								<img src="${ew:pathS('/static/img/savetodisk_unavaiable_512.png')}"
-									  width="150" height="150" class="img-responsive"
-									alt="Generic placeholder thumbnail">
+								<c:if test="${isInSync }">
+									<img src="${ew:pathS('/static/img/savetodisk_512.png')}"
+										  width="150" height="150" class="img-responsive"
+										alt="Generic placeholder thumbnail">
+								</c:if>
+								<c:if test="${not isInSync }">
+									<img src="${ew:pathS('/static/img/savetodisk_unavaiable_512.png')}"
+										  width="150" height="150" class="img-responsive"
+										alt="Generic placeholder thumbnail">
+								</c:if>
 								<h4>Sync</h4>
 								<span class="text-muted">Sync between memory and disk</span>
 							</a>

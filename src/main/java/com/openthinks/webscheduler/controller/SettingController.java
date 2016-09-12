@@ -27,7 +27,6 @@ package com.openthinks.webscheduler.controller;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import com.openthinks.easyweb.WebUtils;
@@ -39,6 +38,7 @@ import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
 import com.openthinks.webscheduler.help.PageMap;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.model.Statable.State;
 import com.openthinks.webscheduler.model.security.Role;
 import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.service.WebSecurityService;
@@ -78,11 +78,16 @@ public class SettingController {
 	public String taskRef(WebAttributers was) {
 		List<Class<? extends ITaskDefinition>> taskDefs = TaskTypes.getSupportTasks();
 		taskDefs.addAll(TaskTypes.getCustomTasks());
+		boolean isInSync = true;
 		for(Class<? extends ITaskDefinition> defClazz:taskDefs) {
-			TaskRefProtected.valueOf(defClazz);
+			TaskRefProtected trp=TaskRefProtected.valueOf(defClazz);
+			if(!trp.isInSync()){
+				isInSync=false;
+			}
 		}
 		Collection<TaskRefProtected> trps = TaskRefProtected.getAllProtectedRefs();
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_PROTECTED_REF_LIST, trps);
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_PROTECTED_REF_IS_IN_SYNC, isInSync);
 		return "WEB-INF/jsp/setting/ref/index.jsp";
 	}
 
@@ -119,6 +124,7 @@ public class SettingController {
 			trp = TaskRefProtected.valueOf(protectedClassName);
 			trp.getTaskRefUnChange().readString(protectedRef);
 			isSuccess = true;
+			trp.moveTo(State.OUT_SYNC);
 		}catch (ClassNotFoundException e) {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_PRE + "Param",
 					"Couldn't found this protected task class type.", WebScope.REQUEST);

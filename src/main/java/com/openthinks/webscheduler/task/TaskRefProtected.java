@@ -38,6 +38,7 @@ import com.openthinks.libs.utilities.Checker;
 import com.openthinks.libs.utilities.exception.CheckerNoPassException;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.model.Statable;
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.task.support.SimpleDownloadFileTask;
@@ -50,7 +51,7 @@ import com.openthinks.webscheduler.task.support.SimpleDownloadFileTask;
  * @author dailey.yet@outlook.com
  *
  */
-public final class TaskRefProtected {
+public final class TaskRefProtected implements Statable{
 	private static Map<Class<? extends ITaskDefinition>, TaskRefProtected> protectedCache = new ConcurrentHashMap<>();
 	private static String unChangeRefsDir = null;
 
@@ -87,6 +88,10 @@ public final class TaskRefProtected {
 	//////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////
 
+	public TaskRefProtected() {
+		this.currentState = State.OUT_SYNC;
+	}
+	
 	private void initialize() {
 		if (taskDefClass == null)
 			return;
@@ -99,6 +104,7 @@ public final class TaskRefProtected {
 			taskRefUnChange = new DefaultTaskRef();
 			try {
 				taskRefUnChange.load(new FileReader(protecteRefFile));
+				this.moveTo(State.IN_SYNC);
 			} catch (IOException e) {
 				ProcessLogger.warn(e);
 			}
@@ -108,6 +114,8 @@ public final class TaskRefProtected {
 	private Class<? extends ITaskDefinition> taskDefClass;
 
 	private ITaskRef taskRefUnChange;
+	
+	private State currentState ;
 
 	public Class<? extends ITaskDefinition> getTaskDefClass() {
 		return taskDefClass;
@@ -115,6 +123,14 @@ public final class TaskRefProtected {
 
 	public ITaskRef getTaskRefUnChange() {
 		return taskRefUnChange;
+	}
+	
+	public boolean isInSync(){
+		return currentState==State.IN_SYNC;
+	}
+	
+	public State getCurrentState() {
+		return currentState;
 	}
 
 	public TaskRefDefinitionDescriber getTaskRefDescriber() {
@@ -162,4 +178,13 @@ public final class TaskRefProtected {
 
 	}
 
+	@Override
+	public State getState() {
+		return currentState;
+	}
+	
+	@Override
+	public void moveTo(State nextState) {
+		this.currentState = nextState;
+	}
 }
