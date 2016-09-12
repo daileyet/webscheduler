@@ -27,6 +27,7 @@ package com.openthinks.webscheduler.task;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -84,11 +85,23 @@ public final class TaskRefProtected implements Statable{
 	public static Collection<TaskRefProtected> getAllProtectedRefs() {
 		return protectedCache.values();
 	}
+	
+	public static void sync() {
+		Collection<TaskRefProtected> trps = protectedCache.values();
+		for(TaskRefProtected trp:trps){
+			trp.saveToDisk();
+		}
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////
+	private Class<? extends ITaskDefinition> taskDefClass;
 
-	public TaskRefProtected() {
+	private ITaskRef taskRefUnChange;
+	
+	private State currentState ;
+	
+	private TaskRefProtected() {
 		this.currentState = State.OUT_SYNC;
 	}
 	
@@ -101,7 +114,7 @@ public final class TaskRefProtected implements Statable{
 		String dir = (unChangeRefsDir == null ? StaticUtils.getUnChangeRefsDefaultDir(false) : unChangeRefsDir);
 		File protecteRefFile = new File(dir, taskDefClass.getName());
 		if (protecteRefFile.exists() && protecteRefFile.isFile()) {
-			taskRefUnChange = new DefaultTaskRef();
+			this.makeDefaultTaskRef();
 			try {
 				taskRefUnChange.load(new FileReader(protecteRefFile));
 				this.moveTo(State.IN_SYNC);
@@ -109,13 +122,29 @@ public final class TaskRefProtected implements Statable{
 				ProcessLogger.warn(e);
 			}
 		}
+		if (!protecteRefFile.exists()){
+			this.moveTo(State.IN_SYNC);
+		}
 	}
-
-	private Class<? extends ITaskDefinition> taskDefClass;
-
-	private ITaskRef taskRefUnChange;
 	
-	private State currentState ;
+	private void saveToDisk(){
+		if (taskDefClass == null)
+			return;
+		//TODO get from MapDB firstly
+
+		// if not found, then try to load from local configure file
+		String dir = (unChangeRefsDir == null ? StaticUtils.getUnChangeRefsDefaultDir(false) : unChangeRefsDir);
+		File protecteRefFile = new File(dir, taskDefClass.getName());
+		if(this.taskRefUnChange!=null){
+			try {
+				this.taskRefUnChange.store(new FileWriter(protecteRefFile), "");
+				this.moveTo(State.IN_SYNC);
+			} catch (IOException e) {
+				ProcessLogger.error(e);
+			}
+			
+		}
+	}
 
 	public Class<? extends ITaskDefinition> getTaskDefClass() {
 		return taskDefClass;
@@ -123,6 +152,15 @@ public final class TaskRefProtected implements Statable{
 
 	public ITaskRef getTaskRefUnChange() {
 		return taskRefUnChange;
+	}
+	
+	 void setTaskRefUnChange(ITaskRef taskRefUnChange) {
+		this.taskRefUnChange = taskRefUnChange;
+	}
+	
+	public ITaskRef makeDefaultTaskRef(){
+		this.taskRefUnChange = new DefaultTaskRef();
+		return this.taskRefUnChange;
 	}
 	
 	public boolean isInSync(){
@@ -187,4 +225,5 @@ public final class TaskRefProtected implements Statable{
 	public void moveTo(State nextState) {
 		this.currentState = nextState;
 	}
+
 }

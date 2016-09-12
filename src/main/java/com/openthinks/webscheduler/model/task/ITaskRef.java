@@ -28,9 +28,11 @@ package com.openthinks.webscheduler.model.task;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.io.Writer;
 import java.util.Enumeration;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Optional;
@@ -44,6 +46,7 @@ import com.openthinks.webscheduler.help.StaticChecker;
  * support two type configuration:<BR>
  * <li>properties file
  * <li>XML type properties
+ * 
  * @see DefaultTaskRef
  * @author dailey.yet@outlook.com
  *
@@ -52,6 +55,7 @@ public interface ITaskRef extends Serializable {
 
 	/**
 	 * {@link Properties#getProperty(String)}
+	 * 
 	 * @param key
 	 * @return
 	 */
@@ -59,6 +63,7 @@ public interface ITaskRef extends Serializable {
 
 	/**
 	 * {@link Properties#getProperty(String, String)}
+	 * 
 	 * @param key
 	 * @param defaultValue
 	 * @return
@@ -67,6 +72,7 @@ public interface ITaskRef extends Serializable {
 
 	/**
 	 * {@link Properties#setProperty(String, String)}
+	 * 
 	 * @param key
 	 * @param value
 	 * @return
@@ -76,6 +82,7 @@ public interface ITaskRef extends Serializable {
 	/**
 	 * 
 	 * {@link Properties#load(Reader)}
+	 * 
 	 * @param reader
 	 * @throws IOException
 	 */
@@ -83,6 +90,7 @@ public interface ITaskRef extends Serializable {
 
 	/**
 	 * {@link Properties#loadFromXML(InputStream)}
+	 * 
 	 * @param in
 	 * @throws IOException
 	 * @throws InvalidPropertiesFormatException
@@ -91,19 +99,40 @@ public interface ITaskRef extends Serializable {
 
 	/**
 	 * {@link Properties#propertyNames()}
+	 * 
 	 * @return
 	 */
 	public Enumeration<?> propertyNames();
 
 	/**
 	 * {@link Properties#stringPropertyNames()}
+	 * 
 	 * @return
 	 */
 	public Set<String> stringPropertyNames();
 
 	/**
+	 * {@link Properties#store(Writer, String)}
+	 * 
+	 * @param writer
+	 * @param comments
+	 * @throws IOException
+	 */
+	public void store(Writer writer, String comments) throws IOException;
+
+	/**
+	 * {@link Properties#store(OutputStream, String)}
+	 * @param out
+	 * @param comments
+	 * @throws IOException
+	 */
+	public void store(OutputStream out, String comments) throws IOException;
+
+	/**
 	 * get property value by given property name
-	 * @param propertyName String 
+	 * 
+	 * @param propertyName
+	 *            String
 	 * @return Optional<String>
 	 */
 	public default Optional<String> getProp(String propertyName) {
@@ -117,7 +146,9 @@ public interface ITaskRef extends Serializable {
 	/**
 	 * read content and do load<BR>
 	 * this parameter: refContent could be XML properties or pure properties
-	 * @param refContent String
+	 * 
+	 * @param refContent
+	 *            String
 	 * @throws IOException
 	 */
 	public default void readString(String refContent) throws IOException {

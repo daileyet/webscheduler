@@ -41,6 +41,7 @@ import com.openthinks.webscheduler.help.StaticUtils;
 import com.openthinks.webscheduler.model.Statable.State;
 import com.openthinks.webscheduler.model.security.Role;
 import com.openthinks.webscheduler.model.security.User;
+import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.service.WebSecurityService;
 import com.openthinks.webscheduler.task.ITaskDefinition;
 import com.openthinks.webscheduler.task.TaskRefProtected;
@@ -122,7 +123,11 @@ public class SettingController {
 		PageMap pm = newPageMap();
 		try{
 			trp = TaskRefProtected.valueOf(protectedClassName);
-			trp.getTaskRefUnChange().readString(protectedRef);
+			ITaskRef taskRef=trp.getTaskRefUnChange();
+			if(taskRef==null){//not exist this protected REF file
+				taskRef = trp.makeDefaultTaskRef();
+			}
+			taskRef.readString(protectedRef);
 			isSuccess = true;
 			trp.moveTo(State.OUT_SYNC);
 		}catch (ClassNotFoundException e) {
@@ -140,6 +145,14 @@ public class SettingController {
 			return StaticUtils.errorPage(was, pm);
 		}
 		pm.push("title", "Setting - Editing REFs").push("redirectUrl", WebUtils.path("/setting/ref"));
+		return StaticUtils.intermediatePage(was, pm);
+	}
+	
+	@Mapping("/ref/sync")
+	public String syncRef(WebAttributers was){
+		TaskRefProtected.sync();
+		PageMap pm = newPageMap();
+		pm.push("title", "Setting - Syncing REFs").push("redirectUrl", WebUtils.path("/setting/ref"));
 		return StaticUtils.intermediatePage(was, pm);
 	}
 

@@ -28,12 +28,12 @@
 						<div class="col-xs-12 col-sm-12 placeholder2" >
 							<a href="${ew:path('/setting/ref/sync') }" class="no-underline" >
 								<c:if test="${isInSync }">
-									<img src="${ew:pathS('/static/img/savetodisk_512.png')}"
+									<img src="${ew:pathS('/static/img/savetodisk_512.png')}" title="In sync"
 										  width="150" height="150" class="img-responsive"
 										alt="Generic placeholder thumbnail">
 								</c:if>
 								<c:if test="${not isInSync }">
-									<img src="${ew:pathS('/static/img/savetodisk_unavaiable_512.png')}"
+									<img src="${ew:pathS('/static/img/savetodisk_unavaiable_512.png')}" title="Out of sync"
 										  width="150" height="150" class="img-responsive"
 										alt="Generic placeholder thumbnail">
 								</c:if>
