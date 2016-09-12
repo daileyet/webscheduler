@@ -27,9 +27,11 @@ package com.openthinks.webscheduler.model.task;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
+import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
 
 /**
@@ -73,4 +75,19 @@ public class DefaultTaskRef extends Properties implements ITaskRef {
 		};
 	}
 
+	public String getContent() {
+		StringWriter stringWriter = new StringWriter();
+		try {
+			this.store(stringWriter, "");
+		} catch (IOException e) {
+			ProcessLogger.warn(e);
+		} finally {
+			try {
+				stringWriter.close();
+			} catch (IOException e) {
+				ProcessLogger.warn(e);
+			}
+		}
+		return stringWriter.toString();
+	}
 }

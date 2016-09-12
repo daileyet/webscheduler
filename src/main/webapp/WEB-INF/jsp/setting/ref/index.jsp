@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="dailey.yet@outlook.com">
-<title>Setting - User</title>
+<title>Setting - Protected REFs</title>
 <%@ include file="../../template/head.style.jsp"%>
 </head>
 <body>
@@ -23,19 +23,10 @@
 				<jsp:param name="active" value="settings" />
 			</jsp:include>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h1 class="page-header">Setting <small>Users</small></h1>
+				<h1 class="page-header">Setting <small>REFs</small></h1>
 				<div class="row placeholders">
-						<div class="col-xs-6 col-sm-6 placeholder2">
-							<a href="${ew:path('/setting/user/to/add') }" class="no-underline">
-								<img src="${ew:pathS('/static/img/useradd_512.png')}"
-									  width="150" height="150" class="img-responsive"
-									alt="Generic placeholder thumbnail">
-								<h4>New</h4>
-								<span class="text-muted">Create a user</span>
-							</a>
-						</div>
-						<div class="col-xs-6 col-sm-6 placeholder" >
-							<a href="${ew:path('/setting/user/sync') }" class="no-underline" >
+						<div class="col-xs-12 col-sm-12 placeholder2" >
+							<a href="${ew:path('/setting/ref/sync') }" class="no-underline" >
 								<img src="${ew:pathS('/static/img/savetodisk_unavaiable_512.png')}"
 									  width="150" height="150" class="img-responsive"
 									alt="Generic placeholder thumbnail">
@@ -50,22 +41,18 @@
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>Name</th>
-									<th>Roles</th>
+									<th>Protected Task Name</th>
+									<th>Protected Count</th>
 									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="user" items="${users }" varStatus="status">
-									<tr data-id="${user.id }">
-										<td data-title="userseq">${status.index+1 }</td>
-										<td>${user.name}</td>
-										<td>
-											<c:forEach var="role" items="${user.roleKeys.roles }">
-												<span>${role.name}</span> 
-											</c:forEach>
-										</td>
-										<td><a href="${ew:path('/setting/user/to/edit') }?userid=${user.id }" >
+								<c:forEach var="trp" items="${trps }" varStatus="status">
+									<tr data-id="${trp.taskDefClass.name }">
+										<td data-title="trpseq">${status.index+1 }</td>
+										<td>${trp.taskDefClass.name}</td>
+										<td>${trp.protectedCount }</td>
+										<td><a href="${ew:path('/setting/ref/to/edit') }?trpid=${trp.taskDefClass.name}" >
 													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> </td>
 									</tr>
 								</c:forEach>

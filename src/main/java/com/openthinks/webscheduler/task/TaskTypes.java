@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -135,6 +136,14 @@ public final class TaskTypes {
 			list.add(new TaskDefinitionMetaData(taskDefinition));
 		});
 		return list;
+	}
+
+	public static Optional<TaskDefinitionMetaData> getTaskMetaData(Class<? extends ITaskDefinition> clazz) {
+		ITaskDefinition taskDefinition = taskInstanceSingletonMap.get(clazz);
+		if (taskDefinition == null) {
+			return Optional.empty();
+		}
+		return Optional.of(new TaskDefinitionMetaData(taskDefinition));
 	}
 
 	static void clear() {

@@ -1,15 +1,3 @@
-.CodeMirror {
-	display: block;
-	width: 100%;
-	font-size: 14px;
-	line-height: 1.42857143;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
-
-.CodeMirror-fullscreen{
-	z-index:2000;
-}
 
 #taskref, #taskdef {
 	position: absolute;

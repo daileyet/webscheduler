@@ -47,7 +47,7 @@
 				</div>
 				<div class="row placeholders">
 					<div class="col-xs-6 col-sm-6 placeholder">
-							<a href="#" class="no-underline">
+							<a href="${ew:path('/setting/ref') }" class="no-underline">
 								<img src="${ew:pathS('/static/img/protection_512.png')}"
 									width="200" height="200" class="img-responsive"
 									alt="Generic placeholder thumbnail">

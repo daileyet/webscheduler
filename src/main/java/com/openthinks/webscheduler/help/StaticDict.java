@@ -42,6 +42,8 @@ public interface StaticDict {
 	public static final String PAGE_ATTRIBUTE_TASK_TRIGGERS = "triggers";
 	public static final String PAGE_ATTRIBUTE_ROLE_LIST = "roles";
 	public static final String PAGE_ATTRIBUTE_USER_LIST = "users";
+	public static final String PAGE_ATTRIBUTE_PROTECTED_REF_LIST = "trps";
+	public static final String PAGE_ATTRIBUTE_PROTECTED_REF = "trp";
 
 	public static final String PAGE_ATTRIBUTE_ERROR_1 = "error_1";
 	public static final String PAGE_ATTRIBUTE_ERROR_2 = "error_2";
@@ -67,6 +69,9 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_LOGIN_PASS = "login_password";
 	public static final String PAGE_PARAM_LOGIN_REMEMBER = "login_remember";
 	public static final String PAGE_PARAM_LOGIN_REMEMBER_CHECKED_VAL = "CHECKED";
+
+	public static final String PAGE_PARAM_TASK_REF_PROTECTED_ID = "trpid";
+
 	public static final String COOKIE_REMEMBER_ME = "quick_login";
 	public static final int COOKIE_REMEMBER_ME_EXPIRE_TIME = 7 * 24 * 60 * 60;
 

@@ -16,7 +16,7 @@
 <link
 	href="${pageContext.request.contextPath}/static/css/ie10-viewport-bug-workaround.css"
 	rel="stylesheet">
-<link href="${pageContext.request.contextPath}/static/css/dashboard.css"
+<link href="${pageContext.request.contextPath}/static/css/common.css"
 	rel="stylesheet">
 <c:if test="${not wsfn:isLogin(pageContext) }">
 	<link href="${pageContext.request.contextPath}/static/css/login.modal.css"

@@ -25,16 +25,24 @@
 */
 package com.openthinks.webscheduler.controller;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
 import com.openthinks.easyweb.annotation.Mapping;
 import com.openthinks.easyweb.context.handler.WebAttributers;
+import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
+import com.openthinks.webscheduler.help.PageMap;
 import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.help.StaticUtils;
 import com.openthinks.webscheduler.model.security.Role;
 import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.service.WebSecurityService;
+import com.openthinks.webscheduler.task.ITaskDefinition;
+import com.openthinks.webscheduler.task.TaskRefProtected;
+import com.openthinks.webscheduler.task.TaskTypes;
 
 /**
  * @author dailey.yet@outlook.com
@@ -62,6 +70,45 @@ public class SettingController {
 		List<User> users = securityService.getUsers().getUsers();
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_USER_LIST, users);
 		return "WEB-INF/jsp/setting/user/index.jsp";
+	}
+
+	@Mapping("/ref")
+	public String taskRef(WebAttributers was) {
+		Iterator<Class<?>> it = TaskTypes.getAllTasks().iterator();
+		while (it.hasNext()) {
+			@SuppressWarnings("unchecked")
+			Class<? extends ITaskDefinition> defClazz = (Class<? extends ITaskDefinition>) it.next();
+			TaskRefProtected.valueOf(defClazz);
+		}
+		Collection<TaskRefProtected> trps = TaskRefProtected.getAllProtectedRefs();
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_PROTECTED_REF_LIST, trps);
+		return "WEB-INF/jsp/setting/ref/index.jsp";
+	}
+
+	@Mapping("/ref/to/edit")
+	public String toEditTaskRef(WebAttributers was) {
+		String protectedClassName = was.get(StaticDict.PAGE_PARAM_TASK_REF_PROTECTED_ID);
+		TaskRefProtected trp = null;
+		boolean isSuccess = false;
+		try {
+			trp = TaskRefProtected.valueOf(protectedClassName);
+			isSuccess = true;
+		} catch (ClassNotFoundException e) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_PRE + "Param",
+					"Couldn't found this protected task class type.", WebScope.REQUEST);
+		} catch (Exception e) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_PRE + "Param",
+					"Protected task class name could not be null or not a task class type.", WebScope.REQUEST);
+		}
+		if (!isSuccess) {
+			return StaticUtils.errorPage(was, this.newPageMap());
+		}
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_PROTECTED_REF, trp);
+		return "WEB-INF/jsp/setting/ref/edit.jsp";
+	}
+
+	private PageMap newPageMap() {
+		return PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_ACTIVESIDEBAR, "settings");
 	}
 
 }

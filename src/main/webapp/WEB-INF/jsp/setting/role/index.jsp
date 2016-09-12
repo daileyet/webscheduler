@@ -25,13 +25,22 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Setting <small>Roles</small></h1>
 				<div class="row placeholders">
-						<div class="col-xs-12 col-sm-12 placeholder2">
+						<div class="col-xs-6 col-sm-6 placeholder2">
 							<a href="${ew:path('/setting/role/to/add') }" class="no-underline">
 								<img src="${ew:pathS('/static/img/groupadd_512.png')}"
 									  width="150" height="150" class="img-responsive"
 									alt="Generic placeholder thumbnail">
 								<h4>New</h4>
 								<span class="text-muted">Create a role</span>
+							</a>
+						</div>
+						<div class="col-xs-6 col-sm-6 placeholder" >
+							<a href="${ew:path('/setting/role/sync') }" class="no-underline" >
+								<img src="${ew:pathS('/static/img/savetodisk_unavaiable_512.png')}"
+									  width="150" height="150" class="img-responsive"
+									alt="Generic placeholder thumbnail">
+								<h4>Sync</h4>
+								<span class="text-muted">Sync between memory and disk</span>
 							</a>
 						</div>
 				</div>

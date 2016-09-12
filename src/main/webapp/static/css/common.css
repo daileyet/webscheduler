@@ -184,3 +184,30 @@ body {
     font-weight: 500;
     color: #767676;
 }
+
+/*
+CodeMirror editor
+*/
+
+.CodeMirror {
+	display: block;
+	width: 100%;
+	font-size: 14px;
+	line-height: 1.42857143;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.CodeMirror-fullscreen{
+	z-index:2000;
+}
+
+.ref-editor{
+	position: absolute;
+	display: inline !important;
+	width: 0.5px;
+	margin-left: 30px;
+	height: 0.5px;
+	padding: 0px;
+	border-width: 0px;
+}

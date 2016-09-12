@@ -28,10 +28,14 @@ package com.openthinks.webscheduler.task;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.openthinks.libs.utilities.Checker;
+import com.openthinks.libs.utilities.exception.CheckerNoPassException;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.StaticUtils;
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
@@ -61,9 +65,27 @@ public final class TaskRefProtected {
 		return taskRefProtected;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static TaskRefProtected valueOf(String protectedClassName) throws ClassNotFoundException {
+		Checker.require(protectedClassName).notNull();
+		Class<?> clazz = Class.forName(protectedClassName);
+		if (ITaskDefinition.class.isAssignableFrom(clazz)) {
+			return valueOf((Class<? extends ITaskDefinition>) clazz);
+		} else {
+			throw new CheckerNoPassException(clazz + " need extends or implements " + ITaskDefinition.class);
+		}
+	}
+
 	public static void setUnChangeRefsDir(String unChangeRefsDir) {
 		TaskRefProtected.unChangeRefsDir = unChangeRefsDir;
 	}
+
+	public static Collection<TaskRefProtected> getAllProtectedRefs() {
+		return protectedCache.values();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////
 
 	private void initialize() {
 		if (taskDefClass == null)
@@ -86,6 +108,36 @@ public final class TaskRefProtected {
 	private Class<? extends ITaskDefinition> taskDefClass;
 
 	private ITaskRef taskRefUnChange;
+
+	public Class<? extends ITaskDefinition> getTaskDefClass() {
+		return taskDefClass;
+	}
+
+	public ITaskRef getTaskRefUnChange() {
+		return taskRefUnChange;
+	}
+
+	public TaskRefDefinitionDescriber getTaskRefDescriber() {
+		Optional<TaskDefinitionMetaData> optioanl = TaskTypes.getTaskMetaData(taskDefClass);
+		if (optioanl.isPresent()) {
+			return optioanl.get().getRefDescriber();
+		}
+		return DefaultTaskRef.getTaskRefDescriber();
+	}
+
+	public String getTaskRefFormat() {
+		if (taskRefUnChange != null) {
+			return taskRefUnChange.getContent();
+		}
+		return "";
+	}
+
+	public int getProtectedCount() {
+		if (taskRefUnChange != null) {
+			return taskRefUnChange.stringPropertyNames().size();
+		}
+		return 0;
+	}
 
 	/**
 	 * reload again from configure file

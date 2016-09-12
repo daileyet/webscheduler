@@ -35,6 +35,7 @@ import java.util.Enumeration;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.Set;
 
 import com.openthinks.webscheduler.help.StaticChecker;
 
@@ -95,6 +96,12 @@ public interface ITaskRef extends Serializable {
 	public Enumeration<?> propertyNames();
 
 	/**
+	 * {@link Properties#stringPropertyNames()}
+	 * @return
+	 */
+	public Set<String> stringPropertyNames();
+
+	/**
 	 * get property value by given property name
 	 * @param propertyName String 
 	 * @return Optional<String>
@@ -121,4 +128,14 @@ public interface ITaskRef extends Serializable {
 		}
 	}
 
+	public default String getContent() {
+		Set<String> properties = this.stringPropertyNames();
+		StringBuffer sb = new StringBuffer();
+		properties.forEach((propertyName) -> {
+			String propertyValue = this.getProperty(propertyName);
+			sb.append(propertyName + "=" + propertyValue);
+			sb.append("\r\n");
+		});
+		return sb.toString();
+	}
 }
