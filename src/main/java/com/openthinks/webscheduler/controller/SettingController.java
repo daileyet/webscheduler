@@ -30,6 +30,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
@@ -107,7 +109,7 @@ public class SettingController {
 		user.setId(StaticUtils.UUID());
 		user.setName(userName);
 		user.setEmail(userEmail);
-		user.setPass(userPass);
+		user.setPass(DigestUtils.md5Hex(userPass));
 		List<Role> roles = securityService.getRoles().findByIds(userRoles);
 		user.setRoles(roles);
 		if (roles == null || roles.isEmpty()) {
@@ -134,7 +136,9 @@ public class SettingController {
 					WebScope.REQUEST);
 			return StaticUtils.errorPage(was, this.newPageMap());
 		}
-		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_USER, "user");
+		List<Role> roles = securityService.getRoles().getRoles();
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_ROLE_LIST, roles);
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_USER, user);
 		return "WEB-INF/jsp/setting/user/edit.jsp";
 	}
 
@@ -142,7 +146,30 @@ public class SettingController {
 	public String editUser(WebAttributers was) {
 		boolean isSuccess = false;
 		PageMap pm = newPageMap();
-		//TODO
+		String userId = was.get(StaticDict.PAGE_PARAM_USER_ID);
+		User user = securityService.getUsers().findById(userId);
+		if(user==null){
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
+					"Couldn't save this user, because not find this user.", WebScope.REQUEST);
+			return StaticUtils.errorPage(was, pm);
+		}
+		String userEmail = was.get(StaticDict.PAGE_PARAM_USER_EMAIL);
+		String userPass = was.get(StaticDict.PAGE_PARAM_USER_PASS);
+		String userRoles = was.get(StaticDict.PAGE_PARAM_USER_ROLES);
+		try {
+			Checker.require(userEmail).notEmpty("User email can not be empty.");
+			Checker.require(userPass).notEmpty("User password can not be empty.");
+			Checker.require(userRoles).notEmpty("User roles can not be empty.");
+		} catch (Exception e) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, e.getMessage(), WebScope.REQUEST);
+			return StaticUtils.errorPage(was, pm);
+		}
+		user.setEmail(userEmail);
+		user.setPass(DigestUtils.md5Hex(userPass));
+		List<Role> roles = securityService.getRoles().findByIds(userRoles);
+		user.setRoles(roles);
+		user.moveToChanged();
+		isSuccess=true;
 		if (!isSuccess) {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
 					"Couldn't save this user, maybe this email has already been used.", WebScope.REQUEST);

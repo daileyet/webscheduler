@@ -68,11 +68,11 @@
 										<td data-title="userseq">${status.index+1 }</td>
 										<td>${user.name}</td>
 										<td>
-											<c:forEach var="role" items="${user.roleKeys.roles }">
-												<span>${role.name}</span> 
+											<c:forEach var="role" items="${user.roles }">
+												<kbd>${role.name}</kbd> 
 											</c:forEach>
 										</td>
-										<td><a href="${ew:path('/setting/user/to/edit') }?userid=${user.id }" >
+										<td><a href="${ew:path('/setting/user/to/edit') }?uid=${user.id }" >
 													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> </td>
 									</tr>
 								</c:forEach>

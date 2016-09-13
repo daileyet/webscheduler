@@ -3,14 +3,19 @@ package com.openthinks.webscheduler.model.security;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.openthinks.libs.utilities.Checker;
+import com.openthinks.webscheduler.help.StaticDict;
+
 /**
  * Reference role key set in User definition
+ * 
  * @author dailey.yet@outlook.com
  *
  */
@@ -29,7 +34,7 @@ public class RoleKeys implements Serializable {
 		return roles;
 	}
 
-	public void setRoles(List<RoleKey> roles) {
+	 void setRoles(List<RoleKey> roles) {
 		this.roles = roles;
 	}
 
@@ -37,7 +42,6 @@ public class RoleKeys implements Serializable {
 		if (this.roles != null)
 			return this.roles.add(alais);
 		return false;
-
 	}
 
 }

@@ -26,7 +26,9 @@
 package com.openthinks.webscheduler.model.security;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -37,7 +39,12 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang3.SerializationUtils;
 
+import com.openthinks.easyweb.context.WebContexts;
+import com.openthinks.libs.utilities.Checker;
+import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.model.Statable.DefaultStatable;
+import com.openthinks.webscheduler.service.WebSecurityService;
 
 /**
  * User definition
@@ -96,7 +103,33 @@ public class User extends DefaultStatable implements Serializable {
 	}
 
 	public List<Role> getRoles() {
+		if((this.roles==null || this.roles.isEmpty()) && this.roleKeys!=null){
+			try {
+				this.roles = this.roleKeys.getRoles().stream().map((roleKey)->{
+					Role role = null;
+					Roles roles = WebContexts.get().lookup(WebSecurityService.class).getRoles();
+					if(roleKey.getId()!=null){
+						role= roles.findById(roleKey.getId());
+					}
+					if(role==null && roleKey.getName()!=null){
+						role= roles.findByName(roleKey.getName());
+					}
+					Checker.require(role).notNull();
+					return role;
+				}).collect(Collectors.toList());
+			} catch (Exception e) {
+				ProcessLogger.error(e);
+				this.roles = Collections.emptyList();
+			}
+		}
 		return roles;
+	}
+	
+	public String getJoinedKeys() {
+		String joinedKeys = getRoles().stream().map((role) -> {
+			return role.getId();
+		}).collect(Collectors.joining(StaticDict.PAGE_PARAM_LIST_JOIN));
+		return joinedKeys;
 	}
 
 	public void setRoles(List<Role> roles) {
