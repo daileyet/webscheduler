@@ -39,7 +39,7 @@ import com.openthinks.libs.utilities.Checker;
 import com.openthinks.libs.utilities.exception.CheckerNoPassException;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.StaticUtils;
-import com.openthinks.webscheduler.model.Statable;
+import com.openthinks.webscheduler.model.Statable.DefaultStatable;
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.task.support.SimpleDownloadFileTask;
@@ -52,7 +52,7 @@ import com.openthinks.webscheduler.task.support.SimpleDownloadFileTask;
  * @author dailey.yet@outlook.com
  *
  */
-public final class TaskRefProtected implements Statable{
+public final class TaskRefProtected extends DefaultStatable {
 	private static Map<Class<? extends ITaskDefinition>, TaskRefProtected> protectedCache = new ConcurrentHashMap<>();
 	private static String unChangeRefsDir = null;
 
@@ -85,10 +85,10 @@ public final class TaskRefProtected implements Statable{
 	public static Collection<TaskRefProtected> getAllProtectedRefs() {
 		return protectedCache.values();
 	}
-	
+
 	public static void sync() {
 		Collection<TaskRefProtected> trps = protectedCache.values();
-		for(TaskRefProtected trp:trps){
+		for (TaskRefProtected trp : trps) {
 			trp.saveToDisk();
 		}
 	}
@@ -98,13 +98,11 @@ public final class TaskRefProtected implements Statable{
 	private Class<? extends ITaskDefinition> taskDefClass;
 
 	private ITaskRef taskRefUnChange;
-	
-	private State currentState ;
-	
+
 	private TaskRefProtected() {
-		this.currentState = State.OUT_SYNC;
+		super();
 	}
-	
+
 	private void initialize() {
 		if (taskDefClass == null)
 			return;
@@ -117,32 +115,34 @@ public final class TaskRefProtected implements Statable{
 			this.makeDefaultTaskRef();
 			try {
 				taskRefUnChange.load(new FileReader(protecteRefFile));
-				this.moveTo(State.IN_SYNC);
+				this.moveToSaved();
 			} catch (IOException e) {
 				ProcessLogger.warn(e);
 			}
 		}
-		if (!protecteRefFile.exists()){
-			this.moveTo(State.IN_SYNC);
+		if (!protecteRefFile.exists()) {
+			this.moveToSaved();
 		}
 	}
-	
-	private void saveToDisk(){
+
+	private void saveToDisk() {
 		if (taskDefClass == null)
+			return;
+		if (this.isInSync())
 			return;
 		//TODO get from MapDB firstly
 
 		// if not found, then try to load from local configure file
 		String dir = (unChangeRefsDir == null ? StaticUtils.getUnChangeRefsDefaultDir(false) : unChangeRefsDir);
 		File protecteRefFile = new File(dir, taskDefClass.getName());
-		if(this.taskRefUnChange!=null){
+		if (this.taskRefUnChange != null) {
 			try {
-				this.taskRefUnChange.store(new FileWriter(protecteRefFile), "");
-				this.moveTo(State.IN_SYNC);
+				this.taskRefUnChange.store(new FileWriter(protecteRefFile), getState() + "=>" + State.SAVED);
+				this.moveToSaved();
 			} catch (IOException e) {
 				ProcessLogger.error(e);
 			}
-			
+
 		}
 	}
 
@@ -153,22 +153,14 @@ public final class TaskRefProtected implements Statable{
 	public ITaskRef getTaskRefUnChange() {
 		return taskRefUnChange;
 	}
-	
-	 void setTaskRefUnChange(ITaskRef taskRefUnChange) {
+
+	void setTaskRefUnChange(ITaskRef taskRefUnChange) {
 		this.taskRefUnChange = taskRefUnChange;
 	}
-	
-	public ITaskRef makeDefaultTaskRef(){
+
+	public ITaskRef makeDefaultTaskRef() {
 		this.taskRefUnChange = new DefaultTaskRef();
 		return this.taskRefUnChange;
-	}
-	
-	public boolean isInSync(){
-		return currentState==State.IN_SYNC;
-	}
-	
-	public State getCurrentState() {
-		return currentState;
 	}
 
 	public TaskRefDefinitionDescriber getTaskRefDescriber() {
@@ -214,16 +206,6 @@ public final class TaskRefProtected implements Statable{
 			}
 		}
 
-	}
-
-	@Override
-	public State getState() {
-		return currentState;
-	}
-	
-	@Override
-	public void moveTo(State nextState) {
-		this.currentState = nextState;
 	}
 
 }

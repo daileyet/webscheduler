@@ -33,6 +33,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.openthinks.webscheduler.model.Statable.DefaultStatable;
+
 /**
  * Role definition
  * @author dailey.yet@outlook.com
@@ -40,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "role")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Role implements Serializable {
+public class Role extends DefaultStatable implements Serializable {
 	private static final long serialVersionUID = -7271233095825354386L;
 	@XmlAttribute
 	private String id;

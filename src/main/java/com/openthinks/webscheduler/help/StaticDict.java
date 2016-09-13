@@ -44,7 +44,8 @@ public interface StaticDict {
 	public static final String PAGE_ATTRIBUTE_USER_LIST = "users";
 	public static final String PAGE_ATTRIBUTE_PROTECTED_REF_LIST = "trps";
 	public static final String PAGE_ATTRIBUTE_PROTECTED_REF = "trp";
-	public static final String PAGE_ATTRIBUTE_PROTECTED_REF_IS_IN_SYNC = "isInSync";
+	public static final String PAGE_ATTRIBUTE_IS_IN_SYNC = "isInSync";
+	public static final String PAGE_ATTRIBUTE_USER = "user";
 
 	public static final String PAGE_ATTRIBUTE_ERROR_1 = "error_1";
 	public static final String PAGE_ATTRIBUTE_ERROR_2 = "error_2";
@@ -72,6 +73,13 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_LOGIN_REMEMBER_CHECKED_VAL = "CHECKED";
 	public static final String PAGE_PARAM_TASK_REF_PROTECTED_CONTENT = "protectedref";
 	public static final String PAGE_PARAM_TASK_REF_PROTECTED_ID = "trpid";
+	public static final String PAGE_PARAM_USER_ID = "uid";
+	public static final String PAGE_PARAM_USER_NAME = "username";
+	public static final String PAGE_PARAM_USER_EMAIL = "useremail";
+	public static final String PAGE_PARAM_USER_PASS = "userpass";
+	public static final String PAGE_PARAM_USER_ROLES = "userroles";
+
+	public static final String PAGE_PARAM_LIST_JOIN = ",";
 
 	public static final String COOKIE_REMEMBER_ME = "quick_login";
 	public static final int COOKIE_REMEMBER_ME_EXPIRE_TIME = 7 * 24 * 60 * 60;
@@ -105,7 +113,5 @@ public interface StaticDict {
 	public static final String CONF_NAMESPACE = "namespace";
 	public static final String CONF_EASYWEBCLASSDIR = "easyweb.class.dir";
 	public static final String CONF_LOGGER_LEVEL = "logger.level";
-	
-	
 
 }

@@ -58,14 +58,13 @@ public class WebSecurityService {
 		ProcessLogger.debug(getClass() + " start init...");
 		this.securityConfig = securityConfig;
 		this.webSecurity = getWebSecurity();
+		Checker.require(this.webSecurity).notNull();
+		this.webSecurity.moveToSaved();
 	}
 
 	protected WebSecurity getWebSecurity() {
-		if (this.securityConfig != null) {
-			return this.securityConfig.getWebSecurity();
-		} else {
-			return new WebSecurity();
-		}
+		Checker.require(this.securityConfig).notNull();
+		return this.securityConfig.getWebSecurity();
 	}
 
 	public Roles getRoles() {

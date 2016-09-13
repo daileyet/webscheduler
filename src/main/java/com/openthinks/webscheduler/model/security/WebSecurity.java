@@ -7,9 +7,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.openthinks.webscheduler.model.Statable.DefaultStatable;
+
 @XmlRootElement(name = "web-security")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class WebSecurity implements Serializable {
+public class WebSecurity extends DefaultStatable implements Serializable {
 	private static final long serialVersionUID = -6611150406707085265L;
 	@XmlElement(name = "roles")
 	private Roles roles;
@@ -35,6 +37,16 @@ public class WebSecurity implements Serializable {
 
 	protected void setUsers(Users users) {
 		this.users = users;
+	}
+
+	@Override
+	public void moveTo(State nextState) {
+		if (this.roles != null) {
+			this.roles.moveTo(nextState);
+		}
+		if (this.users != null) {
+			this.users.moveTo(nextState);
+		}
 	}
 
 }

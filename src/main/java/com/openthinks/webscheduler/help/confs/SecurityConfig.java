@@ -99,7 +99,6 @@ public class SecurityConfig extends AbstractConfigObject {
 	}
 
 	private void unmarshal(InputStream in) throws JAXBException {
-
 		JAXBContext jaxbContext = JAXBContext.newInstance(WebSecurity.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		this.webSecurity = (WebSecurity) unmarshaller.unmarshal(in);

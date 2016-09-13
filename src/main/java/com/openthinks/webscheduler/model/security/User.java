@@ -37,6 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang3.SerializationUtils;
 
+import com.openthinks.webscheduler.model.Statable.DefaultStatable;
+
 /**
  * User definition
  * @author dailey.yet@outlook.com
@@ -44,7 +46,7 @@ import org.apache.commons.lang3.SerializationUtils;
  */
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class User implements Serializable {
+public class User extends DefaultStatable implements Serializable {
 	private static final long serialVersionUID = -363092122443174954L;
 	@XmlAttribute
 	private String id;
@@ -130,6 +132,37 @@ public class User implements Serializable {
 	@Override
 	public User clone() {
 		return SerializationUtils.clone(this);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (email != null && other.email != null && email.equals(other.email)) {
+			return true;
+		}
+		if (id != null && other.id != null && id.equals(other.id)) {
+			return true;
+		}
+		if (name != null && other.name != null && name.equals(other.name)) {
+			return true;
+		}
+		return false;
 	}
 
 }

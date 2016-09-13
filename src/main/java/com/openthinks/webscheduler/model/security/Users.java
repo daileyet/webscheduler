@@ -1,9 +1,10 @@
 package com.openthinks.webscheduler.model.security;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -12,6 +13,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.model.Statable.DefaultStatable;
 
 /**
  * User definition set
@@ -20,20 +22,43 @@ import com.openthinks.webscheduler.help.StaticUtils;
  */
 @XmlRootElement(name = "users")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Users implements Serializable {
+public class Users extends DefaultStatable implements Serializable {
 	private static final long serialVersionUID = -8626028704451201036L;
 	@XmlElement(name = "user")
-	private List<User> users;
+	private Set<User> users;
 
 	public Users() {
-		this.users = new ArrayList<>();
+		super();
+		this.users = new HashSet<>();
 	}
 
-	public List<User> getUsers() {
+	@Override
+	public State getState() {
+		if (this.users != null) {
+			for (User user : users) {
+				if (user.getState() != State.SAVED) {
+					moveToChanged();
+					break;
+				}
+			}
+		}
+		return super.getState();
+	}
+
+	@Override
+	public void moveTo(State nextState) {
+		if (this.users != null) {
+			for (User user : users) {
+				user.moveTo(nextState);
+			}
+		}
+	}
+
+	public Set<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<User> users) {
+	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
 

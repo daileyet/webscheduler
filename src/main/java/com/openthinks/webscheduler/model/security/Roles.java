@@ -34,6 +34,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.openthinks.webscheduler.model.Statable.DefaultStatable;
+
 /**
  * Role definition set
  * @author dailey.yet@outlook.com
@@ -41,12 +43,34 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "roles")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Roles {
+public class Roles extends DefaultStatable {
 	@XmlElement(name = "role")
 	private List<Role> roles;
 
 	public Roles() {
 		this.roles = new ArrayList<>();
+	}
+
+	@Override
+	public State getState() {
+		if (this.roles != null) {
+			for (Role role : roles) {
+				if (role.getState() != State.SAVED) {
+					moveToChanged();
+					break;
+				}
+			}
+		}
+		return super.getState();
+	}
+
+	@Override
+	public void moveTo(State nextState) {
+		if (this.roles != null) {
+			for (Role role : roles) {
+				role.moveTo(nextState);
+			}
+		}
 	}
 
 	public List<Role> getRoles() {
@@ -71,6 +95,15 @@ public class Roles {
 			return false;
 		}).collect(Collectors.toList());
 		return result.isEmpty() ? null : result.get(0);
+	}
+
+	public List<Role> findByIds(String roleIds) {
+		List<Role> result = roles.stream().filter((role) -> {
+			if (roleIds.indexOf(role.getId()) >= 0)
+				return true;
+			return false;
+		}).collect(Collectors.toList());
+		return result;
 	}
 
 	public Role findByName(String roleName) {
