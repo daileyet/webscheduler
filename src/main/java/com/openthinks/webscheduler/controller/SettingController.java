@@ -152,6 +152,20 @@ public class SettingController {
 		return StaticUtils.intermediatePage(was, pm);
 	}
 
+	@Mapping("/user/sync")
+	public String syncUser(WebAttributers was) {
+		PageMap pm = newPageMap();
+		try {
+			securityService.saveToDisk();
+		} catch (Exception e) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Couldn't sync users, root cause:" + e.getMessage(),
+					WebScope.REQUEST);
+			return StaticUtils.errorPage(was, pm);
+		}
+		pm.push("title", "Setting - Syncing Users").push("redirectUrl", WebUtils.path("/setting/user"));
+		return StaticUtils.intermediatePage(was, pm);
+	}
+
 	@Mapping("/ref")
 	public String taskRef(WebAttributers was) {
 		List<Class<? extends ITaskDefinition>> taskDefs = TaskTypes.getSupportTasks();

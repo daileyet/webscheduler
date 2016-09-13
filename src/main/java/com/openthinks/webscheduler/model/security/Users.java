@@ -52,6 +52,7 @@ public class Users extends DefaultStatable implements Serializable {
 				user.moveTo(nextState);
 			}
 		}
+		super.moveTo(nextState);
 	}
 
 	public Set<User> getUsers() {

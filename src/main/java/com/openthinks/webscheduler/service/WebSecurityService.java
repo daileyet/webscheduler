@@ -133,6 +133,7 @@ public class WebSecurityService {
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			jaxbMarshaller.marshal(this.webSecurity, fos);
 			fos.close();
+			this.webSecurity.moveToSaved();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

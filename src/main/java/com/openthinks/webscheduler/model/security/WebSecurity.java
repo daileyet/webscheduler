@@ -47,6 +47,7 @@ public class WebSecurity extends DefaultStatable implements Serializable {
 		if (this.users != null) {
 			this.users.moveTo(nextState);
 		}
+		super.moveTo(nextState);
 	}
 
 }

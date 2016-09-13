@@ -71,6 +71,7 @@ public class Roles extends DefaultStatable {
 				role.moveTo(nextState);
 			}
 		}
+		super.moveTo(nextState);
 	}
 
 	public List<Role> getRoles() {
