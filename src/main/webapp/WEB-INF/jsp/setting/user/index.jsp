@@ -66,14 +66,20 @@
 								<c:forEach var="user" items="${users }" varStatus="status">
 									<tr data-id="${user.id }">
 										<td data-title="userseq">${status.index+1 }</td>
-										<td>${user.name}</td>
+										<td data-title='username'>${user.name}</td>
 										<td>
 											<c:forEach var="role" items="${user.roles }">
 												<kbd>${role.name}</kbd> 
 											</c:forEach>
 										</td>
-										<td><a href="${ew:path('/setting/user/to/edit') }?uid=${user.id }" >
-													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> </td>
+										<td>
+											<a href="${ew:path('/setting/user/to/edit') }?uid=${user.id }" >
+													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+											<a href="#" data-href="${ew:path('/setting/user/remove') }?uid=${user.id }"  data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
+													<span title="Remove" class="glyphicon glyphicon-trash text-danger" aria-hidden="true"></span>
+												</a> 
+										</td>
+											
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -83,8 +89,29 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Remove</h4>
+                </div>
+            
+                <div class="modal-body">
+                    <p>You are going to remove this user <span class="label label-default" data-title="username"></span>, this procedure is irreversible.</p>
+                    <p>Do you want to proceed?</p>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 	<%@ include file="../../template/body.script.jsp"%>
-
+	<script type="text/javascript"
+		src="${ew:pathS('/static/js/setting.user.index.js')}"></script>
 </body>
 </html>

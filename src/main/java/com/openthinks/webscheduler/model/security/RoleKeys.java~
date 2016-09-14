@@ -52,7 +52,7 @@ public class RoleKeys implements Serializable {
 		if (roles == null) {
 			if (other.roles != null)
 				return false;
-		} else if (other.roles != null && (roles.size()!=other.roles.size() || !roles.containsAll(other.roles) ) )
+		} else if (other.roles != null && !roles.containsAll(other.roles))
 			return false;
 		return true;
 	}

@@ -46,6 +46,7 @@ public interface StaticDict {
 	public static final String PAGE_ATTRIBUTE_PROTECTED_REF = "trp";
 	public static final String PAGE_ATTRIBUTE_IS_IN_SYNC = "isInSync";
 	public static final String PAGE_ATTRIBUTE_USER = "user";
+	public static final String PAGE_ATTRIBUTE_ROLE = "role";
 
 	public static final String PAGE_ATTRIBUTE_ERROR_1 = "error_1";
 	public static final String PAGE_ATTRIBUTE_ERROR_2 = "error_2";
@@ -78,6 +79,9 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_USER_EMAIL = "useremail";
 	public static final String PAGE_PARAM_USER_PASS = "userpass";
 	public static final String PAGE_PARAM_USER_ROLES = "userroles";
+	public static final String PAGE_PARAM_ROLE_ID = "roleid";
+	public static final String PAGE_PARAM_ROLE_NAME = "rolename";
+	public static final String PAGE_PARAM_ROLE_DESC = "roledesc";
 
 	public static final String PAGE_PARAM_LIST_JOIN = ",";
 

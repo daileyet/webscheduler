@@ -110,6 +110,25 @@ public interface Statable {
 			this.moveTo(State.CHANGED);
 		}
 
+		public void moveToRemoved() {
+			this.moveTo(State.REMOVED);
+		}
+
+		public void notifyChanged(Object oldVal, Object newVal) {
+			if (oldVal == newVal || (oldVal != null && oldVal.equals(newVal))) {
+				//nothing to do
+			} else {
+				switch (getState()) {
+				case SAVED:
+					moveToChanged();
+					break;
+				default: // NEW,CHANGED,REMOVED
+					//keep current state
+					break;
+				}
+			}
+		}
+
 	}
 
 }

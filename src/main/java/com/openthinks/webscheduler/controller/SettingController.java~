@@ -139,13 +139,11 @@ public class SettingController {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, e.getMessage(), WebScope.REQUEST);
 			return StaticUtils.errorPage(was, pm);
 		}
-		if(!roleName.equals(role.getName())){
-			Role duplicateRole = securityService.getRoles().findByName(roleName);
-			if (duplicateRole != null) {
-				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
-						"Couldn't save this role, maybe this name has already been used.", WebScope.REQUEST);
-				return StaticUtils.errorPage(was, pm);
-			}
+		Role duplicateRole = securityService.getRoles().findByName(roleName);
+		if (duplicateRole != null) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
+					"Couldn't save this role, maybe this name has already been used.", WebScope.REQUEST);
+			return StaticUtils.errorPage(was, pm);
 		}
 		role.setName(roleName);
 		role.setDesc(roleDesc);
@@ -265,18 +263,14 @@ public class SettingController {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, e.getMessage(), WebScope.REQUEST);
 			return StaticUtils.errorPage(was, pm);
 		}
-		if(!userEmail.equals(user.getEmail())){
-			User duplicateUser = securityService.getUsers().findByEmail(userEmail);
-			if (duplicateUser != null) {
-				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
-						"Couldn't save this user, maybe this email has already been used.", WebScope.REQUEST);
-				return StaticUtils.errorPage(was, pm);
-			}
+		Statable duplicateUser = securityService.getUsers().findByEmail(userEmail);
+		if (duplicateUser != null) {
+			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
+					"Couldn't save this user, maybe this email has already been used.", WebScope.REQUEST);
+			return StaticUtils.errorPage(was, pm);
 		}
 		user.setEmail(userEmail);
-		if(!userPass.equals(user.getPass())){//fix in edit action without change, and will convert MD5 again
-			user.setPass(DigestUtils.md5Hex(userPass));
-		}
+		user.setPass(DigestUtils.md5Hex(userPass));
 		List<Role> roles = securityService.getRoles().findByIds(userRoles);
 		user.setRoles(roles);
 		isSuccess = true;

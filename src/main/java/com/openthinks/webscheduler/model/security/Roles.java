@@ -25,8 +25,9 @@
 */
 package com.openthinks.webscheduler.model.security;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.model.Statable.DefaultStatable;
 
 /**
@@ -45,10 +47,10 @@ import com.openthinks.webscheduler.model.Statable.DefaultStatable;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Roles extends DefaultStatable {
 	@XmlElement(name = "role")
-	private List<Role> roles;
+	private Set<Role> roles;
 
 	public Roles() {
-		this.roles = new ArrayList<>();
+		this.roles = new HashSet<>();
 	}
 
 	@Override
@@ -74,11 +76,11 @@ public class Roles extends DefaultStatable {
 		super.moveTo(nextState);
 	}
 
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
@@ -114,6 +116,19 @@ public class Roles extends DefaultStatable {
 			return false;
 		}).collect(Collectors.toList());
 		return result.isEmpty() ? null : result.get(0);
+	}
+
+	public boolean removeById(String roleId) {
+		boolean result = false;
+		Role role = findById(roleId);
+		try {
+			result = roles.remove(role);
+			this.moveToChanged();
+		} catch (Exception e) {
+			ProcessLogger.warn(e);
+			result = false;
+		}
+		return result;
 	}
 
 }

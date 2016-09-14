@@ -36,9 +36,16 @@
 						</div>
 						<div class="col-xs-6 col-sm-6 placeholder" >
 							<a href="${ew:path('/setting/role/sync') }" class="no-underline" >
-								<img src="${ew:pathS('/static/img/savetodisk_unavaiable_512.png')}"
-									  width="150" height="150" class="img-responsive"
-									alt="Generic placeholder thumbnail">
+								<c:if test="${isInSync }">
+									<img src="${ew:pathS('/static/img/savetodisk_512.png')}" title="In sync"
+										  width="150" height="150" class="img-responsive"
+										alt="Generic placeholder thumbnail">
+								</c:if>
+								<c:if test="${not isInSync }">
+									<img src="${ew:pathS('/static/img/savetodisk_unavaiable_512.png')}" title="Out of sync"
+										  width="150" height="150" class="img-responsive"
+										alt="Generic placeholder thumbnail">
+								</c:if>
 								<h4>Sync</h4>
 								<span class="text-muted">Sync between memory and disk</span>
 							</a>
@@ -59,10 +66,14 @@
 								<c:forEach var="role" items="${roles }" varStatus="status">
 									<tr data-id="${role.id }">
 										<td data-title="roleseq">${status.index+1 }</td>
-										<td>${role.name}</td>
+										<td data-title="rolename">${role.name}</td>
 										<td>${role.desc}</td>
 										<td><a href="${ew:path('/setting/role/to/edit') }?roleid=${role.id }" >
-													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> </td>
+													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+											<a href="#" data-href="${ew:path('/setting/role/remove') }?roleid=${role.id }"  data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
+													<span title="Remove" class="glyphicon glyphicon-trash text-danger" aria-hidden="true"></span>
+												</a> 
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -72,8 +83,28 @@
 			</div>
 		</div>
 	</div>
-
+	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirm" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Remove</h4>
+                </div>
+            
+                <div class="modal-body">
+                    <p>You are going to remove this user <span class="label label-default" data-title="rolename"></span>, this procedure is irreversible.</p>
+                    <p>Do you want to proceed?</p>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
 	<%@ include file="../../template/body.script.jsp"%>
-
+		<script type="text/javascript"
+		src="${ew:pathS('/static/js/setting.role.index.js')}"></script>
 </body>
 </html>

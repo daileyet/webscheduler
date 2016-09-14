@@ -12,7 +12,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.model.Statable;
 import com.openthinks.webscheduler.model.Statable.DefaultStatable;
 
 /**
@@ -35,7 +37,7 @@ public class Users extends DefaultStatable implements Serializable {
 	@Override
 	public State getState() {
 		if (this.users != null) {
-			for (User user : users) {
+			for (Statable user : users) {
 				if (user.getState() != State.SAVED) {
 					moveToChanged();
 					break;
@@ -48,7 +50,7 @@ public class Users extends DefaultStatable implements Serializable {
 	@Override
 	public void moveTo(State nextState) {
 		if (this.users != null) {
-			for (User user : users) {
+			for (Statable user : users) {
 				user.moveTo(nextState);
 			}
 		}
@@ -87,6 +89,15 @@ public class Users extends DefaultStatable implements Serializable {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
+	public User findByEmail(String userEmail) {
+		List<User> result = users.stream().filter((user) -> {
+			if (user.getEmail() != null && user.getEmail().equals(userEmail))
+				return true;
+			return false;
+		}).collect(Collectors.toList());
+		return result.isEmpty() ? null : result.get(0);
+	}
+
 	public User findByCookie(String cookieValue) {
 		List<User> result = users.stream().filter((user) -> {
 			RememberMeCookie rememberCookie = user.getCookie();
@@ -105,5 +116,18 @@ public class Users extends DefaultStatable implements Serializable {
 			return false;
 		}).collect(Collectors.toList());
 		return result.isEmpty() ? null : result.get(0);
+	}
+
+	public boolean removeById(String userId) {
+		boolean result = false;
+		Statable user = findById(userId);
+		try {
+			result = users.remove(user);
+			this.moveToChanged();
+		} catch (Exception e) {
+			ProcessLogger.warn(e);
+			result = false;
+		}
+		return result;
 	}
 }

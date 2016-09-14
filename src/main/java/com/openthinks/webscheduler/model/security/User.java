@@ -75,6 +75,7 @@ public class User extends DefaultStatable implements Serializable {
 	}
 
 	public void setId(String id) {
+		notifyChanged(this.id, id);
 		this.id = id;
 	}
 
@@ -83,6 +84,7 @@ public class User extends DefaultStatable implements Serializable {
 	}
 
 	public void setName(String name) {
+		notifyChanged(this.name, name);
 		this.name = name;
 	}
 
@@ -91,6 +93,7 @@ public class User extends DefaultStatable implements Serializable {
 	}
 
 	public void setEmail(String email) {
+		notifyChanged(this.email, email);
 		this.email = email;
 	}
 
@@ -99,20 +102,21 @@ public class User extends DefaultStatable implements Serializable {
 	}
 
 	public void setPass(String pass) {
+		notifyChanged(this.pass, pass);
 		this.pass = pass;
 	}
 
 	public List<Role> getRoles() {
-		if((this.roles==null || this.roles.isEmpty()) && this.roleKeys!=null){
+		if ((this.roles == null || this.roles.isEmpty()) && this.roleKeys != null) {
 			try {
-				this.roles = this.roleKeys.getRoles().stream().map((roleKey)->{
+				this.roles = this.roleKeys.getRoles().stream().map((roleKey) -> {
 					Role role = null;
 					Roles roles = WebContexts.get().lookup(WebSecurityService.class).getRoles();
-					if(roleKey.getId()!=null){
-						role= roles.findById(roleKey.getId());
+					if (roleKey.getId() != null) {
+						role = roles.findById(roleKey.getId());
 					}
-					if(role==null && roleKey.getName()!=null){
-						role= roles.findByName(roleKey.getName());
+					if (role == null && roleKey.getName() != null) {
+						role = roles.findByName(roleKey.getName());
 					}
 					Checker.require(role).notNull();
 					return role;
@@ -124,7 +128,7 @@ public class User extends DefaultStatable implements Serializable {
 		}
 		return roles;
 	}
-	
+
 	public String getJoinedKeys() {
 		String joinedKeys = getRoles().stream().map((role) -> {
 			return role.getId();
@@ -151,6 +155,7 @@ public class User extends DefaultStatable implements Serializable {
 	}
 
 	public void setRoleKeys(RoleKeys roleKeys) {
+		notifyChanged(this.roleKeys, roleKeys);
 		this.roleKeys = roleKeys;
 	}
 
@@ -186,13 +191,13 @@ public class User extends DefaultStatable implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (email != null && other.email != null && email.equals(other.email)) {
+		if (id != null && id.equals(other.id)) {
 			return true;
 		}
-		if (id != null && other.id != null && id.equals(other.id)) {
+		if (name != null && name.equals(other.name)) {
 			return true;
 		}
-		if (name != null && other.name != null && name.equals(other.name)) {
+		if (email != null && email.equals(other.email)) {
 			return true;
 		}
 		return false;
