@@ -149,6 +149,10 @@ public final class TaskRefProtected extends DefaultStatable {
 	public Class<? extends ITaskDefinition> getTaskDefClass() {
 		return taskDefClass;
 	}
+	
+	 void setTaskDefClass(Class<? extends ITaskDefinition> taskDefClass) {
+		this.taskDefClass = taskDefClass;
+	}
 
 	public ITaskRef getTaskRefUnChange() {
 		return taskRefUnChange;
