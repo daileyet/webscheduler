@@ -32,16 +32,25 @@ import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import com.openthinks.easyweb.WebStatic;
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.AutoComponent;
 import com.openthinks.easyweb.annotation.Controller;
+import com.openthinks.easyweb.annotation.Jsonp;
 import com.openthinks.easyweb.annotation.Mapping;
+import com.openthinks.easyweb.annotation.ResponseReturn;
+import com.openthinks.easyweb.annotation.ResponseReturn.ResponseReturnType;
+import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.easyweb.context.handler.WebAttributers.WebScope;
+import com.openthinks.easyweb.utils.json.OperationJson;
 import com.openthinks.libs.utilities.Checker;
+import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.libs.utilities.logger.ProcessLogger.PLLevel;
 import com.openthinks.webscheduler.help.PageMap;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.help.StaticUtils;
+import com.openthinks.webscheduler.help.confs.RootConfig;
 import com.openthinks.webscheduler.model.Statable;
 import com.openthinks.webscheduler.model.security.Role;
 import com.openthinks.webscheduler.model.security.Roles;
@@ -61,6 +70,9 @@ import com.openthinks.webscheduler.task.TaskTypes;
 public class SettingController {
 	@AutoComponent
 	WebSecurityService securityService;
+
+	@AutoComponent
+	RootConfig rootConfig;
 
 	@Mapping("/index")
 	public String index() {
@@ -139,7 +151,7 @@ public class SettingController {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, e.getMessage(), WebScope.REQUEST);
 			return StaticUtils.errorPage(was, pm);
 		}
-		if(!roleName.equals(role.getName())){
+		if (!roleName.equals(role.getName())) {
 			Role duplicateRole = securityService.getRoles().findByName(roleName);
 			if (duplicateRole != null) {
 				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
@@ -211,7 +223,7 @@ public class SettingController {
 		user.setName(userName);
 		user.setEmail(userEmail);
 		user.setPass(DigestUtils.md5Hex(userPass));
-		List<Role> roles = securityService.getRoles().findByIds(userRoles);
+		Set<Role> roles = securityService.getRoles().findByIds(userRoles);
 		user.setRoles(roles);
 		if (roles == null || roles.isEmpty()) {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Invalid user roles, please check again.",
@@ -265,7 +277,7 @@ public class SettingController {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, e.getMessage(), WebScope.REQUEST);
 			return StaticUtils.errorPage(was, pm);
 		}
-		if(!userEmail.equals(user.getEmail())){
+		if (!userEmail.equals(user.getEmail())) {
 			User duplicateUser = securityService.getUsers().findByEmail(userEmail);
 			if (duplicateUser != null) {
 				was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1,
@@ -274,10 +286,10 @@ public class SettingController {
 			}
 		}
 		user.setEmail(userEmail);
-		if(!userPass.equals(user.getPass())){//fix in edit action without change, and will convert MD5 again
+		if (!userPass.equals(user.getPass())) {//fix in edit action without change, and will convert MD5 again
 			user.setPass(DigestUtils.md5Hex(userPass));
 		}
-		List<Role> roles = securityService.getRoles().findByIds(userRoles);
+		Set<Role> roles = securityService.getRoles().findByIds(userRoles);
 		user.setRoles(roles);
 		isSuccess = true;
 		if (!isSuccess) {
@@ -395,6 +407,50 @@ public class SettingController {
 		PageMap pm = newPageMap();
 		pm.push("title", "Setting - Syncing REFs").push("redirectUrl", WebUtils.path("/setting/ref"));
 		return StaticUtils.intermediatePage(was, pm);
+	}
+
+	@Mapping("/misc")
+	public String misc(WebAttributers was) {
+		PageMap pm = this.newPageMap();
+		pm.push("basic_app_conf_path",
+				WebContexts.getServletContext().getInitParameter(StaticDict.SERVLET_INIT_PARAM_WEBCONFIGUREPATH));
+		pm.push("basic_app_conf_content", rootConfig.getConfigContent());
+		pm.push("basic_task_source_code_path", StaticUtils.getDefaultCustomTaskSourceDir());
+		pm.push("basic_task_class_file_path", StaticUtils.getDefaultCustomTaskTargetDir());
+		pm.push("logger_level_list", ProcessLogger.PLLevel.values());
+		pm.push("logger_level_now", ProcessLogger.currentLevel());
+		ProcessLogger.debug("Enable remote monitor = " + WebUtils.isEnableRemoteMonitor());
+		pm.push("monitor_remotable", WebUtils.isEnableRemoteMonitor());
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
+		return "WEB-INF/jsp/setting/misc/index.jsp";
+	}
+
+	@Mapping("/misc/llevel/edit")
+	@Jsonp
+	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
+	public String updateMiscLoggerLevel(WebAttributers was) {
+		String logerLevel = was.get(StaticDict.PAGE_PARAM_LOGGER_LEVEL);
+		PLLevel level = ProcessLogger.PLLevel.build(logerLevel);
+		if (level != null) {
+			ProcessLogger.currentLevel = level;
+			return OperationJson.build().sucess().toString();
+		}
+		return OperationJson.build().error().toString();
+	}
+
+	@Mapping("/misc/remotable/edit")
+	@Jsonp
+	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
+	public String updateMiscMonitorRemotable(WebAttributers was) {
+		String enableRemote = was.get(WebStatic.WEB_MONITOR_INIT_PARAM_ENABLE_REMOTE);
+		try {
+			Boolean.valueOf(enableRemote);
+			WebContexts.getServletContext().setAttribute(WebStatic.WEB_MONITOR_INIT_PARAM_ENABLE_REMOTE, enableRemote);
+			return OperationJson.build().sucess().toString();
+		} catch (Exception e) {
+			ProcessLogger.warn(e);
+			return OperationJson.build().error(e.getMessage()).toString();
+		}
 	}
 
 	private PageMap newPageMap() {

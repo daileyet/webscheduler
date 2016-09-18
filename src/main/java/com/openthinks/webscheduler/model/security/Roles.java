@@ -100,12 +100,12 @@ public class Roles extends DefaultStatable {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	public List<Role> findByIds(String roleIds) {
-		List<Role> result = roles.stream().filter((role) -> {
+	public Set<Role> findByIds(String roleIds) {
+		Set<Role> result = roles.stream().filter((role) -> {
 			if (roleIds.indexOf(role.getId()) >= 0)
 				return true;
 			return false;
-		}).collect(Collectors.toList());
+		}).collect(Collectors.toSet());
 		return result;
 	}
 

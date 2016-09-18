@@ -12,7 +12,7 @@
 	<servlet>
 		<servlet-name>easyweb</servlet-name>
 		<servlet-class>com.openthinks.easyweb.EasyWebDispatcher</servlet-class>
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>0</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>easyweb</servlet-name>
@@ -25,6 +25,11 @@
 	<servlet>
 		<servlet-name>monitor</servlet-name>
 		<servlet-class>com.openthinks.easyweb.monitor.WebProcessMonitor</servlet-class>
+		<init-param>
+  			<param-name>enableRemote</param-name>
+  			<param-value>true</param-value>
+  		</init-param>
+  		<load-on-startup>0</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>monitor</servlet-name>
@@ -34,10 +39,6 @@
 	<filter>
   		<filter-name>EasyWebFilter</filter-name>
   		<filter-class>com.openthinks.easyweb.EasyWebFilter</filter-class>
-  		<web:init-param>
-  			<web:param-name>enableRemote</web:param-name>
-  			<web:param-value>true</web:param-value>
-  		</web:init-param>
   	</filter>
   	<filter-mapping>
   		<filter-name>EasyWebFilter</filter-name>
@@ -58,11 +59,6 @@
 		<param-value>classpath:/ws-conf.properties</param-value>
 	</context-param>
 
-	<!-- <context-param>
-		<param-name>easywebClassDir</param-name>
-		<param-value>R:\MyGit\webscheduler\target\classes</param-value>
-	</context-param> -->
-	
 	<session-config>
 		<!-- minutes -->
 		<session-timeout>30</session-timeout>

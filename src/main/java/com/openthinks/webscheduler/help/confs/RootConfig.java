@@ -30,6 +30,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Set;
 
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.context.WebContexts;
@@ -131,6 +132,19 @@ public class RootConfig implements ConfigObject {
 	@Override
 	public ConfigObjects children() {
 		return children;
+	}
+
+	public String getConfigContent() {
+		if (this.properties == null)
+			return "";
+		Set<String> properties = this.properties.stringPropertyNames();
+		StringBuffer sb = new StringBuffer();
+		properties.forEach((propertyName) -> {
+			String propertyValue = this.properties.getProperty(propertyName);
+			sb.append(propertyName + "=" + propertyValue);
+			sb.append("\r\n");
+		});
+		return sb.toString();
 	}
 
 }

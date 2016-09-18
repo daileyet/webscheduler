@@ -27,7 +27,7 @@ package com.openthinks.webscheduler.model.security;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -64,7 +64,7 @@ public class User extends DefaultStatable implements Serializable {
 	@XmlElement(name = "user-pass")
 	private String pass;
 	@XmlTransient
-	private List<Role> roles;
+	private Set<Role> roles;
 	@XmlElement(name = "user-roles")
 	private RoleKeys roleKeys;
 	@XmlElement(name = "user-cookie")
@@ -106,7 +106,7 @@ public class User extends DefaultStatable implements Serializable {
 		this.pass = pass;
 	}
 
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		if ((this.roles == null || this.roles.isEmpty()) && this.roleKeys != null) {
 			try {
 				this.roles = this.roleKeys.getRoles().stream().map((roleKey) -> {
@@ -120,10 +120,10 @@ public class User extends DefaultStatable implements Serializable {
 					}
 					Checker.require(role).notNull();
 					return role;
-				}).collect(Collectors.toList());
+				}).collect(Collectors.toSet());
 			} catch (Exception e) {
 				ProcessLogger.error(e);
-				this.roles = Collections.emptyList();
+				this.roles = Collections.emptySet();
 			}
 		}
 		return roles;
@@ -136,7 +136,7 @@ public class User extends DefaultStatable implements Serializable {
 		return joinedKeys;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 		if (roles != null) {
 			RoleKeys roleKeys = new RoleKeys();

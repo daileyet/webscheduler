@@ -56,7 +56,7 @@
 							</a>
 					</div>
 					<div class="col-xs-6 col-sm-6 placeholder">
-						<a href="#" class="no-underline">
+						<a href="${ew:path('/setting/misc') }" class="no-underline">
 							<img src="${ew:pathS('/static/img/misc_512.png')}"
 								width="200" height="200" class="img-responsive"
 								alt="Generic placeholder thumbnail">
