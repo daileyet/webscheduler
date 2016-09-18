@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.annotation.process.filter.file.FileFilterVisitor;
@@ -17,6 +19,7 @@ import com.openthinks.webscheduler.help.StaticUtils;
 
 /**
  * all task definition keeper
+ * 
  * @author dailey.yet@outlook.com
  *
  */
@@ -27,6 +30,7 @@ public final class TaskTypes {
 	private static final List<Class<? extends CustomTaskDefinition>> customTaskDefinitions = new ArrayList<>();
 	private static final List<Class<?>> allTasks = new ArrayList<>();
 	private static final Map<Class<? extends ITaskDefinition>, ITaskDefinition> taskInstanceSingletonMap = new ConcurrentHashMap<>();
+	private static Lock lock = new ReentrantLock();
 
 	static class PackageUnit {
 		private String packageRootDir;
@@ -87,19 +91,30 @@ public final class TaskTypes {
 	}
 
 	static {
-		scanedPackages.add(PackageUnit.of("com.openthinks.webscheduler.task.support"));
-		scanedPackages.add(PackageUnit.of("com.openthinks.webscheduler.task.custom"));
-		scanedPackages.add(
-				PackageUnit.of(StaticUtils.getDefaultCustomTaskTargetDir(), "com.openthinks.webscheduler.task.custom"));
+		initScanedPackages();
 		scan();
 	}
 
-	public static void init() {
+	public static void reload() {
+		initScanedPackages();
+		scan();
+	}
 
+	private static void initScanedPackages() {
+		lock.lock();
+		try {
+			scanedPackages.clear();
+			scanedPackages.add(PackageUnit.of("com.openthinks.webscheduler.task.support"));
+			scanedPackages.add(PackageUnit.of("com.openthinks.webscheduler.task.custom"));
+			scanedPackages.add(PackageUnit.of(StaticUtils.getDefaultCustomTaskTargetDir(),
+					"com.openthinks.webscheduler.task.custom"));
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	/**
-	 * scan and automatically find task definition class 
+	 * scan and automatically find task definition class
 	 */
 	public static void scan() {
 		clear();
@@ -147,9 +162,15 @@ public final class TaskTypes {
 	}
 
 	static void clear() {
-		allTasks.clear();
-		supportTasks.clear();
-		customTaskDefinitions.clear();
+		lock.lock();
+		try {
+			allTasks.clear();
+			supportTasks.clear();
+			customTaskDefinitions.clear();
+			taskInstanceSingletonMap.clear();
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	private static void visitPackage(PackageUnit pu) {

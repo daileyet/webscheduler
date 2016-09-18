@@ -452,6 +452,25 @@ public class SettingController {
 			return OperationJson.build().error(e.getMessage()).toString();
 		}
 	}
+	
+	@Mapping("/misc/ttypes/reload")
+	@Jsonp
+	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
+	public String reloadMiscTaskTypes(){
+		TaskTypes.reload();
+		return OperationJson.build().sucess().toString();
+	}
+	
+	@Mapping("/misc/tprefs/reload")
+	@Jsonp
+	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
+	public String reloadMiscTaskProtectedRefs(){
+		TaskRefProtected.getAllProtectedRefs().forEach((taskProtected)->{
+			taskProtected.reload();
+		});
+		return OperationJson.build().sucess().toString();
+	}
+
 
 	private PageMap newPageMap() {
 		return PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_ACTIVESIDEBAR, "settings");

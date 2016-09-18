@@ -192,7 +192,7 @@ public final class TaskRefProtected extends DefaultStatable {
 	/**
 	 * reload again from configure file
 	 */
-	public void refresh() {
+	public void reload() {
 		initialize();
 	}
 

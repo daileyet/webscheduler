@@ -76,7 +76,18 @@
 						</div>
 						<div class=" ">
 							<blockquote><h3  id="reload">Reload</h3></blockquote>
-							<p>TBD</p>
+							<dl class="dl-horizontal">
+								<dt style="text-align:left">Task types</dt>
+								<dd><button type="button" id="reload_tasktypes" data-loading-text="Reloading..." class="btn btn-primary" autocomplete="off"
+									data-link="${ew:path('/setting/misc/ttypes/reload') }"
+								>Reload</button></dd>
+								<dt>&nbsp;</dt>
+								<dd></dd>
+								<dt style="text-align:left">Task protected</dt>
+								<dd><button type="button" id="reload_taskprotected" data-loading-text="Reloading..." class="btn btn-primary" autocomplete="off"
+									data-link="${ew:path('/setting/misc/tprefs/reload') }"
+								>Reload</button></dd>
+							</dl>
 						</div>
 						<div class=" ">
 							<blockquote><h3  id="service">Service</h3></blockquote>
