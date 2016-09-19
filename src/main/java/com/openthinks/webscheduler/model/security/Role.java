@@ -50,6 +50,8 @@ public class Role extends DefaultStatable implements Serializable {
 	private String name;
 	@XmlElement(name = "role-desc")
 	private String desc;
+	@XmlElement(name = "role-maps")
+	private RoleMaps roleMaps;
 
 	public String getId() {
 		return id;
@@ -76,6 +78,10 @@ public class Role extends DefaultStatable implements Serializable {
 	public void setDesc(String desc) {
 		notifyChanged(this.desc, desc);
 		this.desc = desc;
+	}
+	
+	public RoleMaps getRoleMaps() {
+		return roleMaps;
 	}
 
 	@Override

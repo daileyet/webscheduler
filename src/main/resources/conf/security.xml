@@ -10,12 +10,24 @@
 		<role id="16a30fe5974d4bd09a0ae5ffc0985a2b">
 			<role-name>contributor</role-name>
 			<role-desc>Contributor role: manager task and custom definition; include viewer role</role-desc>
+			<role-maps>
+				<role-map path="/webscheduler/task/" />
+				<role-map include="740fda352c2c43d4a9a7818ca2407b30"/>
+			</role-maps>
 		</role>
 		<role id="740fda352c2c43d4a9a7818ca2407b30">
 			<role-name>viewer</role-name>
 			<role-desc>Viewer role: view dashboard; view task and custom definition</role-desc>
+			<role-maps>
+				<role-map path="/webscheduler/index" />
+				<role-map path="/webscheduler/help" />
+				<role-map path="/webscheduler/chart1" />
+				<role-map path="/webscheduler/chart2" />
+			</role-maps>
 		</role>
 	</roles>
+	
+	
 	<!-- User definitions -->
 	<users>
 		<user id="ffcef8f4ec7c4bfb9934e14b130de58b">
