@@ -82,6 +82,7 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_ROLE_ID = "roleid";
 	public static final String PAGE_PARAM_ROLE_NAME = "rolename";
 	public static final String PAGE_PARAM_ROLE_DESC = "roledesc";
+	public static final String PAGE_PARAM_LOGGER_LEVEL = "logger_level";
 
 	public static final String PAGE_PARAM_LIST_JOIN = ",";
 
@@ -117,6 +118,7 @@ public interface StaticDict {
 	public static final String CONF_NAMESPACE = "namespace";
 	public static final String CONF_EASYWEBCLASSDIR = "easyweb.class.dir";
 	public static final String CONF_LOGGER_LEVEL = "logger.level";
-	public static final String PAGE_PARAM_LOGGER_LEVEL = "logger_level";
+
+	public static final String CONF_QUARTZ_FILE = "quartz.file";
 
 }

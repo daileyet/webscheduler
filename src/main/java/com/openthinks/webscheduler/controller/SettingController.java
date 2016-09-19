@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.quartz.SchedulerException;
 
 import com.openthinks.easyweb.WebStatic;
 import com.openthinks.easyweb.WebUtils;
@@ -57,6 +58,7 @@ import com.openthinks.webscheduler.model.security.Roles;
 import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.model.security.Users;
 import com.openthinks.webscheduler.model.task.ITaskRef;
+import com.openthinks.webscheduler.service.SchedulerService;
 import com.openthinks.webscheduler.service.WebSecurityService;
 import com.openthinks.webscheduler.task.ITaskDefinition;
 import com.openthinks.webscheduler.task.TaskRefProtected;
@@ -70,6 +72,8 @@ import com.openthinks.webscheduler.task.TaskTypes;
 public class SettingController {
 	@AutoComponent
 	WebSecurityService securityService;
+	@AutoComponent
+	SchedulerService schedulerService;
 
 	@AutoComponent
 	RootConfig rootConfig;
@@ -419,8 +423,10 @@ public class SettingController {
 		pm.push("basic_task_class_file_path", StaticUtils.getDefaultCustomTaskTargetDir());
 		pm.push("logger_level_list", ProcessLogger.PLLevel.values());
 		pm.push("logger_level_now", ProcessLogger.currentLevel());
-		ProcessLogger.debug("Enable remote monitor = " + WebUtils.isEnableRemoteMonitor());
 		pm.push("monitor_remotable", WebUtils.isEnableRemoteMonitor());
+
+		pm.push("quartz_properties", schedulerService.getQuartzConfigContent());
+		pm.push("quartz_metadata", schedulerService.getSchedulerMetaData());
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_MAP, pm);
 		return "WEB-INF/jsp/setting/misc/index.jsp";
 	}
@@ -452,25 +458,50 @@ public class SettingController {
 			return OperationJson.build().error(e.getMessage()).toString();
 		}
 	}
-	
+
 	@Mapping("/misc/ttypes/reload")
 	@Jsonp
 	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
-	public String reloadMiscTaskTypes(){
+	public String reloadMiscTaskTypes() {
 		TaskTypes.reload();
 		return OperationJson.build().sucess().toString();
 	}
-	
+
 	@Mapping("/misc/tprefs/reload")
 	@Jsonp
 	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
-	public String reloadMiscTaskProtectedRefs(){
-		TaskRefProtected.getAllProtectedRefs().forEach((taskProtected)->{
+	public String reloadMiscTaskProtectedRefs() {
+		TaskRefProtected.getAllProtectedRefs().forEach((taskProtected) -> {
 			taskProtected.reload();
 		});
 		return OperationJson.build().sucess().toString();
 	}
 
+	@Mapping("/misc/scheduler/stop")
+	@Jsonp
+	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
+	public String stopMiscSchedulerService() {
+		try {
+			schedulerService.stop();
+			return OperationJson.build().sucess().toString();
+		} catch (SchedulerException e) {
+			ProcessLogger.error(e);
+			return OperationJson.build().error(e.getMessage()).toString();
+		}
+	}
+
+	@Mapping("/misc/scheduler/start")
+	@Jsonp
+	@ResponseReturn(contentType = ResponseReturnType.TEXT_JAVASCRIPT)
+	public String startMiscSchedulerService() {
+		try {
+			schedulerService.start();
+			return OperationJson.build().sucess().toString();
+		} catch (SchedulerException e) {
+			ProcessLogger.error(e);
+			return OperationJson.build().error(e.getMessage()).toString();
+		}
+	}
 
 	private PageMap newPageMap() {
 		return PageMap.build().push(StaticDict.PAGE_ATTRIBUTE_ACTIVESIDEBAR, "settings");

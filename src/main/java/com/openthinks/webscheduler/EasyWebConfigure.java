@@ -39,6 +39,7 @@ public class EasyWebConfigure implements Bootstrap {
 		ProcessLogger.info("Start WebScheduler...");
 		try {
 			schedulerService.start();
+			ProcessLogger.info("WebScheduler started.");
 		} catch (SchedulerException e) {
 			ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
 		}

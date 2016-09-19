@@ -5,6 +5,8 @@
 		'Input_Remote_monitor':'#remote_monitor',
 		'Btn_Reload_tasktypes':'#reload_tasktypes',
 		'Btn_Reload_tprs':'#reload_taskprotected',
+		'Btn_Stop_scheduler':'#stop_scheduler',
+		'Btn_Start_scheduler':'#start_scheduler',
 		init:function(){
 			this.components.init();
 		}
@@ -49,6 +51,16 @@
 				    _this.reloadOps($btn);
 				});
 				
+				$(ctx.VIEW.Btn_Stop_scheduler).on('click', function () {
+				    var $btn = $(this).button('loading');
+				    _this.schedulerOps($btn);
+				});
+				
+				$(ctx.VIEW.Btn_Start_scheduler).on('click', function () {
+				    var $btn = $(this).button('loading');
+				    _this.schedulerOps($btn);
+				});
+				
 			},
 			updateLoggerLevel:function(sNewLevel){
 				var $level = $(ctx.VIEW.Select_Logger_level);
@@ -89,6 +101,21 @@
 				});
 			},
 			reloadOps:function($btn){
+				var _this = this;
+				$.ajax({
+					type: "post",
+					url: $btn.data("link"),
+					async: false,
+					dataType: "jsonp",
+					success: function(data) {
+						_this.notifyResult($btn.parents('dd').prev(),data,$btn);
+					},
+					error: function(jqXHR,textStatus,errorThrown ) {
+						_this.notifyResult($btn.parents('dd').prev(),{type:'ERROR',msg:errorThrown},$btn);
+					}
+				});
+			},
+			schedulerOps:function($btn){
 				var _this = this;
 				$.ajax({
 					type: "post",

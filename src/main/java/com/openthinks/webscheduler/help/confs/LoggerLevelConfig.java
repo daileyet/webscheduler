@@ -32,10 +32,10 @@ import com.openthinks.libs.utilities.logger.ProcessLogger.PLLevel;
  * @author dailey.yet@outlook.com
  *
  */
-public class LoggerLevelConfig implements ConfigObject {
+public final class LoggerLevelConfig implements ConfigObject {
 	private String level;
 
-	public LoggerLevelConfig(String loglevel) {
+	LoggerLevelConfig(String loglevel) {
 		this.level = loglevel;
 	}
 

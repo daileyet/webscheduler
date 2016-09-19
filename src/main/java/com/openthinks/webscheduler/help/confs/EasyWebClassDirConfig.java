@@ -38,13 +38,13 @@ import com.openthinks.webscheduler.help.StaticDict;
  * @author dailey.yet@outlook.com
  *
  */
-public class EasyWebClassDirConfig extends AbstractConfigObject {
+public final class EasyWebClassDirConfig extends AbstractConfigObject {
 
-	public EasyWebClassDirConfig(String configPath, ConfigObject parent) {
+	EasyWebClassDirConfig(String configPath, ConfigObject parent) {
 		super(configPath, parent);
 	}
 
-	public EasyWebClassDirConfig(String configPath) {
+	EasyWebClassDirConfig(String configPath) {
 		super(configPath);
 	}
 

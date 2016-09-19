@@ -38,13 +38,13 @@ import com.openthinks.webscheduler.task.TaskRefProtected;
  * @author dailey.yet@outlook.com
  *
  */
-public class TaskRefProtectedConfig extends AbstractConfigObject {
+public final class TaskRefProtectedConfig extends AbstractConfigObject {
 
-	public TaskRefProtectedConfig(String configPath, ConfigObject parent) {
+	TaskRefProtectedConfig(String configPath, ConfigObject parent) {
 		super(configPath, parent);
 	}
 
-	public TaskRefProtectedConfig(String configPath) {
+	TaskRefProtectedConfig(String configPath) {
 		super(configPath);
 	}
 

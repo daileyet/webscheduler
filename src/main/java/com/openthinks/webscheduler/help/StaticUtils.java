@@ -33,6 +33,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.quartz.TriggerKey;
@@ -159,6 +161,19 @@ public final class StaticUtils {
 
 	public static String UUID() {
 		return java.util.UUID.randomUUID().toString();
+	}
+
+	public static String getPropertiesContent(final Properties properties) {
+		if (properties == null)
+			return "";
+		Set<String> propKeys = properties.stringPropertyNames();
+		StringBuffer sb = new StringBuffer();
+		propKeys.forEach((propertyName) -> {
+			String propertyValue = properties.getProperty(propertyName);
+			sb.append(propertyName + "=" + propertyValue);
+			sb.append("\r\n");
+		});
+		return sb.toString();
 	}
 
 }

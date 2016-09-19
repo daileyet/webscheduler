@@ -2,6 +2,8 @@ package com.openthinks.webscheduler.service;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -17,7 +19,9 @@ import org.quartz.TriggerListener;
 import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.openthinks.libs.utilities.Checker;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
+import com.openthinks.webscheduler.help.confs.QuartzConfig;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.ITaskTrigger;
 import com.openthinks.webscheduler.model.task.TaskState;
@@ -31,27 +35,69 @@ import com.openthinks.webscheduler.task.TaskInterruptException;
  */
 public class SchedulerService {
 
+	private StdSchedulerFactory stdSchedulerFactory;
+	private QuartzConfig quartzConfig;
 	private Scheduler scheduler;
+	private Lock lock = new ReentrantLock();
 
-	public SchedulerService() {
+	public void init(QuartzConfig quartzConfig) throws SchedulerException {
+		ProcessLogger.debug(getClass() + " start init...");
+		this.quartzConfig = quartzConfig;
+		Checker.require(this.quartzConfig).notNull();
+		this.stdSchedulerFactory = new StdSchedulerFactory(this.quartzConfig.getQuartzProps());
+	}
+
+	public String getQuartzConfigContent() {
+		return quartzConfig == null ? "" : quartzConfig.getConfigContent();
+	}
+
+	public String getSchedulerMetaData() {
 		try {
-			scheduler = StdSchedulerFactory.getDefaultScheduler();
-			scheduler.getListenerManager().addJobListener(new DefaultJobListener());
-			scheduler.getListenerManager().addTriggerListener(new DefaultTriggerListener());
+			return getScheduler().getMetaData().toString();
 		} catch (SchedulerException e) {
-			ProcessLogger.fatal(e);
+			ProcessLogger.warn(e);
+			return "";
 		}
 	}
 
+	private Scheduler getScheduler() throws SchedulerException {
+		lock.lock();
+		try {
+			if (scheduler == null) {
+				scheduler = getStdSchedulerFactory().getScheduler();
+				scheduler.getListenerManager().addJobListener(new DefaultJobListener());
+				scheduler.getListenerManager().addTriggerListener(new DefaultTriggerListener());
+			}
+		} finally {
+			lock.unlock();
+		}
+		return scheduler;
+	}
+
+	private StdSchedulerFactory getStdSchedulerFactory() {
+		lock.lock();
+		try {
+			if (stdSchedulerFactory == null)
+				stdSchedulerFactory = new StdSchedulerFactory();
+		} finally {
+			lock.unlock();
+		}
+		return stdSchedulerFactory;
+	}
+
 	public void start() throws SchedulerException {
-		scheduler.start();
+		Scheduler scheduler = getScheduler();
+		if (scheduler.isShutdown()) {
+			this.scheduler = null;
+		}
+		getScheduler().start();
 	}
 
 	public boolean interrupt(JobKey jobKey) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = scheduler.interrupt(jobKey);
-			isSuccess = scheduler.deleteJob(jobKey);
+			isSuccess = getScheduler().interrupt(jobKey);
+			isSuccess = getScheduler().deleteJob(jobKey);
 		} catch (UnableToInterruptJobException e) {
 			isSuccess = false;
 		} catch (TaskInterruptException e) {
@@ -68,8 +114,8 @@ public class SchedulerService {
 		try {
 			ITaskTrigger taskTrigger = taskRunTimeData.getTaskTrigger();
 			TriggerKey triggerKey = taskTrigger.getTriggerKey();
-			if (scheduler.checkExists(triggerKey)) {
-				isSuccess = scheduler.unscheduleJob(triggerKey);
+			if (getScheduler().checkExists(triggerKey)) {
+				isSuccess = getScheduler().unscheduleJob(triggerKey);
 			} else {
 				isSuccess = true;
 			}
@@ -86,7 +132,7 @@ public class SchedulerService {
 	public boolean delete(JobKey jobKey) {
 		boolean isSuccess = false;
 		try {
-			isSuccess = scheduler.deleteJob(jobKey);
+			isSuccess = getScheduler().deleteJob(jobKey);
 		} catch (SchedulerException e) {
 			isSuccess = false;
 			ProcessLogger.fatal(e);
@@ -95,11 +141,23 @@ public class SchedulerService {
 	}
 
 	public void stop() throws SchedulerException {
-		scheduler.shutdown();
+		getScheduler().shutdown();
+	}
+
+	public void stopAll() throws SchedulerException {
+		if (stdSchedulerFactory != null) {
+			stdSchedulerFactory.getAllSchedulers().forEach((scheduler) -> {
+				try {
+					scheduler.shutdown();
+				} catch (SchedulerException e) {
+					ProcessLogger.warn(e);
+				}
+			});
+		}
 	}
 
 	public void scheduleJob(JobDetail job, Trigger trigger) throws SchedulerException {
-		scheduler.scheduleJob(job, trigger);
+		getScheduler().scheduleJob(job, trigger);
 	}
 
 }

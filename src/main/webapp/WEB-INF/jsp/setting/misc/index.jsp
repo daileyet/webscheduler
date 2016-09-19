@@ -78,24 +78,38 @@
 							<blockquote><h3  id="reload">Reload</h3></blockquote>
 							<dl class="dl-horizontal">
 								<dt style="text-align:left">Task types</dt>
-								<dd><button type="button" id="reload_tasktypes" data-loading-text="Reloading..." class="btn btn-primary" autocomplete="off"
+								<dd><button type="button" id="reload_tasktypes" data-loading-text="Reloading..." class="btn btn-primary btn-sm" autocomplete="off"
 									data-link="${ew:path('/setting/misc/ttypes/reload') }"
 								>Reload</button></dd>
 								<dt>&nbsp;</dt>
 								<dd></dd>
 								<dt style="text-align:left">Task protected</dt>
-								<dd><button type="button" id="reload_taskprotected" data-loading-text="Reloading..." class="btn btn-primary" autocomplete="off"
+								<dd><button type="button" id="reload_taskprotected" data-loading-text="Reloading..." class="btn btn-primary btn-sm " autocomplete="off"
 									data-link="${ew:path('/setting/misc/tprefs/reload') }"
 								>Reload</button></dd>
 							</dl>
 						</div>
 						<div class=" ">
-							<blockquote><h3  id="service">Service</h3></blockquote>
-							<p>TBD</p>
+							<blockquote><h3  id="quartz">Quartz</h3></blockquote>
+							<dl>
+								<dt>Quartz properties</dt>
+								<dd><pre>${pm.quartz_properties }</pre></dd>
+								<dt>Quartz runtime meta data</dt>
+								<dd><pre>${pm.quartz_metadata }</pre></dd>
+							</dl>
 						</div>
 						<div class=" ">
-							<blockquote><h3  id="quartz">Quartz</h3></blockquote>
-							<p>TBD</p>
+							<blockquote><h3  id="service">Service</h3></blockquote>
+							<dl class="dl-horizontal">
+								<dt style="text-align:left">Scheduler service</dt>
+								<dd><button type="button" id="stop_scheduler" data-loading-text="Stoping..." class="btn btn-primary btn-sm" autocomplete="off"
+									data-link="${ew:path('/setting/misc/scheduler/stop') }">Stop</button></dd>
+								<dt>&nbsp;</dt>
+								<dd></dd>
+								<dt style="text-align:left">Scheduler service</dt>
+								<dd><button type="button" id="start_scheduler" data-loading-text="Starting..." class="btn btn-primary btn-sm " autocomplete="off"
+									data-link="${ew:path('/setting/misc/scheduler/start') }">Start</button></dd>
+							</dl>
 						</div>
 					</div>
 					<nav class="col-sm-3 col-md-2 bs-docs-sidebar" id="docs-nav">
@@ -105,8 +119,8 @@
 							<li><a href="#basic">Basic</a></li>
 							<li><a href="#logger-monitor">Logger & Monitor</a></li>
 							<li><a href="#reload">Reload</a></li>
-							<li><a href="#service">Service</a></li>
 							<li><a href="#quartz">Quartz</a></li>
+							<li><a href="#service">Service</a></li>
 						</ul>
 					</nav>
 				</div>

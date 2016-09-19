@@ -46,14 +46,14 @@ import com.openthinks.webscheduler.service.WebSecurityService;
  * @author dailey.yet@outlook.com
  *
  */
-public class SecurityConfig extends AbstractConfigObject {
+public final class SecurityConfig extends AbstractConfigObject {
 	private WebSecurity webSecurity;
 
-	public SecurityConfig(String configPath, ConfigObject parent) {
+	SecurityConfig(String configPath, ConfigObject parent) {
 		super(configPath, parent);
 	}
 
-	public SecurityConfig(String configPath) {
+	SecurityConfig(String configPath) {
 		super(configPath);
 	}
 

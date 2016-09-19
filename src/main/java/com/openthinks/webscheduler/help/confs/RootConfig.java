@@ -30,7 +30,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.Set;
 
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.context.WebContexts;
@@ -38,6 +37,7 @@ import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.exception.FailedConfigPath;
 import com.openthinks.webscheduler.exception.UnSupportConfigPath;
 import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.help.StaticUtils;
 
 /**
  * @author dailey.yet@outlook.com
@@ -115,7 +115,10 @@ public class RootConfig implements ConfigObject {
 		String unchangeRefPath = getProperty4Namespace(StaticDict.CONF_REFS_UNCHANGE_PATH, namespace);
 		TaskRefProtectedConfig protectedConfig = new TaskRefProtectedConfig(unchangeRefPath, this);
 		children.add(protectedConfig);
-
+		//quartz properties configure
+		String quartzFile = getProperty4Namespace(StaticDict.CONF_QUARTZ_FILE, namespace);
+		QuartzConfig quartzConfig = new QuartzConfig(quartzFile, this);
+		children.add(quartzConfig);
 	}
 
 	protected String getProperty4Namespace(final String propertyName, final String namespace) {
@@ -135,16 +138,7 @@ public class RootConfig implements ConfigObject {
 	}
 
 	public String getConfigContent() {
-		if (this.properties == null)
-			return "";
-		Set<String> properties = this.properties.stringPropertyNames();
-		StringBuffer sb = new StringBuffer();
-		properties.forEach((propertyName) -> {
-			String propertyValue = this.properties.getProperty(propertyName);
-			sb.append(propertyName + "=" + propertyValue);
-			sb.append("\r\n");
-		});
-		return sb.toString();
+		return StaticUtils.getPropertiesContent(this.properties);
 	}
 
 }
