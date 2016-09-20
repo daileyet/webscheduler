@@ -5,7 +5,9 @@ package com.openthinks.webscheduler.model.security;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -81,6 +83,16 @@ public class RoleMaps extends DefaultStatable implements Serializable {
 				&& (roleMaps.size() != other.roleMaps.size() || !roleMaps.containsAll(other.roleMaps)))
 			return false;
 		return true;
+	}
+
+	public RoleMap findPath(String mappingPath) {
+		List<RoleMap> result =roleMaps.stream().filter((roleMap)->{
+			if(mappingPath!=null && mappingPath.equals(roleMap.getPath())){
+				return true;
+			}
+			return false;
+		}).collect(Collectors.toList());
+		return result.isEmpty() ? null : result.get(0);
 	}
 
 }

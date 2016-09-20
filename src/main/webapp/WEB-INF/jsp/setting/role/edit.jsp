@@ -15,6 +15,7 @@
 <meta name="author" content="dailey.yet@outlook.com">
 <title>Setting - Role</title>
 <%@ include file="../../template/head.style.jsp"%>
+<link rel="stylesheet" href="${ew:pathS('/static/bootstrap-select/css/bootstrap-select.min.css')}">
 </head>
 <body>
 	<jsp:include page="../../template/navbar.jsp" />
@@ -40,6 +41,24 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="rolemaps" class="col-sm-2 control-label">Role maps</label>
+						<div class="col-sm-10">
+							<input type="hidden" name="rolemaps" id="rolemaps" value="${role.joinedRoleMaps }"/>
+							<select name="rolemaps-sel" required title="Choose some of the following paths..."
+								class="selectpicker show-tick " id="rolemaps-sel" data-width="auto"
+								data-live-search="true" data-show-subtext="true" multiple data-selected-text-format="count > 3">
+								<c:forEach var="webCtr" items="${webControllers }">
+									<optgroup label="<code>${webCtr.relativePath }</code><small>${webCtr.name }</small>">
+										<c:forEach var="webMethod" items="${webCtr.webMethods }">
+											<option value="${webMethod.fullPath }" data-content="<kbd>${webMethod.relativePath }</kbd><small>${webMethod.name }</small>" <c:if test="${fn:contains(role.joinedRoleMaps , webMethod.fullPath)}">selected</c:if>>
+											</option>
+										</c:forEach>
+									</optgroup>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="roledesc" class="col-sm-2 control-label">Role
 							description</label>
 						<div class="col-sm-10">
@@ -59,5 +78,9 @@
 		</div>
 	</div>
 	<%@ include file="../../template/body.script.jsp"%>
+	<script type="text/javascript"
+		src="${ew:pathS('/static/bootstrap-select/js/bootstrap-select.min.js')}"></script>
+	<script type="text/javascript"
+		src="${ew:pathS('/static/js/setting.role.edit.js')}"></script>
 </body>
 </html>

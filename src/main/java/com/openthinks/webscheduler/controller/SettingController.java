@@ -139,6 +139,8 @@ public class SettingController {
 			return StaticUtils.errorPage(was, this.newPageMap());
 		}
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_ROLE, role);
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_WEB_CONTROLLER_LIST,
+				WebContexts.get().getWebContainer().getWebControllers());
 		return "WEB-INF/jsp/setting/role/edit.jsp";
 	}
 
@@ -155,8 +157,10 @@ public class SettingController {
 		}
 		String roleName = was.get(StaticDict.PAGE_PARAM_ROLE_NAME);
 		String roleDesc = was.get(StaticDict.PAGE_PARAM_ROLE_DESC);
+		String rolemaps = was.get(StaticDict.PAGE_PARAM_ROLE_MAPS);
 		try {
 			Checker.require(roleName).notEmpty("Role name can not be empty.");
+			Checker.require(rolemaps).notEmpty("Role maps can not be empty.");
 		} catch (Exception e) {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, e.getMessage(), WebScope.REQUEST);
 			return StaticUtils.errorPage(was, pm);
@@ -170,6 +174,7 @@ public class SettingController {
 			}
 		}
 		role.setName(roleName);
+		role.setRoleMaps(RoleMaps.valueOf(rolemaps));
 		role.setDesc(roleDesc);
 		isSuccess = true;
 		if (!isSuccess) {

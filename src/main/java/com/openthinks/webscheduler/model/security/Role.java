@@ -26,6 +26,7 @@
 package com.openthinks.webscheduler.model.security;
 
 import java.io.Serializable;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.model.Statable.DefaultStatable;
 
 /**
@@ -81,7 +83,17 @@ public class Role extends DefaultStatable implements Serializable {
 	}
 
 	public RoleMaps getRoleMaps() {
+		if(roleMaps==null){
+			this.roleMaps=new RoleMaps();
+		}
 		return roleMaps;
+	}
+	
+	public String getJoinedRoleMaps(){
+		String joinedMaps = getRoleMaps().getRoleMaps().stream().map((roleMap) -> {
+			return roleMap.getPath();
+		}).collect(Collectors.joining(StaticDict.PAGE_PARAM_LIST_JOIN));
+		return joinedMaps;
 	}
 
 	public void setRoleMaps(RoleMaps roleMaps) {

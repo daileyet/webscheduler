@@ -42,13 +42,15 @@
 						<label for="rolemaps" class="col-sm-2 control-label">Role maps</label>
 						<div class="col-sm-10">
 							<input type="hidden" name="rolemaps" id="rolemaps"/>
-							<select name="rolemaps-sel" required
+							<select name="rolemaps-sel" required title="Choose some of the following paths..."
 								class="selectpicker show-tick " id="rolemaps-sel" data-width="auto"
 								data-live-search="true" data-show-subtext="true" multiple data-selected-text-format="count > 3">
 								<c:forEach var="webCtr" items="${webControllers }">
-									<optgroup label="${webCtr.name }">
+									<optgroup label="<code>${webCtr.relativePath }</code><small>${webCtr.name }</small>">
 										<c:forEach var="webMethod" items="${webCtr.webMethods }">
-											<option value="${webMethod.fullPath }">${webMethod.relativePath }</option>
+											<option value="${webMethod.fullPath }" data-content="<kbd>${webMethod.relativePath }</kbd><small>${webMethod.name }</small>">
+											<kbd>${webMethod.relativePath }</kbd>
+											</option>
 										</c:forEach>
 									</optgroup>
 								</c:forEach>
