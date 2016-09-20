@@ -54,6 +54,7 @@ import com.openthinks.webscheduler.help.StaticUtils;
 import com.openthinks.webscheduler.help.confs.RootConfig;
 import com.openthinks.webscheduler.model.Statable;
 import com.openthinks.webscheduler.model.security.Role;
+import com.openthinks.webscheduler.model.security.RoleMaps;
 import com.openthinks.webscheduler.model.security.Roles;
 import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.model.security.Users;
@@ -94,6 +95,8 @@ public class SettingController {
 
 	@Mapping("/role/to/add")
 	public String toAddRole(WebAttributers was) {
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_WEB_CONTROLLER_LIST,
+				WebContexts.get().getWebContainer().getWebControllers());
 		return "WEB-INF/jsp/setting/role/add.jsp";
 	}
 
@@ -103,8 +106,10 @@ public class SettingController {
 		PageMap pm = newPageMap();
 		String roleName = was.get(StaticDict.PAGE_PARAM_ROLE_NAME);
 		String roleDesc = was.get(StaticDict.PAGE_PARAM_ROLE_DESC);
+		String rolemaps = was.get(StaticDict.PAGE_PARAM_ROLE_MAPS);
 		try {
 			Checker.require(roleName).notEmpty("Role name can not be empty.");
+			Checker.require(rolemaps).notEmpty("Role maps can not be empty.");
 		} catch (Exception e) {
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, e.getMessage(), WebScope.REQUEST);
 			return StaticUtils.errorPage(was, pm);
@@ -112,6 +117,7 @@ public class SettingController {
 		Role role = new Role();
 		role.setId(StaticUtils.UUID());
 		role.setName(roleName);
+		role.setRoleMaps(RoleMaps.valueOf(rolemaps));
 		role.setDesc(roleDesc);
 		isSuccess = securityService.getRoles().add(role);
 		if (!isSuccess) {

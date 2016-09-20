@@ -79,9 +79,14 @@ public class Role extends DefaultStatable implements Serializable {
 		notifyChanged(this.desc, desc);
 		this.desc = desc;
 	}
-	
+
 	public RoleMaps getRoleMaps() {
 		return roleMaps;
+	}
+
+	public void setRoleMaps(RoleMaps roleMaps) {
+		notifyChanged(this.roleMaps, roleMaps);
+		this.roleMaps = roleMaps;
 	}
 
 	@Override
