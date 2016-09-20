@@ -109,7 +109,7 @@ public class WebSecurityFilter {
 			}
 		}else{
 			try {
-				User user = was.getSession(StaticDict.SESSION_ATTR_LOGIN_INFO) ;
+				User user = was.getSession(StaticDict.SESSION_ATTR_LOGIN_INFO);
 				return user.getRoles();
 			} catch (Exception e) {
 				ProcessLogger.error(e);
