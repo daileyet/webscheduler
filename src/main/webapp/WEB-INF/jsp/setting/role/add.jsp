@@ -42,8 +42,8 @@
 						<label for="rolemaps" class="col-sm-2 control-label">Role maps</label>
 						<div class="col-sm-10">
 							<input type="hidden" name="rolemaps" id="rolemaps"/>
-							<select name="rolemaps-sel" required title="Choose some of the following paths..."
-								class="selectpicker show-tick " id="rolemaps-sel" data-width="auto"
+							<select name="rolemaps-sel-path"  title="Choose some of the following paths..."
+								class="selectpicker show-tick " id="rolemaps-sel-path" data-width="auto"
 								data-live-search="true" data-show-subtext="true" multiple data-selected-text-format="count > 3">
 								<c:forEach var="webCtr" items="${webControllers }">
 									<optgroup label="<code>${webCtr.relativePath }</code><small>${webCtr.name }</small>">
@@ -53,6 +53,15 @@
 											</option>
 										</c:forEach>
 									</optgroup>
+								</c:forEach>
+							</select>
+							<p class="visible-xs-block visible-sm-block"></p>
+							<span> <code >&nbsp;+&nbsp;</code> </span>
+							<select name="rolemaps-sel-include" id="rolemaps-sel-include"  data-width="auto" class="selectpicker show-tick"
+							data-show-subtext="true" multiple data-selected-text-format="count > 3"
+							title="Include some of the following roles...">
+								<c:forEach var="role" items="${roles }">
+									<option value="${role.id }">${role.name }</option>
 								</c:forEach>
 							</select>
 						</div>

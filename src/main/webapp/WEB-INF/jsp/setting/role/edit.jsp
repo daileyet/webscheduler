@@ -44,16 +44,30 @@
 						<label for="rolemaps" class="col-sm-2 control-label">Role maps</label>
 						<div class="col-sm-10">
 							<input type="hidden" name="rolemaps" id="rolemaps" value="${role.joinedRoleMaps }"/>
-							<select name="rolemaps-sel" required title="Choose some of the following paths..."
-								class="selectpicker show-tick " id="rolemaps-sel" data-width="auto"
+							<select name="rolemaps-sel-path" required title="Choose some of the following paths..."
+								class="selectpicker show-tick " id="rolemaps-sel-path" data-width="auto"
 								data-live-search="true" data-show-subtext="true" multiple data-selected-text-format="count > 3">
 								<c:forEach var="webCtr" items="${webControllers }">
 									<optgroup label="<code>${webCtr.relativePath }</code><small>${webCtr.name }</small>">
 										<c:forEach var="webMethod" items="${webCtr.webMethods }">
-											<option value="${webMethod.fullPath }" data-content="<kbd>${webMethod.relativePath }</kbd><small>${webMethod.name }</small>" <c:if test="${fn:contains(role.joinedRoleMaps , webMethod.fullPath)}">selected</c:if>>
+											<option value="${webMethod.fullPath }" 
+											data-content="<kbd>${webMethod.relativePath }</kbd><small>${webMethod.name }</small>" 
+											<c:if test="${fn:contains(role.joinedRoleMaps , webMethod.fullPath)}">selected</c:if> >
 											</option>
 										</c:forEach>
 									</optgroup>
+								</c:forEach>
+							</select>
+							<p class="visible-xs-block visible-sm-block"></p>
+							<span> <code >&nbsp;+&nbsp;</code> </span>
+							<select name="rolemaps-sel-include" id="rolemaps-sel-include"  data-width="auto" class="selectpicker show-tick"
+							data-show-subtext="true" multiple data-selected-text-format="count > 3"
+							title="Include some of the following roles...">
+								<c:forEach var="othrole" items="${roles }">
+									<option value="${othrole.id }" 
+									<c:if test="${fn:contains(role.joinedRoleMaps , othrole.id)}">selected</c:if> >
+										${othrole.name }
+									</option>
 								</c:forEach>
 							</select>
 						</div>

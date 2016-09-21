@@ -97,6 +97,7 @@ public class SettingController {
 	public String toAddRole(WebAttributers was) {
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_WEB_CONTROLLER_LIST,
 				WebContexts.get().getWebContainer().getWebControllers());
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_ROLE_LIST, securityService.getRoles().getRoles());
 		return "WEB-INF/jsp/setting/role/add.jsp";
 	}
 
@@ -139,6 +140,10 @@ public class SettingController {
 			return StaticUtils.errorPage(was, this.newPageMap());
 		}
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_ROLE, role);
+		Set<Role> otherRoles = securityService.getRoles().findByPredicate((roleTest) -> {
+			return !role.equals(roleTest);
+		});
+		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_ROLE_LIST, otherRoles);
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_WEB_CONTROLLER_LIST,
 				WebContexts.get().getWebContainer().getWebControllers());
 		return "WEB-INF/jsp/setting/role/edit.jsp";

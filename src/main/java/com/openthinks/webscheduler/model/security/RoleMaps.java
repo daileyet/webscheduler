@@ -1,13 +1,8 @@
-/**
- * 
- */
 package com.openthinks.webscheduler.model.security;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -67,6 +62,23 @@ public class RoleMaps extends DefaultStatable implements Serializable {
 		return false;
 	}
 
+	public RoleMap findPath(String mappingPath) {
+		RoleMap result = null;
+		for (RoleMap roleMap : roleMaps) {
+			if (roleMap.getAllPathsWithInclude().contains(mappingPath)) {
+				result = roleMap;
+				break;
+			}
+		}
+		return result;
+	}
+
+	public boolean existPath(String mappingPath) {
+		return roleMaps.stream().anyMatch((roleMap) -> {
+			return mappingPath != null && roleMap.getAllPathsWithInclude().contains(mappingPath);
+		});
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -83,16 +95,6 @@ public class RoleMaps extends DefaultStatable implements Serializable {
 				&& (roleMaps.size() != other.roleMaps.size() || !roleMaps.containsAll(other.roleMaps)))
 			return false;
 		return true;
-	}
-
-	public RoleMap findPath(String mappingPath) {
-		List<RoleMap> result =roleMaps.stream().filter((roleMap)->{
-			if(mappingPath!=null && mappingPath.equals(roleMap.getPath())){
-				return true;
-			}
-			return false;
-		}).collect(Collectors.toList());
-		return result.isEmpty() ? null : result.get(0);
 	}
 
 }

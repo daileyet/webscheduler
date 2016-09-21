@@ -3,9 +3,7 @@ package com.openthinks.webscheduler.model.security;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -71,51 +69,107 @@ public class Users extends DefaultStatable implements Serializable {
 		return false;
 	}
 
+	/**
+	 * find {@link User} by id
+	 * @param userId String
+	 * @return {@link User} or null
+	 */
 	public User findById(String userId) {
-		List<User> result = users.stream().filter((user) -> {
-			if (user.getId().equals(userId))
-				return true;
-			return false;
-		}).collect(Collectors.toList());
-		return result.isEmpty() ? null : result.get(0);
+		//		List<User> result = users.stream().filter((user) -> {
+		//			if (user.getId().equals(userId))
+		//				return true;
+		//			return false;
+		//		}).collect(Collectors.toList());
+		//		return result.isEmpty() ? null : result.get(0);
+		for (User user : users) {
+			if (user.getId().equals(userId)) {
+				return user;
+			}
+		}
+		return null;
 	}
 
+	/**
+	 * find {@link User} by name
+	 * @param userName String
+	 * @return {@link User} or null
+	 */
 	public User findByName(String userName) {
-		List<User> result = users.stream().filter((user) -> {
-			if (user.getName() != null && user.getName().equals(userName))
-				return true;
-			return false;
-		}).collect(Collectors.toList());
-		return result.isEmpty() ? null : result.get(0);
+		//		List<User> result = users.stream().filter((user) -> {
+		//			if (user.getName() != null && user.getName().equals(userName))
+		//				return true;
+		//			return false;
+		//		}).collect(Collectors.toList());
+		//		return result.isEmpty() ? null : result.get(0);
+		for (User user : users) {
+			if (user.getName() != null && user.getName().equals(userName)) {
+				return user;
+			}
+		}
+		return null;
 	}
 
+	/**
+	 * find {@link User} by email
+	 * @param userEmail String
+	 * @return {@link User} or null
+	 */
 	public User findByEmail(String userEmail) {
-		List<User> result = users.stream().filter((user) -> {
-			if (user.getEmail() != null && user.getEmail().equals(userEmail))
-				return true;
-			return false;
-		}).collect(Collectors.toList());
-		return result.isEmpty() ? null : result.get(0);
+		//		List<User> result = users.stream().filter((user) -> {
+		//			if (user.getEmail() != null && user.getEmail().equals(userEmail))
+		//				return true;
+		//			return false;
+		//		}).collect(Collectors.toList());
+		//		return result.isEmpty() ? null : result.get(0);
+		for (User user : users) {
+			if (user.getEmail() != null && user.getEmail().equals(userEmail)) {
+				return user;
+			}
+		}
+		return null;
 	}
 
+	/**
+	 * find {@link User} by cookie
+	 * @param cookieValue String
+	 * @return {@link User} or null
+	 */
 	public User findByCookie(String cookieValue) {
-		List<User> result = users.stream().filter((user) -> {
+		//		List<User> result = users.stream().filter((user) -> {
+		//			RememberMeCookie rememberCookie = user.getCookie();
+		//			if (rememberCookie != null && rememberCookie.getToken().equals(cookieValue)) {
+		//				String expireTime = rememberCookie.getExpireTime();
+		//				if (expireTime != null) {
+		//					try {
+		//						if (StaticUtils.parseDate(expireTime).before(new Date()))//validate expire time
+		//							return false;
+		//					} catch (Exception e) {
+		//						rememberCookie.setExpireTime(StaticUtils.formatNow());
+		//					}
+		//				}
+		//				return true;
+		//			}
+		//			return false;
+		//		}).collect(Collectors.toList());
+		//		return result.isEmpty() ? null : result.get(0);
+		for (User user : users) {
 			RememberMeCookie rememberCookie = user.getCookie();
 			if (rememberCookie != null && rememberCookie.getToken().equals(cookieValue)) {
 				String expireTime = rememberCookie.getExpireTime();
 				if (expireTime != null) {
 					try {
 						if (StaticUtils.parseDate(expireTime).before(new Date()))//validate expire time
-							return false;
+							continue;
 					} catch (Exception e) {
 						rememberCookie.setExpireTime(StaticUtils.formatNow());
 					}
+				} else {
+					return user;
 				}
-				return true;
 			}
-			return false;
-		}).collect(Collectors.toList());
-		return result.isEmpty() ? null : result.get(0);
+		}
+		return null;
+
 	}
 
 	public boolean removeById(String userId) {
