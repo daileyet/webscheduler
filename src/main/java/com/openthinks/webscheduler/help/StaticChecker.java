@@ -25,10 +25,18 @@
 */
 package com.openthinks.webscheduler.help;
 
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
+import com.openthinks.easyweb.WebUtils;
+import com.openthinks.easyweb.context.WebContexts;
+import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.libs.utilities.Checker;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.security.Role;
 import com.openthinks.webscheduler.model.task.ExecutionResult;
 import com.openthinks.webscheduler.model.task.ITaskTrigger;
 import com.openthinks.webscheduler.model.task.SupportedTrigger;
@@ -36,6 +44,7 @@ import com.openthinks.webscheduler.model.task.TaskAction;
 import com.openthinks.webscheduler.model.task.TaskState;
 import com.openthinks.webscheduler.model.task.trigger.CronTaskTrigger;
 import com.openthinks.webscheduler.model.task.trigger.SimpleTaskTrigger;
+import com.openthinks.webscheduler.service.WebSecurityService;
 
 /**
  * @author dailey.yet@outlook.com
@@ -59,6 +68,48 @@ public final class StaticChecker {
 	public static boolean isLogin(PageContext pageContext) {
 		return (pageContext != null && pageContext.getSession() != null
 				&& pageContext.getSession().getAttribute(StaticDict.SESSION_ATTR_LOGIN_INFO) != null);
+	}
+
+	/**
+	 * check security for on page element
+	 * @see #isAccessable(WebAttributers)
+	 * @param pageContext {@link PageContext}
+	 * @param requestMapingPath String
+	 * @return boolean
+	 */
+	public static boolean isSecurity(PageContext pageContext, String requestMapingShortPath) {
+		WebAttributers was = new WebAttributers((HttpServletRequest) pageContext.getRequest(),
+				(HttpServletResponse) pageContext.getResponse());
+		return isAccessable(was, requestMapingShortPath);
+	}
+
+	/**
+	 * check given request path can be access or not under current session user's role list
+	 * @param was {@link WebAttributers}
+	 * @param requestMapingPath String
+	 * @return boolean
+	 */
+	public static boolean isAccessable(WebAttributers was, String requestMapingPath) {
+		String fullRequestMappingPath = WebUtils.getFullRequestMapingPath(requestMapingPath);
+		Set<Role> roles = StaticUtils.getCurrentSessionRole(was, WebContexts.get().lookup(WebSecurityService.class));
+		boolean isPass = roles.stream().anyMatch((role) -> {
+			return role.getRoleMaps().existPath(fullRequestMappingPath);
+		});
+		return isPass;
+	}
+
+	/**
+	 * check current request can be access or not under current session user's role list
+	 * @param was {@link WebAttributers}
+	 * @return boolean
+	 */
+	public static boolean isAccessable(WebAttributers was) {
+		Set<Role> roles = StaticUtils.getCurrentSessionRole(was, WebContexts.get().lookup(WebSecurityService.class));
+		String requestMapingPath = WebUtils.getRequestMapingPath(was.getRequest().getRequestURI());
+		boolean isPass = roles.stream().anyMatch((role) -> {
+			return role.getRoleMaps().existPath(requestMapingPath);
+		});
+		return isPass;
 	}
 
 	public static boolean isCompleteWith(TaskRunTimeData taskRunTimeData, boolean isSuccess) {

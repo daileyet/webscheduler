@@ -15,6 +15,12 @@
 		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
 		<function-signature>boolean isLogin(javax.servlet.jsp.PageContext)</function-signature>
 	</function>
+	
+	<function>
+		<name>isSecurity</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>boolean isSecurity(javax.servlet.jsp.PageContext,java.lang.String)</function-signature>
+	</function>
 
 	<function>
 		<name>isCompleteWith</name>

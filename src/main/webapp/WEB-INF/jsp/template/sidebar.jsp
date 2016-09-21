@@ -7,13 +7,17 @@
 			class="${param.active=='overview'?'active':''}"><a
 			href="${ew:path('/index')}"><span
 				class="glyphicon glyphicon-home" aria-hidden="true"></span> Overview</a></li>
-		<c:if test="${wsfn:isLogin(pageContext) }">
+		<c:if test="${wsfn:isSecurity(pageContext,'/task/index') }">
 			<li data-role="tasks" class="${param.active=='tasks'?'active':''}"><a
 				href="${ew:path('/task/index')}"><span
 					class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Tasks</a></li>
+		</c:if>
+		<c:if test="${wsfn:isSecurity(pageContext,'/setting/index') }">
 			<li data-role="settings" class="${param.active=='settings'?'active':''}"><a
 				href="${ew:path('/setting/index')}"><span class="glyphicon glyphicon-cog"
 					aria-hidden="true"></span> Settings</a></li>
+		</c:if>
+		<c:if test="${wsfn:isLogin(pageContext) }">
 			<li data-role="exit" class="${param.active=='exit'?'active':''}"><a
 				href="${ew:path('/security/logout')}"><span class="glyphicon glyphicon-off"
 					aria-hidden="true"></span> Logout</a></li>

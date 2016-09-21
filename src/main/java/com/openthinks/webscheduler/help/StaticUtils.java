@@ -31,8 +31,10 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,9 +44,13 @@ import org.quartz.TriggerKey;
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.easyweb.context.handler.WebAttributers;
+import com.openthinks.libs.utilities.Checker;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.security.Role;
+import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
+import com.openthinks.webscheduler.service.WebSecurityService;
 
 /**
  * @author dailey.yet@outlook.com
@@ -174,6 +180,34 @@ public final class StaticUtils {
 			sb.append("\r\n");
 		});
 		return sb.toString();
+	}
+
+	/**
+	 * get current session user's role list if login
+	 * @param was {@link WebAttributers}
+	 * @param securityService {@link WebSecurityService}
+	 * @param <T> {@link Role}
+	 * @return Set<T> role set or empty set
+	 */
+	public static Set<Role> getCurrentSessionRole(WebAttributers was, WebSecurityService securityService) {
+		Checker.require(securityService).notNull();
+		User user = was.getSession(StaticDict.SESSION_ATTR_LOGIN_INFO);
+		if (user == null) {
+			Optional<User> userOption = securityService.validateUserByCookie(was);
+			if (userOption.isPresent()) {
+				return userOption.get().getRoles();
+			} else {
+				//				Role anonymousRole = securityService.getRoles().findByName("anonymous");
+				//				if (anonymousRole != null) {
+				//					Set<Role> roles = new HashSet<>();
+				//					roles.add(anonymousRole);
+				//					return roles;
+				//				}
+			}
+		} else {
+			return user.getRoles();
+		}
+		return Collections.emptySet();
 	}
 
 }
