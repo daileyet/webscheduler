@@ -49,11 +49,11 @@ import com.openthinks.webscheduler.model.Statable.DefaultStatable;
 public class Role extends DefaultStatable implements Serializable {
 	private static final long serialVersionUID = -7271233095825354386L;
 	@XmlAttribute
-	private String id;
+	protected String id;
 	@XmlElement(name = "role-name")
-	private String name;
+	protected String name;
 	@XmlElement(name = "role-desc")
-	private String desc;
+	protected String desc;
 	@XmlElement(name = "role-maps")
 	private RoleMaps roleMaps;
 

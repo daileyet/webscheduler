@@ -1,85 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	id="WebScheduler" version="3.0">
-	<display-name>webscheduler</display-name>
-	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-	<servlet>
-		<servlet-name>easyweb</servlet-name>
-		<servlet-class>com.openthinks.easyweb.EasyWebDispatcher</servlet-class>
-		<load-on-startup>0</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>easyweb</servlet-name>
-		<url-pattern>*.do</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>easyweb</servlet-name>
-		<url-pattern>*.htm</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>monitor</servlet-name>
-		<servlet-class>com.openthinks.easyweb.monitor.WebProcessMonitor</servlet-class>
-		<init-param>
-  			<param-name>enableRemote</param-name>
-  			<param-value>true</param-value>
-  		</init-param>
-  		<load-on-startup>0</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>monitor</servlet-name>
-		<url-pattern>/monitor/*</url-pattern>
-	</servlet-mapping>
-	
-	<filter>
-  		<filter-name>EasyWebFilter</filter-name>
-  		<filter-class>com.openthinks.easyweb.EasyWebFilter</filter-class>
-  	</filter>
-  	<filter-mapping>
-  		<filter-name>EasyWebFilter</filter-name>
-  		<servlet-name>easyweb</servlet-name>
-  	</filter-mapping>
-	
-	<listener>
-		<listener-class>com.openthinks.easyweb.context.WebContextLoadListener</listener-class>
-	</listener>
-	<context-param>
-		<param-name>configureClassName</param-name>
-		<param-value>com.openthinks.webscheduler.EasyWebConfigure</param-value>
-	</context-param>
-	
-	<!-- WebScheduler application configure path -->
-	<context-param>
-		<param-name>webConfigurePath</param-name>
-		<param-value>classpath:/ws-conf.properties</param-value>
-	</context-param>
-
-	<session-config>
-		<!-- minutes -->
-		<session-timeout>30</session-timeout>
-	</session-config>
-
-	<jsp-config>
-       <taglib>
-         <taglib-uri>
-           http://www.openthinks.com/easyweb
-         </taglib-uri>
-         <taglib-location>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebScheduler" version="3.0">
+  <display-name>webscheduler</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+  
+  <servlet>
+    <servlet-name>easyweb</servlet-name>
+    <servlet-class>com.openthinks.easyweb.EasyWebDispatcher</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>easyweb</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>easyweb</servlet-name>
+    <url-pattern>*.htm</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>monitor</servlet-name>
+    <servlet-class>com.openthinks.easyweb.monitor.WebProcessMonitor</servlet-class>
+    <init-param>
+      <param-name>enableRemote</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>monitor</servlet-name>
+    <url-pattern>/monitor/*</url-pattern>
+  </servlet-mapping>
+  <filter>
+    <filter-name>EasyWebFilter</filter-name>
+    <filter-class>com.openthinks.easyweb.EasyWebFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EasyWebFilter</filter-name>
+    <servlet-name>easyweb</servlet-name>
+  </filter-mapping>
+  <listener>
+    <listener-class>com.openthinks.easyweb.context.WebContextLoadListener</listener-class>
+  </listener>
+  <context-param>
+    <param-name>configureClassName</param-name>
+    <param-value>com.openthinks.webscheduler.EasyWebConfigure</param-value>
+  </context-param>
+  <context-param>
+    <param-name>webConfigurePath</param-name>
+    <param-value>classpath:/ws-conf.properties</param-value>
+  </context-param>
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://www.openthinks.com/easyweb</taglib-uri>
+      <taglib-location>
            /WEB-INF/tags/easyweb.tld
          </taglib-location>
-       </taglib>
-       <taglib>
-         <taglib-uri>
-           http://www.openthinks.com/webscheduler/fns
-         </taglib-uri>
-         <taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://www.openthinks.com/webscheduler/fns</taglib-uri>
+      <taglib-location>
            /WEB-INF/tags/webscheduler-fn.tld
          </taglib-location>
-       </taglib>
-    </jsp-config>
+    </taglib>
+  </jsp-config>
 </web-app>
