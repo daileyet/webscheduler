@@ -19,17 +19,18 @@
 				<c:if test="${not wsfn:isLogin(pageContext) }">
 					<li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
 				</c:if>
+				<c:if test="${wsfn:isSecurity(pageContext,'/task/index') }">
+					<li><a href="${ew:path('/task/index')}" class="visible-xs-inline-block">Tasks</a></li>
+				</c:if>
 				<c:if test="${wsfn:isSecurity(pageContext,'/setting/index') }">
-					<li><a href="${ew:path('/setting/index')}">Settings</a></li>
+					<li><a href="${ew:path('/setting/index')}" class="visible-xs-inline-block">Settings</a></li>
 				</c:if>
 				<c:if test="${wsfn:isLogin(pageContext) }">
 					<li><a href="#">Profile</a></li>
+					<li><a href="${ew:path('/security/logout')}" class="visible-xs-inline-block">Logout</a></li>
 				</c:if>
 				<li><a href="${ew:path('/help')}">Help</a></li>
 			</ul>
-			<!-- <form class="navbar-form navbar-right">
-				<input type="text" class="form-control" placeholder="Search...">
-			</form> -->
 		</div>
 	</div>
 </nav>
