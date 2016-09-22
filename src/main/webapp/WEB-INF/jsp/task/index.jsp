@@ -26,8 +26,8 @@
 				<h1 class="page-header">Task <small>Home</small></h1>
 
 				<div class="row placeholders">
-						<div class="col-xs-6 col-sm-6 placeholder">
-							<a href="${ew:path('/task/to/add') }" class="no-underline">
+						<div class="col-xs-6 col-sm-6 placeholder <c:if test="${not wsfn:isSecurity(pageContext,'/task/to/add') }">disabled</c:if>">
+							<a href="${ew:path('/task/to/add') }" class="no-underline" >
 								<img src="${ew:pathS('/static/img/createtask_512.png')}"
 									width="200" height="200" class="img-responsive"
 									alt="Generic placeholder thumbnail">
@@ -35,7 +35,7 @@
 								<span class="text-muted">Create a task</span>
 							</a>
 						</div>
-					<div class="col-xs-6 col-sm-6 placeholder">
+					<div class="col-xs-6 col-sm-6 placeholder <c:if test="${not wsfn:isSecurity(pageContext,'/task/def/index') }">disabled</c:if>">
 						<a href="${ew:path('/task/def/index') }" class="no-underline">
 							<img src="${ew:pathS('/static/img/definetask_512.png')}"
 								width="200" height="200" class="img-responsive"
@@ -63,7 +63,12 @@
 							<c:forEach var="tm" items="${tms }" varStatus="status">
 								<tr data-id="${tm.taskId }">
 									<td data-title="taskseq">${status.index+1 }</td>
-									<td data-title="taskname"><a href="${ew:path('/task/to/view') }?taskid=${tm.taskId }">${tm.taskName }</a></td>
+									<td data-title="taskname">
+										<a class="<c:if test="${not wsfn:isSecurity(pageContext,'/task/to/view') }">disabled</c:if>"
+										href="${ew:path('/task/to/view') }?taskid=${tm.taskId }">
+											${tm.taskName }
+										</a>
+									</td>
 									<td data-title="tasktype"><span title="${tm.taskType}">${tm.taskTypeShort }</span></td>
 									<td data-title="taskstate">${tm.taskState.display }
 										<c:if
@@ -76,23 +81,23 @@
 									</td>
 									<td data-title="taskaction">
 										<!-- <div class="btn-group btn-group-xs" role="group"> -->
-											<c:if test="${wsfn:isAvaiableWith(tm,'Schedule') }">
+											<c:if test="${wsfn:isSecurity(pageContext,'/task/schedule') and wsfn:isAvaiableWith(tm,'Schedule') }">
 												<a href="${ew:path('/task/schedule') }?taskid=${tm.taskId }" >
 												<span title="Schedule" class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a> 
 											</c:if>
-											<c:if test="${wsfn:isAvaiableWith(tm,'UnSchedule') }">
+											<c:if test="${wsfn:isSecurity(pageContext,'/task/unschedule') and wsfn:isAvaiableWith(tm,'UnSchedule') }">
 												<a href="${ew:path('/task/unschedule') }?taskid=${tm.taskId }" >
 												<span title="UnSchedule" class="glyphicon glyphicon-log-out text-danger" aria-hidden="true"></span></a> 
 											</c:if>
-											<c:if test="${wsfn:isAvaiableWith(tm,'Stop') }">
+											<c:if test="${wsfn:isSecurity(pageContext,'/task/stop') and wsfn:isAvaiableWith(tm,'Stop') }">
 												<a href="${ew:path('/task/stop') }?taskid=${tm.taskId }" >
 													<span title="Stop" class="glyphicon glyphicon-pause" aria-hidden="true"></span></a> 
 											</c:if>
-											<c:if test="${wsfn:isAvaiableWith(tm,'Edit') }">
+											<c:if test="${wsfn:isSecurity(pageContext,'/task/to/edit') and wsfn:isAvaiableWith(tm,'Edit') }">
 												<a href="${ew:path('/task/to/edit') }?taskid=${tm.taskId }" >
 													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> 
 											</c:if>
-											<c:if test="${wsfn:isAvaiableWith(tm,'Remove') }">
+											<c:if test="${wsfn:isSecurity(pageContext,'/task/remove') and wsfn:isAvaiableWith(tm,'Remove') }">
 												<a href="${ew:path('/task/remove') }?taskid=${tm.taskId }"  data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
 													<span title="Remove" class="glyphicon glyphicon-trash text-danger" aria-hidden="true"></span>
 												</a>

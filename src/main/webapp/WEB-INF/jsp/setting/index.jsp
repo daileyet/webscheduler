@@ -26,7 +26,7 @@
 				<h1 class="page-header">Setting <small>Home</small></h1>
 
 				<div class="row placeholders">
-						<div class="col-xs-6 col-sm-6 placeholder">
+						<div class="col-xs-6 col-sm-6 placeholder <c:if test="${not wsfn:isSecurity(pageContext,'/setting/user') }">disabled</c:if>">
 							<a href="${ew:path('/setting/user') }" class="no-underline">
 								<img src="${ew:pathS('/static/img/user_512.png')}"
 									width="200" height="200" class="img-responsive"
@@ -35,7 +35,7 @@
 								<span class="text-muted">Manager users</span>
 							</a>
 						</div>
-					<div class="col-xs-6 col-sm-6 placeholder">
+					<div class="col-xs-6 col-sm-6 placeholder <c:if test="${not wsfn:isSecurity(pageContext,'/setting/role') }">disabled</c:if>">
 						<a href="${ew:path('/setting/role') }" class="no-underline">
 							<img src="${ew:pathS('/static/img/role_512.png')}"
 								width="200" height="200" class="img-responsive"
@@ -46,7 +46,7 @@
 					</div>
 				</div>
 				<div class="row placeholders">
-					<div class="col-xs-6 col-sm-6 placeholder">
+					<div class="col-xs-6 col-sm-6 placeholder <c:if test="${not wsfn:isSecurity(pageContext,'/setting/ref') }">disabled</c:if>">
 							<a href="${ew:path('/setting/ref') }" class="no-underline">
 								<img src="${ew:pathS('/static/img/protection_512.png')}"
 									width="200" height="200" class="img-responsive"
@@ -55,7 +55,7 @@
 								<span class="text-muted">Protect task configuration</span>
 							</a>
 					</div>
-					<div class="col-xs-6 col-sm-6 placeholder">
+					<div class="col-xs-6 col-sm-6 placeholder <c:if test="${not wsfn:isSecurity(pageContext,'/setting/misc') }">disabled</c:if>">
 						<a href="${ew:path('/setting/misc') }" class="no-underline">
 							<img src="${ew:pathS('/static/img/misc_512.png')}"
 								width="200" height="200" class="img-responsive"

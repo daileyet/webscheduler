@@ -25,7 +25,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Setting <small>REFs</small></h1>
 				<div class="row placeholders">
-						<div class="col-xs-12 col-sm-12 placeholder2" >
+						<div class="col-xs-12 col-sm-12 placeholder2 <c:if test="${not wsfn:isSecurity(pageContext,'/setting/ref/sync') }">disabled</c:if>" >
 							<a href="${ew:path('/setting/ref/sync') }" class="no-underline" >
 								<c:if test="${isInSync }">
 									<img src="${ew:pathS('/static/img/savetodisk_512.png')}" title="In sync"
@@ -59,8 +59,12 @@
 										<td data-title="trpseq">${status.index+1 }</td>
 										<td>${trp.taskDefClass.name}</td>
 										<td>${trp.protectedCount }</td>
-										<td><a href="${ew:path('/setting/ref/to/edit') }?trpid=${trp.taskDefClass.name}" >
-													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> </td>
+										<td>
+											<c:if test="${wsfn:isSecurity(pageContext,'/setting/ref/to/edit') }">
+												<a href="${ew:path('/setting/ref/to/edit') }?trpid=${trp.taskDefClass.name}" >
+														<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> 
+											</c:if>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>

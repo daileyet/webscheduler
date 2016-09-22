@@ -25,7 +25,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">Setting <small>Roles</small></h1>
 				<div class="row placeholders">
-						<div class="col-xs-6 col-sm-6 placeholder2">
+						<div class="col-xs-6 col-sm-6 placeholder2 <c:if test="${not wsfn:isSecurity(pageContext,'/setting/role/to/add') }">disabled</c:if>">
 							<a href="${ew:path('/setting/role/to/add') }" class="no-underline">
 								<img src="${ew:pathS('/static/img/groupadd_512.png')}"
 									  width="150" height="150" class="img-responsive"
@@ -34,7 +34,7 @@
 								<span class="text-muted">Create a role</span>
 							</a>
 						</div>
-						<div class="col-xs-6 col-sm-6 placeholder" >
+						<div class="col-xs-6 col-sm-6 placeholder <c:if test="${not wsfn:isSecurity(pageContext,'/setting/role/sync') }">disabled</c:if>" >
 							<a href="${ew:path('/setting/role/sync') }" class="no-underline" >
 								<c:if test="${isInSync }">
 									<img src="${ew:pathS('/static/img/savetodisk_512.png')}" title="In sync"
@@ -68,11 +68,16 @@
 										<td data-title="roleseq">${status.index+1 }</td>
 										<td data-title="rolename">${role.name}</td>
 										<td>${role.desc}</td>
-										<td><a href="${ew:path('/setting/role/to/edit') }?roleid=${role.id }" >
-													<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-											<a href="#" data-href="${ew:path('/setting/role/remove') }?roleid=${role.id }"  data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
-													<span title="Remove" class="glyphicon glyphicon-trash text-danger" aria-hidden="true"></span>
-												</a> 
+										<td>
+											<c:if test="${wsfn:isSecurity(pageContext,'/setting/role/to/edit') }">
+												<a href="${ew:path('/setting/role/to/edit') }?roleid=${role.id }" >
+														<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+											</c:if>
+											<c:if test="${wsfn:isSecurity(pageContext,'/setting/role/remove') }">
+												<a href="#" data-href="${ew:path('/setting/role/remove') }?roleid=${role.id }"  data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
+														<span title="Remove" class="glyphicon glyphicon-trash text-danger" aria-hidden="true"></span>
+													</a> 
+											</c:if>
 										</td>
 									</tr>
 								</c:forEach>

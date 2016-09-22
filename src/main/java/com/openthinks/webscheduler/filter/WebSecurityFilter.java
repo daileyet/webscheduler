@@ -42,8 +42,7 @@ public class WebSecurityFilter {
 	@AutoComponent
 	WebSecurityService securityService;
 
-	@Mapping("/")
-	//@Mapping("/.*")
+	@Mapping("/.*")
 	public String auth0(WebAttributers was) {
 		boolean isPass = StaticChecker.isAccessable(was);
 		if (isPass) {
@@ -52,7 +51,7 @@ public class WebSecurityFilter {
 		return WebUtils.redirect("/index");
 	}
 
-	@Mapping("/(index|help|chart1|chart2|security/login)")
+	@Mapping("/(index|help|chart1|chart2|security/(login|logout))")
 	public String anonymousPath() {
 		return WebUtils.filterPass();
 	}

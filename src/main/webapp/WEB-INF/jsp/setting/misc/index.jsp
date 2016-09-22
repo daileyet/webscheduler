@@ -58,7 +58,9 @@
 							<dl>
 								<dt>Logger level</dt> 
 								<dd>
-									<select id="logger_level" name="logger_level" class="selectpicker show-tick " data-width="auto" 
+									<select id="logger_level" name="logger_level" 
+									class="selectpicker show-tick <c:if test="${not wsfn:isSecurity(pageContext,'/setting/misc/llevel/edit') }">disabled</c:if>" 
+									data-width="auto" 
 									data-link="${ew:path('/setting/misc/llevel/edit') }">
 										<c:forEach var="level" items="${pm.logger_level_list }">
 											<option value="${level }" <c:if test="${level==pm.logger_level_now }">selected</c:if>>${level }</option>
@@ -68,7 +70,8 @@
 								</dd>
 								<dt>Remote monitor</dt>
 								<dd>
-									<input class="bootstrap-switch"  data-link="${ew:path('/setting/misc/remotable/edit') }"
+									<input class="bootstrap-switch" data-link="${ew:path('/setting/misc/remotable/edit') }"
+									<c:if test="${not wsfn:isSecurity(pageContext,'/setting/misc/remotable/edit') }">disabled</c:if>
 									<c:if test="${pm.monitor_remotable }">checked</c:if>
 									data-label-text="Access" type="checkbox" name="remote_monitor" id="remote_monitor">
 								</dd>
@@ -78,15 +81,20 @@
 							<blockquote><h3  id="reload">Reload</h3></blockquote>
 							<dl class="dl-horizontal">
 								<dt style="text-align:left">Task types</dt>
-								<dd><button type="button" id="reload_tasktypes" data-loading-text="Reloading..." class="btn btn-primary btn-sm" autocomplete="off"
-									data-link="${ew:path('/setting/misc/ttypes/reload') }"
-								>Reload</button></dd>
+								<dd>
+									<button type="button" id="reload_tasktypes" data-loading-text="Reloading..." 
+									class="btn btn-primary btn-sm" autocomplete="off"
+									<c:if test="${not wsfn:isSecurity(pageContext,'/setting/misc/ttypes/reload') }">disabled</c:if>
+									data-link="${ew:path('/setting/misc/ttypes/reload') }" >Reload</button>
+								</dd>
 								<dt>&nbsp;</dt>
 								<dd></dd>
 								<dt style="text-align:left">Task protected</dt>
-								<dd><button type="button" id="reload_taskprotected" data-loading-text="Reloading..." class="btn btn-primary btn-sm " autocomplete="off"
-									data-link="${ew:path('/setting/misc/tprefs/reload') }"
-								>Reload</button></dd>
+								<dd>
+									<button type="button" id="reload_taskprotected" data-loading-text="Reloading..." class="btn btn-primary btn-sm " autocomplete="off"
+									<c:if test="${not wsfn:isSecurity(pageContext,'/setting/misc/tprefs/reload') }">disabled</c:if>
+									data-link="${ew:path('/setting/misc/tprefs/reload') }">Reload</button>
+								</dd>
 							</dl>
 						</div>
 						<div class=" ">
@@ -102,13 +110,19 @@
 							<blockquote><h3  id="service">Service</h3></blockquote>
 							<dl class="dl-horizontal">
 								<dt style="text-align:left">Scheduler service</dt>
-								<dd><button type="button" id="stop_scheduler" data-loading-text="Stoping..." class="btn btn-primary btn-sm" autocomplete="off"
-									data-link="${ew:path('/setting/misc/scheduler/stop') }">Stop</button></dd>
+								<dd>
+									<button type="button" id="stop_scheduler" data-loading-text="Stoping..." class="btn btn-primary btn-sm" autocomplete="off"
+									<c:if test="${not wsfn:isSecurity(pageContext,'/setting/misc/scheduler/stop') }">disabled</c:if>
+									data-link="${ew:path('/setting/misc/scheduler/stop') }">Stop</button>
+								</dd>
 								<dt>&nbsp;</dt>
 								<dd></dd>
 								<dt style="text-align:left">Scheduler service</dt>
-								<dd><button type="button" id="start_scheduler" data-loading-text="Starting..." class="btn btn-primary btn-sm " autocomplete="off"
-									data-link="${ew:path('/setting/misc/scheduler/start') }">Start</button></dd>
+								<dd>
+									<button type="button" id="start_scheduler" data-loading-text="Starting..." class="btn btn-primary btn-sm " autocomplete="off"
+									<c:if test="${not wsfn:isSecurity(pageContext,'/setting/misc/scheduler/start') }">disabled</c:if>
+									data-link="${ew:path('/setting/misc/scheduler/start') }">Start</button>
+								</dd>
 							</dl>
 						</div>
 					</div>
