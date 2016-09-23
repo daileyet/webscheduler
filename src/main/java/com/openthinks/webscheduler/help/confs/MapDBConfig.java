@@ -30,6 +30,7 @@ import java.io.File;
 import com.openthinks.easyweb.WebUtils;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.dao.impl.mapdb.MapDBHelper;
+import com.openthinks.webscheduler.exception.FailedConfigPath;
 import com.openthinks.webscheduler.exception.UnSupportConfigPath;
 import com.openthinks.webscheduler.help.StaticDict;
 
@@ -68,7 +69,9 @@ public final class MapDBConfig extends AbstractConfigObject {
 		} else {
 			throw new UnSupportConfigPath(configPath);
 		}
-
+		if (dbFile == null || !dbFile.isFile()) {
+			throw new FailedConfigPath(configPath);
+		}
 		MapDBHelper.setUp(dbFile);
 	}
 
