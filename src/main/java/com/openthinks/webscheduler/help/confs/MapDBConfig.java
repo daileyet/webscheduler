@@ -70,6 +70,7 @@ public final class MapDBConfig extends AbstractConfigObject {
 			throw new UnSupportConfigPath(configPath);
 		}
 		if (dbFile == null || !dbFile.isFile()) {
+			ProcessLogger.debug("DbFile=" + dbFile);
 			throw new FailedConfigPath(configPath);
 		}
 		MapDBHelper.setUp(dbFile);
