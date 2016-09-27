@@ -26,7 +26,7 @@
 					<li><a href="${ew:path('/setting/index')}" class="visible-xs-inline-block">Settings</a></li>
 				</c:if>
 				<c:if test="${wsfn:isLogin(pageContext) }">
-					<li><a href="#">Profile</a></li>
+					<li><a href="${ew:path('/profile/index')}">Profile</a></li>
 					<li><a href="${ew:path('/security/logout')}" class="visible-xs-inline-block">Logout</a></li>
 				</c:if>
 				<li><a href="${ew:path('/help')}">Help</a></li>

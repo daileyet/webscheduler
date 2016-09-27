@@ -79,6 +79,9 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_USER_NAME = "username";
 	public static final String PAGE_PARAM_USER_EMAIL = "useremail";
 	public static final String PAGE_PARAM_USER_PASS = "userpass";
+	public static final String PAGE_PARAM_USER_OLD_PWD = "userpass1";
+	public static final String PAGE_PARAM_USER_NEW_PWD = "userpass";
+	public static final String PAGE_PARAM_USER_NEW_PWD_AGAIN = "userpass2";
 	public static final String PAGE_PARAM_USER_ROLES = "userroles";
 	public static final String PAGE_PARAM_ROLE_ID = "roleid";
 	public static final String PAGE_PARAM_ROLE_NAME = "rolename";

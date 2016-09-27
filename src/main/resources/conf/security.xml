@@ -24,6 +24,9 @@
             <role-name>viewer</role-name>
             <role-desc>Viewer role: view dashboard; view task and custom definition</role-desc>
             <role-maps>
+            	<role-map path="/webscheduler/profile/pwd/edit"/>
+            	<role-map path="/webscheduler/profile/base/edit"/>
+            	<role-map path="/webscheduler/profile/index"/>
                 <role-map path="/webscheduler/task/to/view"/>
                 <role-map path="/webscheduler/task/index"/>
                 <role-map path="/webscheduler/security/logout"/>
