@@ -30,27 +30,27 @@
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10 ">
 							<div class="btn-group pull-right" role="group" aria-label="Action">
-								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Schedule') }">
+								<c:if test="${wsfn:isSecurity(pageContext,'/task/schedule') and wsfn:isAvaiableWith(pm.tm,'Schedule') }">
 									<a class="btn btn-default " role="button" href="${ew:path('/task/schedule') }?taskid=${pm.tm.taskId }">
 										<span title="Schedule" class="glyphicon glyphicon-log-in" aria-hidden="true"></span>Schedule
 									</a> 
 								</c:if>
-								<c:if test="${wsfn:isAvaiableWith(pm.tm,'UnSchedule') }">
+								<c:if test="${wsfn:isSecurity(pageContext,'/task/unschedule') and wsfn:isAvaiableWith(pm.tm,'UnSchedule') }">
 									<a class="btn btn-default btn-danger" role="button" href="${ew:path('/task/unschedule') }?taskid=${pm.tm.taskId }">
 										<span title="UnSchedule" class="glyphicon glyphicon-log-out" aria-hidden="true"></span>UnSchedule
 									</a> 
 								</c:if>
-								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Stop') }">
+								<c:if test="${wsfn:isSecurity(pageContext,'/task/stop') and wsfn:isAvaiableWith(pm.tm,'Stop') }">
 									<a class="btn btn-default " href="${ew:path('/task/stop') }?taskid=${pm.tm.taskId }">
 										<span title="Stop" class="glyphicon glyphicon-pause" aria-hidden="true"></span>Stop
 								</a>
 								</c:if> 
-								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Edit') }">
+								<c:if test="${wsfn:isSecurity(pageContext,'/task/to/edit') and wsfn:isAvaiableWith(pm.tm,'Edit') }">
 									<a class="btn btn-default " href="${ew:path('/task/to/edit') }?taskid=${pm.tm.taskId }">
 										<span title="Edit" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Edit
 								</a>
 								</c:if> 
-								<c:if test="${wsfn:isAvaiableWith(pm.tm,'Remove') }">
+								<c:if test="${wsfn:isSecurity(pageContext,'/task/remove') and wsfn:isAvaiableWith(pm.tm,'Remove') }">
 									<a class="btn btn-default btn-danger" href="${ew:path('/task/remove') }?taskid=${pm.tm.taskId }" data-confirm="true"  data-toggle="modal" data-target="#confirm-delete">
 										<span title="Remove" class="glyphicon glyphicon-trash" aria-hidden="true"></span>Remove
 									</a>

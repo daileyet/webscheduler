@@ -5,31 +5,31 @@
             <role-name>contributor</role-name>
             <role-desc>Contributor role: manager task and custom definition; include viewer role</role-desc>
             <role-maps>
-                <role-map path="/webscheduler/task/def/index"/>
-                <role-map path="/webscheduler/task/to/edit"/>
-                <role-map path="/webscheduler/task/def/check"/>
-                <role-map path="/webscheduler/task/add"/>
-                <role-map path="/webscheduler/task/edit"/>
-                <role-map path="/webscheduler/task/to/add"/>
+                <role-map path="/task/stop"/>
+                <role-map path="/task/to/edit"/>
+                <role-map path="/task/def/index"/>
+                <role-map path="/task/add"/>
                 <role-map include="740fda352c2c43d4a9a7818ca2407b30"/>
-                <role-map path="/webscheduler/task/check/cron"/>
-                <role-map path="/webscheduler/task/stop"/>
-                <role-map path="/webscheduler/task/remove"/>
-                <role-map path="/webscheduler/task/schedule"/>
-                <role-map path="/webscheduler/task/def/apply"/>
-                <role-map path="/webscheduler/task/unschedule"/>
+                <role-map path="/task/def/apply"/>
+                <role-map path="/task/check/cron"/>
+                <role-map path="/task/def/check"/>
+                <role-map path="/task/unschedule"/>
+                <role-map path="/task/remove"/>
+                <role-map path="/task/to/add"/>
+                <role-map path="/task/edit"/>
+                <role-map path="/task/schedule"/>
             </role-maps>
         </role>
         <role id="740fda352c2c43d4a9a7818ca2407b30">
             <role-name>viewer</role-name>
             <role-desc>Viewer role: view dashboard; view task and custom definition</role-desc>
             <role-maps>
-            	<role-map path="/webscheduler/profile/pwd/edit"/>
-            	<role-map path="/webscheduler/profile/base/edit"/>
-            	<role-map path="/webscheduler/profile/index"/>
-                <role-map path="/webscheduler/task/to/view"/>
-                <role-map path="/webscheduler/task/index"/>
-                <role-map path="/webscheduler/security/logout"/>
+                <role-map path="/profile/base/edit"/>
+                <role-map path="/task/to/view"/>
+                <role-map path="/security/logout"/>
+                <role-map path="/profile/pwd/edit"/>
+                <role-map path="/profile/index"/>
+                <role-map path="/task/index"/>
                 <role-map include="8a31844f-ee24-46c8-a622-76c868efbe5b"/>
             </role-maps>
         </role>
@@ -37,43 +37,43 @@
             <role-name>admin</role-name>
             <role-desc>Administrator role: manager user; include contributor role</role-desc>
             <role-maps>
-                <role-map path="/webscheduler/setting/user/to/edit"/>
-                <role-map path="/webscheduler/setting/ref"/>
-                <role-map path="/webscheduler/setting/user/remove"/>
-                <role-map path="/webscheduler/setting/role/to/edit"/>
-                <role-map path="/webscheduler/setting/misc/tprefs/reload"/>
+                <role-map path="/setting/role/to/edit"/>
+                <role-map path="/setting/role/sync"/>
+                <role-map path="/setting/misc/tprefs/reload"/>
+                <role-map path="/setting/ref"/>
+                <role-map path="/setting/ref/edit"/>
+                <role-map path="/setting/role/edit"/>
+                <role-map path="/setting/misc/remotable/edit"/>
+                <role-map path="/setting/misc"/>
                 <role-map include="16a30fe5974d4bd09a0ae5ffc0985a2b"/>
-                <role-map path="/webscheduler/setting/ref/to/edit"/>
-                <role-map path="/webscheduler/setting/ref/sync"/>
-                <role-map path="/webscheduler/setting/role/sync"/>
-                <role-map path="/webscheduler/setting/user/sync"/>
-                <role-map path="/webscheduler/setting/role/to/add"/>
-                <role-map path="/webscheduler/setting/user"/>
-                <role-map path="/webscheduler/setting/role/add"/>
-                <role-map path="/webscheduler/setting/misc/llevel/edit"/>
-                <role-map path="/webscheduler/setting/misc/ttypes/reload"/>
-                <role-map path="/webscheduler/setting/user/to/add"/>
-                <role-map path="/webscheduler/setting/misc"/>
-                <role-map path="/webscheduler/setting/user/add"/>
-                <role-map path="/webscheduler/setting/role/edit"/>
-                <role-map path="/webscheduler/setting/role"/>
-                <role-map path="/webscheduler/setting/ref/edit"/>
-                <role-map path="/webscheduler/setting/user/edit"/>
-                <role-map path="/webscheduler/setting/misc/remotable/edit"/>
-                <role-map path="/webscheduler/setting/index"/>
-                <role-map path="/webscheduler/setting/misc/scheduler/start"/>
-                <role-map path="/webscheduler/setting/misc/scheduler/stop"/>
+                <role-map path="/setting/user/to/edit"/>
+                <role-map path="/setting/user/add"/>
+                <role-map path="/setting/user"/>
+                <role-map path="/setting/misc/llevel/edit"/>
+                <role-map path="/setting/user/remove"/>
+                <role-map path="/setting/misc/ttypes/reload"/>
+                <role-map path="/setting/misc/scheduler/start"/>
+                <role-map path="/setting/user/sync"/>
+                <role-map path="/setting/misc/scheduler/stop"/>
+                <role-map path="/setting/role"/>
+                <role-map path="/setting/user/edit"/>
+                <role-map path="/setting/index"/>
+                <role-map path="/setting/role/to/add"/>
+                <role-map path="/setting/user/to/add"/>
+                <role-map path="/setting/role/add"/>
+                <role-map path="/setting/ref/to/edit"/>
+                <role-map path="/setting/ref/sync"/>
             </role-maps>
         </role>
         <role id="8a31844f-ee24-46c8-a622-76c868efbe5b">
             <role-name>anonymous</role-name>
             <role-desc>anonymous view: for who without account</role-desc>
             <role-maps>
-                <role-map path="/webscheduler/index"/>
-                <role-map path="/webscheduler/security/login"/>
-                <role-map path="/webscheduler/help"/>
-                <role-map path="/webscheduler/chart2"/>
-                <role-map path="/webscheduler/chart1"/>
+                <role-map path="/security/login"/>
+                <role-map path="/help"/>
+                <role-map path="/chart2"/>
+                <role-map path="/index"/>
+                <role-map path="/chart1"/>
             </role-maps>
         </role>
     </roles>
@@ -85,10 +85,6 @@
             <user-roles>
                 <user-role name="contributor"/>
             </user-roles>
-            <user-cookie>
-                <token>48d9959bb419c2aaf188c0913222eb3d67ee0a87</token>
-                <expire>2016-09-28 13:28</expire>
-            </user-cookie>
         </user>
         <user id="d00163f85a124cc99c1f2cea752dafdf">
             <user-name>Pi</user-name>

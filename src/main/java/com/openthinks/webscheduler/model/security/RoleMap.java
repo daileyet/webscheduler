@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.openthinks.easyweb.WebUtils;
 import com.openthinks.easyweb.context.WebContexts;
 import com.openthinks.libs.utilities.Checker;
 import com.openthinks.webscheduler.model.Statable.DefaultStatable;
@@ -56,7 +57,7 @@ public class RoleMap extends DefaultStatable implements Serializable {
 	public Set<String> getAllPathsWithInclude() {
 		Set<String> allPaths = new HashSet<>();
 		if (this.path != null && this.path.trim().length() > 0) {
-			allPaths.add(path);
+			allPaths.add(WebUtils.getFullRequestMapingPath(this.path));
 		}
 		if (this.include != null && this.include.trim().length() > 0) {
 			Role role = WebContexts.get().lookup(WebSecurityService.class).getRoles().findById(this.include);

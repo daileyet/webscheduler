@@ -86,7 +86,7 @@ public final class StaticChecker {
 	/**
 	 * check given request path can be access or not under current session user's role list
 	 * @param was {@link WebAttributers}
-	 * @param requestMapingPath String
+	 * @param requestMapingPath String could be full request mapping path or short request mapping path
 	 * @return boolean
 	 */
 	public static boolean isAccessable(WebAttributers was, String requestMapingPath) {
@@ -104,12 +104,8 @@ public final class StaticChecker {
 	 * @return boolean
 	 */
 	public static boolean isAccessable(WebAttributers was) {
-		Set<Role> roles = StaticUtils.getCurrentSessionRole(was, WebContexts.get().lookup(WebSecurityService.class));
 		String requestMapingPath = WebUtils.getRequestMapingPath(was.getRequest().getRequestURI());
-		boolean isPass = roles.stream().anyMatch((role) -> {
-			return role.getRoleMaps().existPath(requestMapingPath);
-		});
-		return isPass;
+		return isAccessable(was,requestMapingPath);
 	}
 
 	public static boolean isCompleteWith(TaskRunTimeData taskRunTimeData, boolean isSuccess) {

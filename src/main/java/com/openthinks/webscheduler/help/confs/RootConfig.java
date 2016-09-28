@@ -57,7 +57,7 @@ public class RootConfig implements ConfigObject {
 		ProcessLogger.debug(getClass() + " start config...");
 		String webConfigurePath = WebContexts.getServletContext()
 				.getInitParameter(StaticDict.SERVLET_INIT_PARAM_WEBCONFIGUREPATH);
-		if (webConfigurePath.startsWith(StaticDict.CLASS_PATH_PREFIX)) {//classpath:/ws-conf.properties
+		if (webConfigurePath.startsWith(StaticDict.CLASS_PATH_PREFIX)) {// classpath:/ws-conf.properties
 			String classpath = webConfigurePath.substring(StaticDict.CLASS_PATH_PREFIX.length());
 			InputStream in = RootConfig.class.getResourceAsStream(classpath);
 			try {
@@ -65,7 +65,7 @@ public class RootConfig implements ConfigObject {
 			} catch (IOException e) {
 				throw new FailedConfigPath(webConfigurePath, e);
 			}
-		} else if (webConfigurePath.startsWith(StaticDict.FILE_PREFIX)) {//file:R:/MyGit/webscheduler/target/classes/ws-conf.properties
+		} else if (webConfigurePath.startsWith(StaticDict.FILE_PREFIX)) {// file:R:/MyGit/webscheduler/target/classes/ws-conf.properties
 			String filePath = webConfigurePath.substring(StaticDict.FILE_PREFIX.length());
 			File file = new File(filePath), absoulteFile = file, relativeFile = null;
 			if (!absoulteFile.exists()) {
@@ -103,31 +103,41 @@ public class RootConfig implements ConfigObject {
 		String easywebClassDir = getProperty4Namespace(StaticDict.CONF_EASYWEBCLASSDIR, namespace);
 		EasyWebClassDirConfig webClassConfig = new EasyWebClassDirConfig(easywebClassDir, this);
 		children.add(webClassConfig);
-		//mapDB configure
+		// mapDB configure
 		String mapdbFile = getProperty4Namespace(StaticDict.CONF_MAPDB_FILE, namespace);
 		MapDBConfig mapdbConfig = new MapDBConfig(mapdbFile, this);
 		children.add(mapdbConfig);
-		//security configure
+		// security configure
 		String securityFile = getProperty4Namespace(StaticDict.CONF_SECURITY_FILE, namespace);
 		SecurityConfig securityConfig = new SecurityConfig(securityFile, this);
 		children.add(securityConfig);
-		//task reference protected configure
+		// task reference protected configure
 		String unchangeRefPath = getProperty4Namespace(StaticDict.CONF_REFS_UNCHANGE_PATH, namespace);
 		TaskRefProtectedConfig protectedConfig = new TaskRefProtectedConfig(unchangeRefPath, this);
 		children.add(protectedConfig);
-		//quartz properties configure
+		// quartz properties configure
 		String quartzFile = getProperty4Namespace(StaticDict.CONF_QUARTZ_FILE, namespace);
 		QuartzConfig quartzConfig = new QuartzConfig(quartzFile, this);
 		children.add(quartzConfig);
 	}
 
+	/**
+	 * get configure property value;firstly try to find by {@link System#getProperty(String)}, then try to find in configure file when not find in system 
+	 * @param propertyName String configure property name
+	 * @param namespace String DEV,PROD,TEST etc.
+	 * @return String configure property value
+	 */
 	protected String getProperty4Namespace(final String propertyName, final String namespace) {
 		String propertyValue = null;
 		if (namespace != null && namespace.trim().length() > 0) {
-			propertyValue = this.properties.getProperty(namespace + "." + propertyName);
+			propertyValue = System.getProperty(namespace + "." + propertyName);
+			if (propertyValue == null)
+				propertyValue = this.properties.getProperty(namespace + "." + propertyName);
 		}
 		if (propertyValue == null) {
-			propertyValue = this.properties.getProperty(propertyName);
+			propertyValue = System.getProperty(propertyName);
+			if (propertyValue == null)
+				propertyValue = this.properties.getProperty(propertyName);
 		}
 		return propertyValue;
 	}

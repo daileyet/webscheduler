@@ -50,9 +50,9 @@
 								<c:forEach var="webCtr" items="${webControllers }">
 									<optgroup label="<code>${webCtr.relativePath }</code><small>${webCtr.name }</small>">
 										<c:forEach var="webMethod" items="${webCtr.webMethods }">
-											<option value="${webMethod.fullPath }" 
+											<option value="${webMethod.relativePath2 }" 
 											data-content="<kbd>${webMethod.relativePath }</kbd><small>${webMethod.name }</small>" 
-											<c:if test="${fn:contains(role.joinedRoleMaps , webMethod.fullPath)}">selected</c:if> >
+											<c:if test="${fn:contains(role.joinedRoleMaps , webMethod.relativePath2)}">selected</c:if> >
 											</option>
 										</c:forEach>
 									</optgroup>

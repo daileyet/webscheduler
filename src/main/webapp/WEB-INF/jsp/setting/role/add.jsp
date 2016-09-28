@@ -48,9 +48,7 @@
 								<c:forEach var="webCtr" items="${webControllers }">
 									<optgroup label="<code>${webCtr.relativePath }</code><small>${webCtr.name }</small>">
 										<c:forEach var="webMethod" items="${webCtr.webMethods }">
-											<option value="${webMethod.fullPath }" data-content="<kbd>${webMethod.relativePath }</kbd><small>${webMethod.name }</small>">
-											<kbd>${webMethod.relativePath }</kbd>
-											</option>
+											<option value="${webMethod.relativePath2 }" data-content="<kbd>${webMethod.relativePath }</kbd><small>${webMethod.name }</small>"></option>
 										</c:forEach>
 									</optgroup>
 								</c:forEach>
