@@ -1,4 +1,4 @@
-# Webscheduler
+# Webscheduler: coolest task scheduler system  :camel: :cool:
 
 ## Introduction
 Webscheduler is a simple web task scheduler system, you can set up it quickly and less configuration. Current, this system include following features:
