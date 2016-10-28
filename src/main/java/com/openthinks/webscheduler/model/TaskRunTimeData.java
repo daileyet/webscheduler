@@ -38,6 +38,12 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 
 	private ITaskTrigger taskTrigger;
 
+	//user id
+	private String createdBy = null;
+
+	//shared for other guys or private
+	private boolean shared = true;
+
 	public TaskRunTimeData() {
 	}
 
@@ -49,6 +55,8 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 		taskRef = new DefaultTaskRef();
 		taskRefContent = "";
 		lastTaskResult = new TaskResult(taskId);
+		createdBy = null;
+		shared = true;
 	}
 
 	public String getTaskId() {
@@ -148,6 +156,26 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 		return taskState != null && taskState != TaskState.INVALID;
 	}
 
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	/**
+	 * when createdBy is empty, then whatever the value of shared, still take shared as true 
+	 * @return this task runtime data is shared or private
+	 */
+	public boolean isShared() {
+		return shared == true ? true : getCreatedBy() == null;
+	}
+
+	public void setShared(boolean shared) {
+		this.shared = shared;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -233,8 +261,9 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 	@Override
 	public String toString() {
 		return "TaskRunTimeData [taskId=" + taskId + ", taskName=" + taskName + ", taskType=" + taskType
-				+ ", groupName=" + groupName + ", taskRefContent=" + taskRefContent + ", taskState=" + taskState
-				+ ", lastTaskResult=" + lastTaskResult + ", taskTrigger=" + taskTrigger + "]";
+				+ ", groupName=" + groupName + ", taskRef=" + taskRef + ", taskRefContent=" + taskRefContent
+				+ ", taskState=" + taskState + ", lastTaskResult=" + lastTaskResult + ", taskTrigger=" + taskTrigger
+				+ ", createdBy=" + createdBy + ", shared=" + shared + "]";
 	}
 
 	//	/**

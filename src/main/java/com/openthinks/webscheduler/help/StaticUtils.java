@@ -210,6 +210,9 @@ public final class StaticUtils {
 		return Collections.emptySet();
 	}
 
-	
-	
+	public static Optional<User> getCurrentSessionUser(WebAttributers was) {
+		User user = was.getSession(StaticDict.SESSION_ATTR_LOGIN_INFO);
+		return Optional.ofNullable(user);
+	}
+
 }

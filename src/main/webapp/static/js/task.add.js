@@ -13,6 +13,8 @@
 			'Input_Repeatinterval':'#repeatinterval',
 			'Input_Startdate':'#startdate',
 			'Input_Cronexpr':'#cronexpr',
+			'Input_Shared':'#taskshared',
+			'Input_Shared_switch':'#taskshared_switch',
 			'Switch_bootstrap':'.bootstrap-switch',
 			'Div_trigger_group':'.trigger-group',
 			'Div_bind_element':'[data-bind-target]',
@@ -88,6 +90,7 @@
 				this.prepared();
 				this.preparedTrigger();
 				this.preparedRepeatable();
+				this.preparedShared();
 				this.bindEventListener();
 			},
 			prepared:function(){//for ctx.VIEW.Select_Tasktype change callback
@@ -132,6 +135,13 @@
 				$(ctx.VIEW.Input_Repeatinterval).prop("required",_state);
 				$(ctx.VIEW.Select_Triggerepeatcount).prop("required",_state);
 			},
+			preparedShared:function(state){
+				var _state = state;
+				if(_state==undefined){
+					_state = $(ctx.VIEW.Input_Shared_switch).bootstrapSwitch('state');
+				}
+				$(ctx.VIEW.Input_Shared).val(_state);
+			},
 			bindEventListener:function(){
 				var _this = this;
 				$(ctx.VIEW.Select_Tasktype).change(function(){
@@ -143,6 +153,10 @@
 				
 				$(ctx.VIEW.Input_Repeatable).on('switchChange.bootstrapSwitch', function(event, state) {
 					_this.preparedRepeatable(state);
+				});
+				
+				$(ctx.VIEW.Input_Shared_switch).on('switchChange.bootstrapSwitch', function(event, state) {
+					_this.preparedShared(state);
 				});
 				
 				$(ctx.VIEW.Addon_datetime_show).click(function(){

@@ -1,6 +1,7 @@
 package com.openthinks.webscheduler.controller;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.quartz.CronExpression;
 import org.quartz.JobBuilder;
@@ -26,6 +27,7 @@ import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.help.StaticUtils;
 import com.openthinks.webscheduler.help.trigger.TriggerGenerator;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.model.task.ITaskTrigger;
 import com.openthinks.webscheduler.model.task.SupportedTrigger;
 import com.openthinks.webscheduler.model.task.TaskAction;
@@ -143,6 +145,16 @@ public class TaskController {
 		taskRunTimeData.setTaskName(was.get(StaticDict.PAGE_PARAM_TASK_NAME));
 		taskRunTimeData.setTaskType(was.get(StaticDict.PAGE_PARAM_TASK_TYPE));
 		taskRunTimeData.setTaskRefContent(was.get(StaticDict.PAGE_PARAM_TASK_REF));
+		//set shared
+		String sharedStr = was.get(StaticDict.PAGE_PARAM_TASK_SHARED);
+		if (sharedStr != null && !Boolean.valueOf(sharedStr)) {
+			taskRunTimeData.setShared(false);
+		}
+		//set created user
+		Optional<User> sessionUser = StaticUtils.getCurrentSessionUser(was);
+		if (sessionUser.isPresent()) {
+			taskRunTimeData.setCreatedBy(sessionUser.get().getId());
+		}
 		ITaskTrigger taskTrigger = TriggerGenerator.valueOf(was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER)).generate(was);
 		taskRunTimeData.setTaskTrigger(taskTrigger);
 		PageMap pm = newPageMap();
@@ -210,6 +222,13 @@ public class TaskController {
 		if (!checkState(was, taskRunTimeData, TaskAction.Edit)) {
 			return StaticUtils.errorPage(was, pm);
 		}
+
+		//set shared
+		String sharedStr = was.get(StaticDict.PAGE_PARAM_TASK_SHARED);
+		if (sharedStr != null && !Boolean.valueOf(sharedStr)) {
+			taskRunTimeData.setShared(false);
+		}
+
 		ITaskTrigger oldTaskTrigger = taskRunTimeData.getTaskTrigger();
 		ProcessLogger.debug("On edit with old task trigger:" + oldTaskTrigger.toString());
 		ITaskTrigger newTaskTrigger = TriggerGenerator.valueOf(was.get(StaticDict.PAGE_PARAM_TASK_TRIGGER))
@@ -299,7 +318,8 @@ public class TaskController {
 
 	@Mapping("/index")
 	public String index(WebAttributers was) {
-		Collection<TaskRunTimeData> tasks = taskService.getValidTasks();
+		Collection<TaskRunTimeData> tasks = taskService
+				.getValidAndSharedTasks(StaticUtils.getCurrentSessionUser(was).get());
 		was.storeRequest(StaticDict.PAGE_ATTRIBUTE_TASK_LIST, tasks);
 		return "WEB-INF/jsp/task/index.jsp";
 	}

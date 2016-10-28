@@ -60,6 +60,9 @@ public interface StaticDict {
 	public static final String PAGE_PARAM_TASK_NAME = "taskname";
 	public static final String PAGE_PARAM_TASK_TYPE = "tasktype";
 	public static final String PAGE_PARAM_TASK_REF = "taskref";
+
+	public static final String PAGE_PARAM_TASK_SHARED = "taskshared";
+
 	public static final String PAGE_PARAM_TASK_TRIGGER = "tasktrigger";
 	public static final String PAGE_PARAM_TASK_DEF_CLASS_NAME = "customtasktype";
 	public static final String PAGE_PARAM_TASK_TRIGGER_REPEATABLE = "repeatable";

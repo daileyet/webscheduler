@@ -159,6 +159,20 @@
 					</c:if>
 					
 					<div class="form-group">
+							<label for="taskshared" class="col-sm-2 control-label">Shared</label>
+							<div class="col-sm-10">
+								<p class="form-control-static">${pm.tm.shared}</p>
+							</div>
+					</div>
+					
+					<div class="form-group">
+							<label for="createdby" class="col-sm-2 control-label">Create By</label>
+							<div class="col-sm-10">
+								<p class="form-control-static">${pm.tm.created}</p>
+							</div>
+					</div>		
+								
+					<div class="form-group">
 						<label for="taskname" class="col-sm-2 control-label">Task
 							I/O</label>
 						<div class="col-sm-10">
