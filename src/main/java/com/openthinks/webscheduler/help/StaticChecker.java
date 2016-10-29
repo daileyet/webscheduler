@@ -37,6 +37,7 @@ import com.openthinks.easyweb.context.handler.WebAttributers;
 import com.openthinks.libs.utilities.Checker;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.security.Role;
+import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.model.task.ExecutionResult;
 import com.openthinks.webscheduler.model.task.ITaskTrigger;
 import com.openthinks.webscheduler.model.task.SupportedTrigger;
@@ -251,6 +252,17 @@ public final class StaticChecker {
 		Checker.require(taskTrigger).notNull();
 		if (taskTrigger instanceof CronTaskTrigger) {
 			return ((CronTaskTrigger) taskTrigger).getCronExpression();
+		}
+		return "";
+	}
+	
+	public static String getCreatedByName(TaskRunTimeData taskRunTimeData){
+		Checker.require(taskRunTimeData).notNull();
+		String userId = taskRunTimeData.getCreatedBy();
+		if(userId!=null){
+			WebSecurityService securityService = WebContexts.get().lookup(WebSecurityService.class);
+			User user = securityService.getUsers().findById(userId);
+			return user==null?"":user.getName(); 
 		}
 		return "";
 	}

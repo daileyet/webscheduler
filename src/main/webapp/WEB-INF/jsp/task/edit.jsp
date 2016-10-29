@@ -160,6 +160,14 @@
 					</div>					
 					
 					<div class="form-group">
+							<label for="taskshared" class="col-sm-2 control-label">Shared</label>
+							<div class="col-sm-10">
+								<input class="bootstrap-switch"  data-label-text="Shared" type="checkbox" name="taskshared_switch" id="taskshared_switch">
+								<input type="hidden" name="taskshared" id="taskshared" value="${pm.tm.shared }"/>
+							</div>
+					</div>
+					
+					<div class="form-group">
 						<label for="taskname" class="col-sm-2 control-label">Task
 							properties</label>
 						<div class="col-sm-10">

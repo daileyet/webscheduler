@@ -168,7 +168,7 @@
 					<div class="form-group">
 							<label for="createdby" class="col-sm-2 control-label">Create By</label>
 							<div class="col-sm-10">
-								<p class="form-control-static">${pm.tm.created}</p>
+								<p class="form-control-static">${wsfn:getCreatedByName(pm.tm)}</p>
 							</div>
 					</div>		
 								

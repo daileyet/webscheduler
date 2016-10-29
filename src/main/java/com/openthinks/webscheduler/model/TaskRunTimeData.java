@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.openthinks.webscheduler.help.StaticDict;
+import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.model.task.ITaskTrigger;
@@ -170,6 +171,10 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 	 */
 	public boolean isShared() {
 		return shared == true ? true : getCreatedBy() == null;
+	}
+	
+	public boolean getRelShared(){
+		return this.shared;
 	}
 
 	public void setShared(boolean shared) {

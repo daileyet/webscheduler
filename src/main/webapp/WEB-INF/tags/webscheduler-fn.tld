@@ -89,4 +89,10 @@
 		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
 		<function-signature>java.lang.String getCronExpr(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
 	</function>	
+	<function>
+		<name>getCreatedByName</name>
+		<function-class>com.openthinks.webscheduler.help.StaticChecker</function-class>
+		<function-signature>java.lang.String getCreatedByName(com.openthinks.webscheduler.model.TaskRunTimeData)</function-signature>
+	</function>	
+	
 </taglib> 

@@ -227,6 +227,8 @@ public class TaskController {
 		String sharedStr = was.get(StaticDict.PAGE_PARAM_TASK_SHARED);
 		if (sharedStr != null && !Boolean.valueOf(sharedStr)) {
 			taskRunTimeData.setShared(false);
+		}else{
+			taskRunTimeData.setShared(true);
 		}
 
 		ITaskTrigger oldTaskTrigger = taskRunTimeData.getTaskTrigger();
