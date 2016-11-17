@@ -12,3 +12,19 @@
 [role="datetime-addon"],[role="cron-addon"]{
 	cursor:pointer;
 }
+
+.CodeMirror-fullscreen{
+	z-index:10000;
+}
+
+.CodeMirror button[data-role="exit-fullscreen"]{	
+	display:none;
+}
+
+.CodeMirror-fullscreen button[data-role="exit-fullscreen"]{
+	position:fixed;
+	top:1px;
+	left:50%;
+	z-index:10001;
+	display:block;
+}

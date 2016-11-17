@@ -56,7 +56,7 @@
 							<div class="btn-toolbar" role="toolbar" id="taskdef-toolbar" aria-label="Definition Toolbar">
 							  <div class="btn-group" role="group" aria-label="Definition group">
 							  	<button data-link="${ew:path('/task/def/check') }" data-role="compile" type="button" title="compile & check" class="btn btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
-							  	<button data-role="example" type="button" title="show example" class="btn btn-default"><i class="fa fa-lightbulb-o" aria-hidden="true"></i></button>
+							  	<button data-link="${ew:pathS('/static/html/task.definition.sample.xml') }" data-role="example" type="button" title="show example" class="btn btn-default"><i class="fa fa-lightbulb-o" aria-hidden="true"></i></button>
 							  	<button data-role="copy" type="button" title="copy to clipboard" class="btn btn-default" data-clipboard-target="#taskdef"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
 							  	<button data-role="clear" type="button" title="clear" class="btn btn-default"><i class="fa fa-eraser" aria-hidden="true"></i></button>
 							  	<button data-role="fullscreen" type="button" title="fullscreen" class="btn btn-default"><i class="fa fa-expand" aria-hidden="true"></i></button>
@@ -91,7 +91,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<%@ include file="../../template/body.script.jsp"%>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/lib/codemirror.js')}"></script>
 	<script type="text/javascript" src="${ew:pathS('/static/CodeMirror/mode/clike/clike.js')}"></script>

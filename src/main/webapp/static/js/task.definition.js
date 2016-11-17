@@ -13,6 +13,7 @@
 			'Btn_Def_copy':'#taskdef-toolbar button[data-role="copy"]',
 			'Btn_Def_clear':'#taskdef-toolbar button[data-role="clear"]',
 			'Btn_Def_full':'#taskdef-toolbar button[data-role="fullscreen"]',
+			'Btn_Def_exit_full':'button[data-role="exit-fullscreen"]',
 			'Chk_Def_keepfile':'#keepfile',
 		init:function(){
 			this.components.init();
@@ -21,6 +22,16 @@
 	ctx.VIEW.components = {
 			init:function(){
 				this.defEditor.init();
+				this.exitButton.init();
+			},
+			exitButton:{
+				init:function(){
+					var sHtml ='<button data-role="exit-fullscreen" type="button" class="btn btn-default" title="Exit fullscreen(press key: Esc)"> Exit </button>'
+					var $exitBtn = $(sHtml);
+					if($(ctx.VIEW.Btn_Def_exit_full).length==0){
+						$exitBtn.appendTo($('.CodeMirror'));
+					}
+				}
 			},
 			defEditor : {
 				init:function(){
@@ -97,6 +108,9 @@
 				$(ctx.VIEW.Btn_Def_full).click(function(){
 					ctx.VIEW.components.defEditor.fullscreen();
 				});
+				$(ctx.VIEW.Btn_Def_exit_full).click(function(){
+					ctx.VIEW.components.defEditor.fullscreen();
+				});
 				
 				$(ctx.VIEW.Btn_Def_compile).click(function(){
 					var $btn = $(this);
@@ -123,6 +137,26 @@
 						}
 					});
 				});
+				
+				$(ctx.VIEW.Btn_Def_example).click(function(){
+					var $btn = $(this);
+					$.ajax({
+						type: "get",
+						url: $btn.data("link"),
+						async: false,
+						dataType: "xml",
+						success: function(data) {
+							$code = $(data).find("code");
+							if($code.length>0){
+								ctx.VIEW.components.defEditor.setContent($code.text());
+							}
+						},
+						error: function() {
+						}
+					});
+				});
+				
+				
 				
 				$(ctx.VIEW.Select_tasktype).change(function(){
 					var $op = $(ctx.VIEW.Optionselected_tasktype);

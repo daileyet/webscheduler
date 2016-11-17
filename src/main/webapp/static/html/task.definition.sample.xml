@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sample>
+<code>package com.openthinks.webscheduler.task.custom;
+
+import java.util.Optional;
+
+import com.openthinks.webscheduler.model.TaskRunTimeData;
+import com.openthinks.webscheduler.model.task.ITaskRef;
+import com.openthinks.webscheduler.task.CustomTaskDefinition;
+import com.openthinks.webscheduler.task.TaskContext;
+
+public class SampleCustomTask implements CustomTaskDefinition {
+	@Override
+	public void execute(TaskContext context) {
+		//get task runtime data
+		Optional&lt;TaskRunTimeData&gt; optRunTimeData = getTaskRunTimeData(context);
+		if (optRunTimeData.isPresent()) {
+			TaskRunTimeData runTimeData = optRunTimeData.get();
+			runTimeData.preparedTaskRef();
+			//get task properties when created
+			ITaskRef taskRef = runTimeData.getTaskRef();
+			Optional&lt;String&gt; optPropValue = taskRef.getProp("property_key");
+			// deal with properties
+			optPropValue.get();
+		}
+		//TODO put other task code here
+	}
+}</code>
+
+</sample>
+
