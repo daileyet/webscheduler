@@ -56,6 +56,11 @@ mvn tomcat7:run
 
 Access system by URL http://localhost:8080/webscheduler/ and login by admin/123456
 
-## Video
-  [YouTube](https://youtu.be/nusM7J4If8Q)
-	
+## Video & Screenshots
+  [Video on YouTube](https://youtu.be/nusM7J4If8Q)
+  
+**Screenshots**:
+
+ [Home page](https://fgkwjw.bn1303.livefilestore.com/y3mHWASdtBxK5q7ZDN23ftMlGBll9gQgK0HJgnsN2v4zZ0HGhvcivR2eJFawkyUGQnyXj7M_IK7CxKQEh8-Pjr3EPJP2GsT8G5wew_9T88lmxL8FMYPP5da0W8zoPzGU3NJGk1sGwHDy0unMuU3V-eEdmhwmY44qMsJCWv0zE736xY?width=1319&height=838&cropmode=none)
+ ,[Task page](https://ggkwjw.bn1303.livefilestore.com/y3miOVDLzcZySfoSGCZ2nAnLOOzGA__wEx1PTfpg5nnTnxVUzkOdmZT5rZXJAVcviYu8kMIKEjUB04doOlH7JW-GVj4zBpMuF3_6WIy2T-djW1GNY9mYKE6VtI7Yl7U7DllqHj0ZLeWVVdS8Ahl6Zjg-LIYwRZKkpf8FCn9HF_sJBc?width=1319&height=838&cropmode=none)
+ ,[Setting page](https://h2kwjw.bn1303.livefilestore.com/y3mJ48lnEXPaECSISMzZPP53KtoH5Ejj2oesvhDR8JGc2QI10yE8716H_BqFD3Z6bE-qkXK6SyNmaNhh01rHt0uFXW_26wGO04RivZSsbC_mPU0uF0TcHzIYb8t5du28fU2wixrvzyyFXLqYWj7cvrly3SaIDCPzcQpQMSuIqeKBlM?width=1319&height=838&cropmode=none)
