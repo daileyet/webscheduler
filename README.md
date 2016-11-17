@@ -55,3 +55,7 @@ mvn tomcat7:run
 ```
 
 Access system by URL http://localhost:8080/webscheduler/ and login by admin/123456
+
+## Video
+  [YouTube](https://youtu.be/nusM7J4If8Q)
+	
