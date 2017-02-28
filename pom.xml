@@ -64,9 +64,9 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.openthinks.others</groupId>
-			<artifactId>webpage-keeper</artifactId>
-			<version>1.0-SNAPSHOT</version>
+		  <groupId>com.openthinks.others</groupId>
+		  <artifactId>webpage-keeper</artifactId>
+		  <version>1.0</version>
 		</dependency>
 
 		<dependency>
