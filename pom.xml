@@ -45,12 +45,6 @@
 			<version>1.2</version>
 		</dependency>
 
-	<!-- 	<dependency>
-			<groupId>com.openthinks.libs</groupId>
-			<artifactId>sql</artifactId>
-			<version>2.0</version>
-		</dependency> -->
-		
 		<!-- https://mvnrepository.com/artifact/org.mapdb/mapdb -->
 		<dependency>
 		    <groupId>org.mapdb</groupId>
@@ -117,9 +111,35 @@
             </exclusions>
         </dependency>
 	</dependencies>
+	
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+            	<namespace>DEV</namespace>
+            </properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+            <properties>
+            	<namespace>PROD</namespace>
+            </properties>
+		</profile>
+	</profiles>
+	
 	<build>
 		<defaultGoal>compile</defaultGoal>
 		<finalName>webscheduler</finalName>
+		<resources>
+			<resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+		</resources>
+		
 		<pluginManagement>
 			<plugins>
 				<plugin>
