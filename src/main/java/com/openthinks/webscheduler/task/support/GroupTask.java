@@ -44,7 +44,9 @@ import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
  *
  */
 public class GroupTask implements SupportTaskDefinition {
-  TaskService taskService = WebContexts.get().lookup(TaskService.class);
+  private static final String ATTR_VALUE_SPLIT_TOKEN = ";";
+private static final String ATTR_TASK_IDS = "task-ids";
+TaskService taskService = WebContexts.get().lookup(TaskService.class);
 
   @Override
   public void execute(TaskContext context) {
@@ -52,10 +54,11 @@ public class GroupTask implements SupportTaskDefinition {
     ITaskRef taskRef = getTaskRefDescriber().createTaskRef();
     try {
       taskRunTimeData.preparedTaskRef(taskRef);
-      Optional<String> ops = taskRef.getProp("task-ids");
+      taskRef = taskRunTimeData.getTaskRef();
+      Optional<String> ops = taskRef.getProp(ATTR_TASK_IDS);
       if (ops.isPresent()) {
         String taskIds = ops.get();
-        String[] ids = taskIds.split(";");
+        String[] ids = taskIds.split(ATTR_VALUE_SPLIT_TOKEN);
         for (String id : ids) {// execute each task
           ProcessLogger.debug("Processing subtask[" + id + "]");
           TaskContext subtaskCtx = context.clone();

@@ -238,17 +238,17 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 	 */
 	public void preparedTaskRef(ITaskRef taskRef) {
 		if (taskRef != null) {
-			if (!this.hasTaskRef()) {
-				try {
-					taskRef.readString(this.getTaskRefContent());
-					setTaskRef(taskRef);
-				} catch (IOException e) {
-					//ignore
-				}
-			} else {
-				this.preparedTaskRef();
+			this.taskRef = taskRef;
+		}
+		if (!this.hasTaskRef()) {
+			try {
+				taskRef.readString(this.getTaskRefContent());
+				setTaskRef(taskRef);
+			} catch (IOException e) {
+				//ignore
 			}
-
+		} else {
+			this.preparedTaskRef();
 		}
 	}
 

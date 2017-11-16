@@ -9,6 +9,7 @@ import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
 
 import com.openthinks.easyweb.WebUtils;
+import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.webscheduler.help.StaticDict;
 import com.openthinks.webscheduler.model.TaskRunTimeData;
 import com.openthinks.webscheduler.model.task.def.TaskDefRuntimeData;
@@ -28,6 +29,7 @@ public final class MapDBHelper {
 		try {
 			setUp(new File(WebUtils.getWebClassDir()), StaticDict.STORE_DB);
 		} catch (Exception e) {
+			ProcessLogger.error(e);
 		}
 	}
 
@@ -59,6 +61,8 @@ public final class MapDBHelper {
 			if (dbMemory == null || dbMemory.isClosed()) {
 				dbMemory = DBMaker.memoryDB().closeOnJvmShutdown().transactionEnable().make();
 			}
+		} catch (Exception e) {
+			ProcessLogger.fatal(e);
 		} finally {
 			lock.unlock();
 		}
@@ -73,6 +77,8 @@ public final class MapDBHelper {
 			if (dbDisk != null && !dbDisk.isClosed()) {
 				dbDisk.close();
 			}
+		} catch (Exception e) {
+			ProcessLogger.fatal(e);
 		} finally {
 			lock.unlock();
 		}
@@ -84,6 +90,8 @@ public final class MapDBHelper {
 			if (dbDisk == null || dbDisk.isClosed()) {
 				dbDisk = DBMaker.fileDB(storeDBPath).closeOnJvmShutdown().transactionEnable().make();
 			}
+		} catch (Exception e) {
+			ProcessLogger.fatal(e);
 		} finally {
 			lock.unlock();
 		}
@@ -96,6 +104,8 @@ public final class MapDBHelper {
 			if (dbMemory == null || dbMemory.isClosed()) {
 				dbMemory = DBMaker.memoryDB().closeOnJvmShutdown().transactionEnable().make();
 			}
+		} catch (Exception e) {
+			ProcessLogger.fatal(e);
 		} finally {
 			lock.unlock();
 		}
