@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.openthinks.webscheduler.help.StaticDict;
-import com.openthinks.webscheduler.model.security.User;
 import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 import com.openthinks.webscheduler.model.task.ITaskRef;
 import com.openthinks.webscheduler.model.task.ITaskTrigger;
@@ -33,7 +32,7 @@ public class TaskRunTimeData implements Serializable, Updateable<TaskRunTimeData
 	private ITaskRef taskRef;
 	private String taskRefContent;
 
-	private TaskState taskState;
+	private volatile TaskState taskState;
 
 	private TaskResult lastTaskResult;
 

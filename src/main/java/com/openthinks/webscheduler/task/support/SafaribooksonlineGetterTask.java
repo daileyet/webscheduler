@@ -1,5 +1,7 @@
 package com.openthinks.webscheduler.task.support;
 
+import org.quartz.UnableToInterruptJobException;
+
 import com.openthinks.libs.utilities.CommonUtilities;
 import com.openthinks.libs.utilities.logger.ProcessLogger;
 import com.openthinks.others.safaribook.SafariBookLaunch;
@@ -11,7 +13,9 @@ import com.openthinks.webscheduler.task.TaskRefDefinitionDescriber;
 import com.openthinks.webscheduler.task.TaskRefProtected;
 
 public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
-
+	
+	 ThreadLocal<SafariBookLaunch> threadLaunch = new ThreadLocal<>();
+	
 	@Override
 	public void execute(TaskContext context) {
 		ProcessLogger.debug(getClass() + ":Job start...");
@@ -22,12 +26,23 @@ public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 			TaskRefProtected.valueOf(getClass()).protect(bookConfigure);
 			ProcessLogger.debug(bookConfigure.toString());
 			SafariBookLaunch bookLaunch = new SafariBookLaunch(bookConfigure);
+			threadLaunch.set(bookLaunch);
 			bookLaunch.start();
 		} catch (Exception e) {
 			ProcessLogger.error(CommonUtilities.getCurrentInvokerMethod(), e);
+			threadLaunch.remove();
 			throw new TaskInterruptException(e);
 		}
-
+		threadLaunch.remove();
+	}
+	
+	@Override
+	public void interrupt() throws UnableToInterruptJobException {
+		SafariBookLaunch bookLaunch =threadLaunch.get();
+		if(bookLaunch!=null) {
+			bookLaunch.stop();
+			threadLaunch.remove();
+		}
 	}
 
 	@Override
@@ -45,6 +60,10 @@ public class SafaribooksonlineGetterTask implements SupportTaskDefinition {
 		describer.push("proxy-host=http://example.proxy.com");
 		describer.push("#[option]proxy host port");
 		describer.push("proxy-port=80");
+		describer.push("#[option]proxy auth user name");
+		describer.push("proxy-auth-user=your proxy auth name");
+		describer.push("#[option]proxy auth pass");
+		describer.push("proxy-auth-pass=your proxy auth pass");
 		describer.push("#[required]download save directory");
 		describer.push("save-dir=to/path/save/dir");
 		describer.push("#[required]download book folder name");

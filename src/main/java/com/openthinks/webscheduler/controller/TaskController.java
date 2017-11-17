@@ -71,6 +71,7 @@ public class TaskController {
 		boolean isSuccess = schedulerService.unschedule(taskRunTimeData);
 		ProcessLogger.debug("Unschedule " + (isSuccess ? "success" : "failed") + " for task:[" + taskRunTimeData + "]");
 		if (isSuccess) {
+			stop(was);
 			taskRunTimeData.setTaskState(TaskState.UN_SCHEDULE);
 			taskService.saveTask(taskRunTimeData);
 		}
@@ -92,6 +93,7 @@ public class TaskController {
 			ProcessLogger.error(e);
 			was.addError(StaticDict.PAGE_ATTRIBUTE_ERROR_1, "Can not stop this task.", WebScope.REQUEST);
 		}
+		ProcessLogger.debug("Stop " + (isSuccess ? "success" : "failed") + " for task:[" + taskRunTimeData + "]");
 		if (!isSuccess) {
 			return StaticUtils.errorPage(was, this.newPageMap());
 		}
