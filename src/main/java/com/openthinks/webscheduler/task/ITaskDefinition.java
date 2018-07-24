@@ -44,6 +44,7 @@ import com.openthinks.webscheduler.model.task.DefaultTaskRef;
 public interface ITaskDefinition extends InterruptableJob {
 	String TASK_REF = "task-ref";
 	String TASK_DATA = "task-data";
+	String ATTR_VALUE_SPLIT_TOKEN = ";";
 
 	/**
 	 * This is extends from parent interface, this method has been implemented, so this method should not be override again.<BR>
@@ -98,6 +99,10 @@ public interface ITaskDefinition extends InterruptableJob {
 	 */
 	@Override
 	default void interrupt() throws UnableToInterruptJobException {
+	}
+	
+	default void raise(String string) {
+		throw new RuntimeException(string);
 	}
 
 }

@@ -39,6 +39,8 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.lang3.SerializationUtils;
+
 import com.openthinks.webscheduler.help.StaticChecker;
 
 /**
@@ -168,5 +170,9 @@ public interface ITaskRef extends Serializable {
 			sb.append("\r\n");
 		});
 		return sb.toString();
+	}
+	
+	public default Object clone() {
+		return SerializationUtils.clone(this);
 	}
 }

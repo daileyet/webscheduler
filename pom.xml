@@ -205,10 +205,6 @@
 				<version>2.6</version>
 				<executions>
 					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
 						<configuration>
 							<outputDirectory>${endorsed.dir}</outputDirectory>
 							<silent>true</silent>
@@ -221,6 +217,10 @@
 								</artifactItem>
 							</artifactItems>
 						</configuration>
+						<!-- <phase>validate</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals> -->
 					</execution>
 				</executions>
 			</plugin>
