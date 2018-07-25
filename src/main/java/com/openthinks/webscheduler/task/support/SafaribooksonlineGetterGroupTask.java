@@ -41,7 +41,7 @@ public class SafaribooksonlineGetterGroupTask implements SupportTaskDefinition {
 			}
 			String[] nameArray = namesOpt.get().trim().split(ATTR_VALUE_SPLIT_TOKEN);
 			String[] urlArray = urlsOpt.get().trim().split(ATTR_VALUE_SPLIT_TOKEN);
-			Checker.require(nameArray).sameLengthWith(urlArray);
+			Checker.require(nameArray).sameLengthWith((Object[])urlArray);
 			if (!pagelinksOpt.isPresent()) {
 				raise("Not valid configure item:catalog-pagelinks-selectors");
 			}

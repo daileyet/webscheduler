@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 
 import com.openthinks.webscheduler.help.StaticUtils;
@@ -60,5 +61,9 @@ public class XMLParserTest {
 		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		jaxbMarshaller.marshal(ws, System.out);
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(DigestUtils.md5Hex(".."));
 	}
 }

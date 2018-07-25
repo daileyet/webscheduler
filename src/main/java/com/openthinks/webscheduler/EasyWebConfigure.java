@@ -26,7 +26,7 @@ public class EasyWebConfigure implements Bootstrap {
       try {
         schedulerService.stop();
       } catch (SchedulerException e) {
-        ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
+        ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod()+":{0}", e.getMessage());
       }
     }
     MapDBHelper.destroy();
@@ -38,7 +38,7 @@ public class EasyWebConfigure implements Bootstrap {
       ConfigureHelper.getConfigure().config();
     } catch (Exception e) {
       e.printStackTrace();
-      ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
+      ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod()+":{0}", e.getMessage());
     }
     schedulerService = WebContexts.get().lookup(SchedulerService.class);
     ProcessLogger.info("Start WebScheduler...");
@@ -46,7 +46,7 @@ public class EasyWebConfigure implements Bootstrap {
       schedulerService.start();
       ProcessLogger.info("WebScheduler started.");
     } catch (SchedulerException e) {
-      ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod(), e.getMessage());
+      ProcessLogger.fatal(CommonUtilities.getCurrentInvokerMethod()+":{0}", e.getMessage());
     }
   }
 }
